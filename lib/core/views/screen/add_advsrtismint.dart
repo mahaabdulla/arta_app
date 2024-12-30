@@ -122,16 +122,16 @@ class _AddAdvsrtismintViewState extends State<AddAdvsrtismintView> {
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide(
                         color: Color.fromARGB(
-                            255, 116, 172, 196), // لون الإطار عند عدم التفاعل
+                            255, 116, 172, 196), 
                         width: 2,
                       ),
                     ),
-                    // الإطار عند التركيز (عند الضغط على الحقل)
+                   
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide(
                         color: Color.fromARGB(
-                            255, 112, 164, 158), // لون الإطار عند الضغط
+                            255, 112, 164, 158), 
                         width: 2,
                       ),
                     ),
@@ -181,6 +181,7 @@ class _AddAdvsrtismintViewState extends State<AddAdvsrtismintView> {
                         ),
                       ),
                     )),
+                    // send bottom
               ],
             ),
           ),
