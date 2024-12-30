@@ -1,6 +1,3 @@
-import 'package:arta_app/core/views/screen/intro_views/introdoction1.dart';
-import 'package:arta_app/core/views/screen/onbording.dart';
-import 'package:arta_app/core/views/screen/splash_view.dart';
 import 'package:arta_app/generated/l10n.dart';
 import 'package:arta_app/helpers/routes.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +13,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/product',
+     
       onGenerateRoute:AppRoute.generatedRoute,
+       initialRoute: '/add_advr',
        localizationsDelegates: [
           S.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -25,6 +23,7 @@ class MyApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: S.delegate.supportedLocales,
-        debugShowCheckedModeBanner: false, home: OnBordingView());
+        debugShowCheckedModeBanner: false, //home: OnBordingView()
+        );
   }
 }

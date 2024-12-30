@@ -1,4 +1,5 @@
 import 'package:arta_app/core/constants/svg_images.dart';
+import 'package:arta_app/core/constants/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -6,12 +7,14 @@ class BasicScaffold extends StatelessWidget {
   final Widget widgets;
   final VoidCallback? onTap;
   final String? title;
+  final String? text;
   final bool showBackButton;
 
   BasicScaffold({
     super.key,
     required this.widgets,
     this.title,
+    this.text,
     this.onTap,
     this.showBackButton = false,
   });
@@ -23,7 +26,7 @@ class BasicScaffold extends StatelessWidget {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(screenHeight * 0.4),
+        preferredSize: Size.fromHeight(screenHeight * 0.34),
         child: Stack(
           children: [
             // الخلفية
@@ -36,16 +39,26 @@ class BasicScaffold extends StatelessWidget {
 
             if (showBackButton)
               Positioned(
-                top: screenHeight * 0.10,
-                child: InkWell(
-                  onTap: onTap,
-                  child: SvgPicture.asset(
-                    iconsArrow,
-                  ),
+                top: screenHeight * 0.11,
+                right: screenWidth * 0.09,
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: onTap,
+                      child: SvgPicture.asset(
+                        iconsArrow,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    if (title != null)
+                      Text(
+                        title!,
+                        style: TextStyles.medium24.copyWith(
+                            fontWeight: FontWeight.bold, color: Colors.black),
+                      ),
+                  ],
                 ),
               ),
-
-          
           ],
         ),
       ),
