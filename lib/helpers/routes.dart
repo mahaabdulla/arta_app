@@ -37,7 +37,7 @@ class AppRoute {
       case '/product':
         return MaterialPageRoute(builder: (ctx) => ProductView());
       case '/add_advr':
-        return MaterialPageRoute(builder: (ctx) => AddAdvsrtismintView());
+        return MaterialPageRoute(builder: (ctx) => AddAdvertisementView());
     }
   }
 }
