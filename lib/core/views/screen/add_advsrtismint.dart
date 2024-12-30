@@ -10,10 +10,10 @@ class AddAdvsrtismintView extends StatefulWidget {
 }
 
 class _AddAdvsrtismintViewState extends State<AddAdvsrtismintView> {
-  String selectedType = 'عقارات'; // القسم الرئيسي
-  String selectedCity = 'سيئون'; // المدينة
-  String selectedPlace = 'السحيل'; // المنطقة
-  String selectedName = 'سيارة'; // اسم الإعلان
+  String selectedType = 'عقارات'; 
+  String selectedCity = 'سيئون'; 
+  String selectedPlace = 'السحيل'; 
+  String selectedName = 'سيارة'; 
 
   @override
   Widget build(BuildContext context) {
