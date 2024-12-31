@@ -29,6 +29,11 @@ abstract class TextStyles {
     fontSize: 20,
     color: Color(0xff1A5C63),
   );
+  static const TextStyle medium22 = TextStyle(
+    fontFamily: appFont,
+    fontSize: 20,
+    color: Colors.black,
+  );
 
   static const TextStyle mediumHeadline = TextStyle(
     fontFamily: appFont,
