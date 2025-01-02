@@ -1,9 +1,10 @@
-import 'package:arta_app/core/constants/png_images.dart';
+import 'dart:io';
+
 import 'package:arta_app/core/constants/text.dart';
 import 'package:arta_app/core/views/widgets/basic_scafoold.dart';
 import 'package:arta_app/core/views/widgets/products_widgets/add_image_container.dart';
-import 'package:arta_app/core/views/widgets/products_widgets/blue_container.dart';
 import 'package:flutter/material.dart';
+
 
 class AddAdvertisementView extends StatefulWidget {
   const AddAdvertisementView({super.key});
@@ -17,6 +18,7 @@ class _AddAdvertisementViewState extends State<AddAdvertisementView> {
   String selectedCity = 'سيئون';
   String selectedPlace = 'السحيل';
   String selectedName = 'سيارة';
+  File? _image;
 
   @override
   Widget build(BuildContext context) {
@@ -94,27 +96,27 @@ class _AddAdvertisementViewState extends State<AddAdvertisementView> {
                 AddImageContainer(),
                 // buttom to send adv
                 Center(
-                  child: InkWell(
-                    onTap: () {
-                      // sent & save adv
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(top: 30, bottom: 20),
-                      width: 250,
-                      height: 60,
-                      decoration: BoxDecoration(
-                          color: Color(0xff055479),
-                          borderRadius: BorderRadius.circular(30)),
-                      child: Center(
-                        child: Text(
-                          'حفظ ونشر الاعلان',
-                          style:
-                              TextStyles.medium22.copyWith(color: Colors.white),
-                        ),
+                    child: InkWell(
+                  onTap: () {
+                    // sent & save adv
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(top: 30, bottom: 20),
+                    width: 250,
+                    height: 60,
+                    decoration: BoxDecoration(
+                        color: Color(0xff055479),
+                        borderRadius: BorderRadius.circular(30)),
+                    child: Center(
+                      child: Text(
+                        'حفظ ونشر الاعلان',
+                        style:
+                            TextStyles.medium22.copyWith(color: Colors.white),
                       ),
                     ),
                   ),
-                )
+                )),
+                // test image picker
               ],
             ),
           ),

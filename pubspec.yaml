@@ -40,6 +40,9 @@ dependencies:
   smooth_page_indicator: ^1.2.0+3
   carousel_slider: ^5.0.0
   font_awesome_flutter: ^10.8.0
+  image_picker: ^1.1.2
+  path: ^1.9.0
+
 
 
 dev_dependencies:
