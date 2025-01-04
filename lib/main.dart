@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
      
       onGenerateRoute:AppRoute.generatedRoute,
-       initialRoute: '/add_advr',
+       initialRoute: '/onboarding',
        localizationsDelegates: [
           S.delegate,
           GlobalMaterialLocalizations.delegate,

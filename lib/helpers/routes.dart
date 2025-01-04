@@ -1,4 +1,4 @@
-import 'package:arta_app/core/views/screen/add_advsrtismint.dart';
+import 'package:arta_app/core/views/screen/ads_views/add_advsrtismint.dart';
 import 'package:arta_app/core/views/screen/catg_views/cars.dart';
 import 'package:arta_app/core/views/screen/catg_views/electronuc.dart';
 import 'package:arta_app/core/views/screen/catg_views/home_catg.dart';

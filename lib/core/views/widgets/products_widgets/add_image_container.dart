@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:arta_app/core/constants/text.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -80,20 +80,12 @@ class _AddImageContainerState extends State<AddImageContainer> {
           ),
           const SizedBox(height: 16.0),
           if (_mainImageIndex != null)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
               children: [
-                Text(
-                  'الصورة الرئيسية',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
                 const SizedBox(height: 10),
                 Container(
-                  height: 150,
-                  width: double.infinity,
+                  height: 70,
+                  width: 79,
                   decoration: BoxDecoration(
                     color: Colors.grey,
                     borderRadius: BorderRadius.circular(20),
@@ -109,6 +101,8 @@ class _AddImageContainerState extends State<AddImageContainer> {
                         : null,
                   ),
                 ),
+                SizedBox(width: 20),
+                Text('حدد الصورة الرئيسية', style: TextStyles.smallReguler),
               ],
             ),
           const SizedBox(height: 20),
@@ -151,6 +145,12 @@ class _AddImageContainerState extends State<AddImageContainer> {
                 ),
               );
             }),
+          ),
+          SizedBox(height: 15),
+          Text(
+            'اضغط مطولًا للاتقاط صورة أو اضغط مره واحدة للاختيار من معرض الصور',
+            style: TextStyles.reguler12,
+            textAlign: TextAlign.center,
           ),
         ],
       ),

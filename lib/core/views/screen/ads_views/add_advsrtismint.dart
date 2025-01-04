@@ -5,7 +5,6 @@ import 'package:arta_app/core/views/widgets/basic_scafoold.dart';
 import 'package:arta_app/core/views/widgets/products_widgets/add_image_container.dart';
 import 'package:flutter/material.dart';
 
-
 class AddAdvertisementView extends StatefulWidget {
   const AddAdvertisementView({super.key});
 
@@ -31,7 +30,7 @@ class _AddAdvertisementViewState extends State<AddAdvertisementView> {
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 _buildSection(
                   title: 'اختر القسم الرئيسي',

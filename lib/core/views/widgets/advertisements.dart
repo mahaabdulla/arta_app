@@ -125,7 +125,7 @@ class _AdvertisementsViewState extends State<AdvertisementsView> {
                 Center(
                   child: InkWell(
                     onTap: () {
-                      Navigator.pushNamed(context, '/cars');
+                      Navigator.pushNamed(context, '/add_advr');
                     },
                     child: Container(
                       height: 38,
