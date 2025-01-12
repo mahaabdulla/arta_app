@@ -1,13 +1,20 @@
 import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/core/constants/text.dart';
+import 'package:arta_app/core/views/widgets/details_bottum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CatguryList extends StatelessWidget {
   final VoidCallback onTap;
-   CatguryList({super.key,
-   required this.onTap
-   });
+  final Color color;
+  final String text;
+
+  CatguryList({
+    super.key,
+    required this.onTap,
+    required this.color,
+    required this.text,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -116,39 +123,18 @@ class CatguryList extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   // زر عرض التفاصيل
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: InkWell(
-                      onTap: onTap,
-                      child: Container(
-                        height: 40,
-                        width: 150,
-                        decoration: BoxDecoration(
-                            color: const Color(0xff046998),
-                            borderRadius: BorderRadius.circular(12)),
-                        alignment: Alignment.center,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'عرض التفاصيل',
-                              style: TextStyles.reguler14.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SvgPicture.asset('assets/svg_images/Arrow Left.svg')
-                          ],
-                        ),
-                      ),
-                    ),
+                  DetailsBottum(
+                    onTap: onTap,
+                    color: color,
+                    text: text,
+                    imagePath: 'assets/svg_images/Arrow Left.svg',
                   ),
                 ],
               ),
             ),
           );
         },
-        childCount: 7, // عدد العناصر
+        childCount: 7,
       ),
     );
   }

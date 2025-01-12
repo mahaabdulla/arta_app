@@ -103,6 +103,8 @@ class HomeView extends StatelessWidget {
             onTap: () {
               Navigator.pushNamed(context, '/product');
             },
+            color: const Color(0xff046998),
+            text: 'عرض التفاصيل',
           ),
           // زر مشاهدة المزيد
           SliverToBoxAdapter(

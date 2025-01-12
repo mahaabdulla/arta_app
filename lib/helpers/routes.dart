@@ -1,4 +1,5 @@
 import 'package:arta_app/core/views/screen/ads_views/add_advsrtismint.dart';
+import 'package:arta_app/core/views/screen/ads_views/my_ads.dart';
 import 'package:arta_app/core/views/screen/catg_views/cars.dart';
 import 'package:arta_app/core/views/screen/catg_views/electronuc.dart';
 import 'package:arta_app/core/views/screen/catg_views/home_catg.dart';
@@ -38,6 +39,8 @@ class AppRoute {
         return MaterialPageRoute(builder: (ctx) => ProductView());
       case '/add_advr':
         return MaterialPageRoute(builder: (ctx) => AddAdvertisementView());
+      case '/my_ads':
+        return MaterialPageRoute(builder: (ctx) => MyAds());
     }
   }
 }

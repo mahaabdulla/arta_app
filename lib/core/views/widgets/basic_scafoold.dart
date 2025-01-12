@@ -29,7 +29,7 @@ class BasicScaffold extends StatelessWidget {
         preferredSize: Size.fromHeight(screenHeight * 0.34),
         child: Stack(
           children: [
-            // الخلفية
+            // background
             SvgPicture.asset(
               group1,
               fit: BoxFit.cover,
@@ -49,7 +49,7 @@ class BasicScaffold extends StatelessWidget {
                         iconsArrow,
                       ),
                     ),
-                    SizedBox(width: 10),
+                    SizedBox(width: 30),
                     if (title != null)
                       Text(
                         title!,
