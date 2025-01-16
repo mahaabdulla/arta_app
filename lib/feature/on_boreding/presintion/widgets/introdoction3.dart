@@ -1,10 +1,10 @@
 import 'package:arta_app/core/constants/png_images.dart';
 import 'package:arta_app/core/constants/text.dart';
-import 'package:arta_app/core/views/screen/intro_views/sheard_scafoold.dart';
+import 'package:arta_app/feature/on_boreding/presintion/widgets/sheard_scafoold.dart';
 import 'package:flutter/material.dart';
 
-class Introdoction2View extends StatelessWidget {
-  const Introdoction2View({super.key});
+class Introdoction3View extends StatelessWidget {
+  const Introdoction3View({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,25 +14,24 @@ class Introdoction2View extends StatelessWidget {
         children: [
           Stack(children: [
             Image.asset(
-              onBordingBackgoung,
+             onBordingBackgoung,
               width: 200,
             ),
             Image.asset(
-             onBordingImage,
+              onBordingImage,
               width: 200,
             ),
           ]),
           const SizedBox(height: 20),
           const Text(
-            'بيـع بسهـولة',
+            'تصفح فئاتنا المتنوعة',
             style: TextStyles.headLine1,
           ),
           const Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(15.0),
             child: Text(
-              'قم بإضافة إعلانك بسهولة واجذب المشـترين',
+              'من الالكترونيات إلى الاثاث لدينا كل ماتبحث عنه',
               style: TextStyles.regulerHeadline,
-              maxLines: 2,
               textAlign: TextAlign.center,
             ),
           ),

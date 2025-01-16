@@ -9,7 +9,7 @@ import 'package:arta_app/core/views/screen/catg_views/real_state.dart';
 import 'package:arta_app/core/views/screen/catg_views/sport.dart';
 import 'package:arta_app/core/views/screen/catg_views/women.dart';
 import 'package:arta_app/feature/home/presention/view/home_view.dart';
-import 'package:arta_app/core/views/screen/onbording.dart';
+import 'package:arta_app/feature/on_boreding/presintion/views/onbording.dart';
 import 'package:arta_app/core/views/screen/products_view/product_details_view.dart';
 import 'package:arta_app/feature/splash/presention/splash_view.dart';
 import 'package:flutter/material.dart';

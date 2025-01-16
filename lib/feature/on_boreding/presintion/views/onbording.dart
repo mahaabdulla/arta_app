@@ -1,7 +1,7 @@
 import 'package:arta_app/core/constants/text.dart';
-import 'package:arta_app/core/views/screen/intro_views/introdoction1.dart';
-import 'package:arta_app/core/views/screen/intro_views/introdoction2.dart';
-import 'package:arta_app/core/views/screen/intro_views/introdoction3.dart';
+import 'package:arta_app/feature/on_boreding/presintion/widgets/introdoction1.dart';
+import 'package:arta_app/feature/on_boreding/presintion/widgets/introdoction2.dart';
+import 'package:arta_app/feature/on_boreding/presintion/widgets/introdoction3.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
