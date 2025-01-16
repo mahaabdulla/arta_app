@@ -6,8 +6,9 @@ import 'package:arta_app/core/views/widgets/products_widgets/send_commint_bottom
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class ProductView extends StatelessWidget {
-  const ProductView({super.key});
+// واجهة تفاصيل المننج 
+class ProductDetailsView extends StatelessWidget {
+  const ProductDetailsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -123,8 +124,8 @@ class ProductView extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: screenHeight * 0.04),
-                 // send commint mottom
-                 SendCommintBottom(),
+                  // send commint mottom
+                  SendCommintBottom(),
                   SizedBox(height: screenHeight * 0.04),
                 ],
               ),

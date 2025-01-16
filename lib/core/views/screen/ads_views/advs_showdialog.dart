@@ -9,62 +9,70 @@ class AdvsShowdialog extends StatefulWidget {
 }
 
 class _AdvsShowdialogState extends State<AdvsShowdialog> {
-  bool isButtomPress = false;
+  bool isButtonPressed = false;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        InkWell(
+        AdvButton(
+          text: 'ازالة الاعلان',
+          isPressed: isButtonPressed,
           onTap: () {
             setState(() {
-              isButtomPress = !isButtomPress;
+              isButtonPressed = !isButtonPressed;
             });
           },
-          child: Container(
-            width: 120,
-            height: 55,
-            decoration: BoxDecoration(
-              color: isButtomPress
-                  ? Color(0xff97282A)
-                  : Color.fromARGB(255, 180, 177, 177),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Center(
-              child: Text(
-                'ازالة الاعلان',
-                style: TextStyles.smallReguler.copyWith(color: Colors.white),
-              ),
-            ),
-          ),
         ),
         SizedBox(width: 10),
-        //
-        InkWell(
+        AdvButton(
+          text: 'الغاء',
+          isPressed: !isButtonPressed,
           onTap: () {
             setState(() {
-              isButtomPress = !isButtomPress;
+              isButtonPressed = !isButtonPressed;
+              Navigator.pop(context);
             });
           },
-          child: Container(
-            width: 120,
-            height: 55,
-            decoration: BoxDecoration(
-              color: isButtomPress
-                  ? Color.fromARGB(255, 180, 177, 177)
-                  : Color(0xff97282A),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Center(
-              child: Text(
-                'الغاء',
-                style: TextStyles.smallReguler.copyWith(color: Colors.white),
-              ),
-            ),
-          ),
-        )
+        ),
       ],
+    );
+  }
+}
+
+class AdvButton extends StatelessWidget {
+  final String text;
+  final bool isPressed;
+  final VoidCallback onTap;
+
+  const AdvButton({
+    required this.text,
+    required this.isPressed,
+    required this.onTap,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: 120,
+        height: 55,
+        decoration: BoxDecoration(
+          color: isPressed
+              ? Color(0xff97282A)
+              : Color.fromARGB(255, 180, 177, 177),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyles.smallReguler.copyWith(color: Colors.white),
+          ),
+        ),
+      ),
     );
   }
 }

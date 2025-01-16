@@ -3,13 +3,15 @@ import 'package:arta_app/core/views/screen/ads_views/my_ads.dart';
 import 'package:arta_app/core/views/screen/catg_views/cars.dart';
 import 'package:arta_app/core/views/screen/catg_views/electronuc.dart';
 import 'package:arta_app/core/views/screen/catg_views/home_catg.dart';
+import 'package:arta_app/core/views/screen/catg_views/morev_view.dart';
 import 'package:arta_app/core/views/screen/catg_views/motors.dart';
+import 'package:arta_app/core/views/screen/catg_views/real_state.dart';
 import 'package:arta_app/core/views/screen/catg_views/sport.dart';
 import 'package:arta_app/core/views/screen/catg_views/women.dart';
-import 'package:arta_app/core/views/screen/home_view.dart';
+import 'package:arta_app/feature/home/presention/view/home_view.dart';
 import 'package:arta_app/core/views/screen/onbording.dart';
-import 'package:arta_app/core/views/screen/products_view/product_view.dart';
-import 'package:arta_app/core/views/screen/splash_view.dart';
+import 'package:arta_app/core/views/screen/products_view/product_details_view.dart';
+import 'package:arta_app/feature/splash/presention/splash_view.dart';
 import 'package:flutter/material.dart';
 
 class AppRoute {
@@ -35,8 +37,12 @@ class AppRoute {
         return MaterialPageRoute(builder: (ctx) => ElectronicView());
       case '/homeCatg':
         return MaterialPageRoute(builder: (ctx) => HomeCatgView());
+      case '/real_estate':
+        return MaterialPageRoute(builder: (ctx) => RealStateView());
+      case '/more':
+        return MaterialPageRoute(builder: (ctx) => MorevView());
       case '/product':
-        return MaterialPageRoute(builder: (ctx) => ProductView());
+        return MaterialPageRoute(builder: (ctx) => ProductDetailsView());
       case '/add_advr':
         return MaterialPageRoute(builder: (ctx) => AddAdvertisementView());
       case '/my_ads':

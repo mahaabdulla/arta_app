@@ -85,7 +85,6 @@ class _AdvertisementsViewState extends State<AdvertisementsView> {
     required String imagePath,
   }) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -101,53 +100,57 @@ class _AdvertisementsViewState extends State<AdvertisementsView> {
       child: Row(
         children: [
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyles.mediumHeadline.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 5),
+                  Text(
+                    title,
+                    style: TextStyles.mediumHeadline.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 6),
-                Expanded(
-                  child: Text(
-                    description,
-                    style: TextStyles.reguler14.copyWith(fontSize: 12),
-                    maxLines: 3,
-                    overflow: TextOverflow.visible,
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: Text(
+                      description,
+                      style: TextStyles.reguler14.copyWith(fontSize: 12),
+                      maxLines: 3,
+                      overflow: TextOverflow.visible,
+                    ),
                   ),
-                ),
-                const Spacer(),
-                Center(
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/add_advr');
-                    },
-                    child: Container(
-                      height: 38,
-                      width: 145,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        gradient: const LinearGradient(
-                          colors: [Color(0xff4C968A), Color(0xff33869C)],
+                  const Spacer(),
+                  Center(
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/add_advr');
+                      },
+                      child: Container(
+                        height: 40,
+                        width: 145,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          gradient: const LinearGradient(
+                            colors: [Color(0xff4C968A), Color(0xff33869C)],
+                          ),
                         ),
-                      ),
-                      child: Text(
-                        'أضف إعلانك الآن',
-                        style: TextStyles.reguler14.copyWith(
-                          color: Colors.white,
-                          fontSize: 16,
+                        child: Text(
+                          'أضف إعلانك الآن',
+                          style: TextStyles.reguler14.copyWith(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           const SizedBox(width: 12),

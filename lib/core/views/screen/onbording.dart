@@ -13,12 +13,12 @@ class OnBordingView extends StatefulWidget {
 }
 
 class _OnBordingViewState extends State<OnBordingView> {
-  final PageController _controller = PageController(); 
+  final PageController _controller = PageController();
   bool onLastPage = false;
 
   @override
   void dispose() {
-    _controller.dispose(); 
+    _controller.dispose();
     super.dispose();
   }
 

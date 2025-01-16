@@ -1,3 +1,4 @@
+import 'package:arta_app/core/constants/png_images.dart';
 import 'package:arta_app/core/constants/text.dart';
 import 'package:arta_app/core/views/screen/intro_views/sheard_scafoold.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +14,11 @@ class Introdoction2View extends StatelessWidget {
         children: [
           Stack(children: [
             Image.asset(
-              'assets/png_images/Vector (1).png',
+              onBordingBackgoung,
               width: 200,
             ),
             Image.asset(
-              'assets/png_images/Purchase online (1).png',
+             onBordingImage,
               width: 200,
             ),
           ]),

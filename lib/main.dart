@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       onGenerateRoute: AppRoute.generatedRoute,
-      initialRoute: '/my_ads',
+      initialRoute: '/splash',
       localizationsDelegates: [
         S.delegate,
         GlobalMaterialLocalizations.delegate,

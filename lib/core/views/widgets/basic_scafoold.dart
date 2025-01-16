@@ -26,7 +26,7 @@ class BasicScaffold extends StatelessWidget {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(screenHeight * 0.34),
+        preferredSize: Size.fromHeight(screenHeight * 0.30),
         child: Stack(
           children: [
             // background
@@ -34,7 +34,7 @@ class BasicScaffold extends StatelessWidget {
               group1,
               fit: BoxFit.cover,
               width: screenWidth,
-              height: screenHeight * 0.5,
+              height: screenHeight * 0.4,
             ),
 
             if (showBackButton)

@@ -1,3 +1,4 @@
+import 'package:arta_app/core/constants/colors.dart';
 import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/core/constants/text.dart';
 import 'package:arta_app/core/views/widgets/details_bottum.dart';
@@ -7,13 +8,25 @@ import 'package:flutter_svg/svg.dart';
 class CatguryList extends StatelessWidget {
   final VoidCallback onTap;
   final Color color;
+  final String title;
   final String text;
+  final String userName;
+  final String time;
+  final String price;
+  final String location;
+  final String imagePath;
 
   CatguryList({
     super.key,
     required this.onTap,
     required this.color,
+    required this.title,
     required this.text,
+    required this.userName,
+    required this.time,
+    required this.price,
+    required this.location,
+    required this.imagePath,
   });
 
   @override
@@ -39,13 +52,13 @@ class CatguryList extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Image.network(
-                          'https://cp.slaati.com//wp-content/uploads/2024/04/WhatsApp-Image-2024-04-09-at-12.52.56-PM.jpeg',
-                          width: 80,
-                          height: 100,
+                          imagePath,
+                          width: 100,
+                          height: 120,
                           fit: BoxFit.cover,
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: 15),
                       // تفاصيل العنصر
                       Expanded(
                         child: Column(
@@ -53,13 +66,13 @@ class CatguryList extends StatelessWidget {
                           children: [
                             // اسم العنصر
                             Text(
-                              'سيارة تويوتا موديل 2006',
+                              title,
                               style: TextStyles.reguler14.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black,
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 20),
                             // صف: اسم البائع و المدينة
                             Row(
                               children: [
@@ -68,10 +81,10 @@ class CatguryList extends StatelessWidget {
                                   children: [
                                     SvgPicture.asset(userImage),
                                     const SizedBox(width: 4),
-                                    Text('اسم البائع',
+                                    Text(userName,
                                         style: TextStyles.reguler14.copyWith(
                                             fontWeight: FontWeight.bold,
-                                            color: Colors.black)),
+                                            color: darkBlck)),
                                   ],
                                 ),
                                 SizedBox(width: 60),
@@ -80,10 +93,10 @@ class CatguryList extends StatelessWidget {
                                   children: [
                                     SvgPicture.asset(locationImage),
                                     const SizedBox(width: 4),
-                                    Text('الرياض',
+                                    Text(location,
                                         style: TextStyles.reguler14.copyWith(
                                             fontWeight: FontWeight.bold,
-                                            color: Colors.black)),
+                                            color: darkBlck)),
                                   ],
                                 ),
                               ],
@@ -91,29 +104,21 @@ class CatguryList extends StatelessWidget {
                             const SizedBox(height: 8),
 
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  children: [
-                                    SvgPicture.asset(clockImage),
-                                    const SizedBox(width: 4),
-                                    Text('38 دقيقة',
-                                        style: TextStyles.reguler14.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black)),
-                                  ],
-                                ),
+                                SvgPicture.asset(clockImage),
+                                const SizedBox(width: 4),
+                                Text(time,
+                                    style: TextStyles.reguler14.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: darkBlck)),
+                                SizedBox(width: 75),
                                 // السعر
-                                Row(
-                                  children: [
-                                    SvgPicture.asset(dollerImage),
-                                    const SizedBox(width: 4),
-                                    Text('45,000 ريال',
-                                        style: TextStyles.reguler14.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.green)),
-                                  ],
-                                ),
+                                SvgPicture.asset(dollerImage),
+                                Text(price,
+                                    style: TextStyles.reguler14.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: darkBlck)),
                               ],
                             ),
                           ],
@@ -121,12 +126,12 @@ class CatguryList extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+
                   // زر عرض التفاصيل
                   DetailsBottum(
                     onTap: onTap,
                     color: color,
-                    text: text,
+                    text: 'عرض التفاصيل',
                     imagePath: 'assets/svg_images/Arrow Left.svg',
                   ),
                 ],
