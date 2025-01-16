@@ -1,5 +1,5 @@
-import 'package:arta_app/core/views/screen/ads_views/add_advsrtismint.dart';
-import 'package:arta_app/core/views/screen/ads_views/my_ads.dart';
+import 'package:arta_app/feature/ads/presition/views/add_advsrtismint.dart';
+import 'package:arta_app/feature/ads/presition/views/my_ads.dart';
 import 'package:arta_app/core/views/screen/catg_views/cars.dart';
 import 'package:arta_app/core/views/screen/catg_views/electronuc.dart';
 import 'package:arta_app/core/views/screen/catg_views/home_catg.dart';

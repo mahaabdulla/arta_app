@@ -2,6 +2,7 @@ import 'package:arta_app/core/constants/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+// ignore: must_be_immutable
 class DetailsBottum extends StatelessWidget {
   final VoidCallback onTap;
   final Color color;

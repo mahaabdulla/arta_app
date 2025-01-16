@@ -1,9 +1,9 @@
 import 'package:arta_app/core/constants/png_images.dart';
 import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/core/constants/text.dart';
-import 'package:arta_app/core/views/widgets/advertisements.dart';
+import 'package:arta_app/feature/ads/presition/widgets/advertisements.dart';
 import 'package:arta_app/core/views/widgets/catgury_list.dart';
-import 'package:arta_app/core/views/widgets/searchbar.dart';
+import 'package:arta_app/feature/home/presention/widgets/searchbar.dart';
 import 'package:arta_app/feature/home/presention/widgets/categury_list.dart';
 import 'package:arta_app/feature/home/presention/widgets/see_more_buttom.dart';
 import 'package:flutter/material.dart';
