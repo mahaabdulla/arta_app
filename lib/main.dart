@@ -1,5 +1,5 @@
 import 'package:arta_app/generated/l10n.dart';
-import 'package:arta_app/helpers/routes.dart';
+import 'package:arta_app/core/utils/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
