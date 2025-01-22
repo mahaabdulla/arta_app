@@ -1,5 +1,7 @@
 import 'package:arta_app/feature/ads/presition/views/add_advsrtismint.dart';
 import 'package:arta_app/feature/ads/presition/views/my_ads.dart';
+import 'package:arta_app/feature/categorys/presintion/categury_details.dart';
+import 'package:arta_app/feature/categorys/presintion/test_ctg_api.dart';
 import 'package:arta_app/feature/categorys/presintion/views/cars.dart';
 import 'package:arta_app/feature/categorys/presintion/views/electronuc.dart';
 import 'package:arta_app/feature/categorys/presintion/views/home_catg.dart';
@@ -10,7 +12,7 @@ import 'package:arta_app/feature/categorys/presintion/views/sport.dart';
 import 'package:arta_app/feature/categorys/presintion/views/women.dart';
 import 'package:arta_app/feature/home/presention/view/home_view.dart';
 import 'package:arta_app/feature/on_boreding/presintion/views/onbording.dart';
-import 'package:arta_app/core/views/screen/products_view/product_details_view.dart';
+import 'package:arta_app/feature/ads/presition/widgets/product_details_view.dart';
 import 'package:arta_app/feature/splash/presention/splash_view.dart';
 import 'package:flutter/material.dart';
 
@@ -19,10 +21,8 @@ class AppRoute {
     switch (route.name) {
       case '/home':
         return MaterialPageRoute(builder: (ctx) => HomeView());
-
       case '/onboarding':
         return MaterialPageRoute(builder: (ctx) => OnBordingView());
-
       case '/splash':
         return MaterialPageRoute(builder: (ctx) => SplashView());
       case '/cars':
@@ -47,6 +47,19 @@ class AppRoute {
         return MaterialPageRoute(builder: (ctx) => AddAdvertisementView());
       case '/my_ads':
         return MaterialPageRoute(builder: (ctx) => MyAds());
+    
+   case '/categoryDetails':
+        final categoryId = route.arguments as int; 
+        return MaterialPageRoute(
+          builder: (ctx) => CategoryDetailPage(categoryId: categoryId),
+        );
+        
+      default:
+        return MaterialPageRoute(
+          builder: (ctx) => Scaffold(
+            body: Center(child: Text('الصفحة غير موجودة')),
+          ),
+        );
     }
   }
 }

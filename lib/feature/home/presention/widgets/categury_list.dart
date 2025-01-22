@@ -1,13 +1,27 @@
+import 'package:arta_app/core/constants/png_images.dart';
 import 'package:arta_app/core/constants/text.dart';
+import 'package:arta_app/feature/categorys/presintion/ctagurey_children_view.dart';
 import 'package:flutter/material.dart';
+import 'package:arta_app/feature/categorys/data/categury_model.dart';
 
 class CateguryList extends StatelessWidget {
-  const CateguryList({
+  final List<Category> categ;
+
+   CateguryList({
     super.key,
     required this.categ,
   });
 
-  final List<Map<String, String>> categ;
+  final List<String> ctgImages = [
+    cars,
+    motors,
+    electronic,
+    home,
+    sports,
+    clothing,
+    ecomiric,
+    more,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -22,23 +36,35 @@ class CateguryList extends StatelessWidget {
         ),
         delegate: SliverChildBuilderDelegate(
           (ctx, index) {
+            Category category = categ[index];
             return GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, categ[index]['onTap']!);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) => CategoryChildrenView(
+                      parentId: category.id,
+                      parentName: category.name,
+                    ),
+                  ),
+                );
               },
               child: Column(
                 children: [
                   Expanded(
                     child: Image.asset(
-                      categ[index]['image']!,
+                      ctgImages[
+                          index % ctgImages.length], 
                       fit: BoxFit.contain,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    categ[index]['title']!,
+                    category.name,
                     style: TextStyles.reguler14.copyWith(
-                        color: Colors.black, fontWeight: FontWeight.bold),
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ],

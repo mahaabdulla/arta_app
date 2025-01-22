@@ -1,3 +1,4 @@
+import 'package:arta_app/feature/categorys/presintion/test_ctg_api.dart';
 import 'package:arta_app/generated/l10n.dart';
 import 'package:arta_app/core/utils/routes.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       onGenerateRoute: AppRoute.generatedRoute,
-      initialRoute: '/splash',
+     initialRoute: '/home',
       localizationsDelegates: [
         S.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      debugShowCheckedModeBanner: false, //home: OnBordingView()
+      debugShowCheckedModeBanner: false, 
+      //home: TestCtgApi()
     );
   }
 }
