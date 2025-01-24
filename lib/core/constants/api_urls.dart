@@ -13,4 +13,7 @@ class ApiUrls {
   static String deletCatgUrl(int id) {
     return '$root/category/$id';
   }
+
+ static const String postAdstUrl = '$root /listing';
+ 
 }

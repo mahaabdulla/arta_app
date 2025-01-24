@@ -50,18 +50,23 @@ class _CategoryChildrenViewState extends State<CategoryChildrenView> {
               itemCount: children.length,
               itemBuilder: (context, index) {
                 Category child = children[index];
-                return ListTile(
-                  title: Text(child.name),
-                  subtitle: Text('ID: ${child.id}'),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            CategoryDetailPage(categoryId: child.id),
-                      ),
-                    );
-                  },
+                return Card(
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.green[300],
+                      child: Text('ID:${child.id}'),
+                    ),
+                    title: Text(child.name),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              CategoryDetailPage(categoryId: child.id),
+                        ),
+                      );
+                    },
+                  ),
                 );
               },
             ),

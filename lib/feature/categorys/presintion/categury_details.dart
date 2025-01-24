@@ -51,7 +51,7 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(category?.name ?? 'تفاصيل الفئة'),
-        backgroundColor: Colors.purple[300],
+        backgroundColor: Colors.blue[200],
       ),
       body: loading
           ? Center(child: CircularProgressIndicator())
@@ -62,14 +62,6 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Text('اسم الفئة: ${category!.name}',
-                        //     style: TextStyle(fontSize: 20)),
-                        // SizedBox(height: 10),
-                        // Text('ID: ${category!.id}',
-                        //     style: TextStyle(fontSize: 16)),
-                        // Text('Parent ID: ${category!.parentId}'),
-                        // SizedBox(height: 20),
-                        // Text('الفئات الفرعية:', style: TextStyle(fontSize: 18)),
                         loadingChildren
                             ? Center(child: CircularProgressIndicator())
                             : children.isNotEmpty
@@ -79,9 +71,12 @@ class _CategoryDetailPageState extends State<CategoryDetailPage> {
                                     itemCount: children.length,
                                     itemBuilder: (context, index) {
                                       Category child = children[index];
-                                      return ListTile(
-                                        title: Text(child.name),
-                                        subtitle: Text('ID: ${child.id}'),
+                                      return Card(
+                                        child: ListTile(
+                                          leading: CircleAvatar(),
+                                          title: Text(child.name),
+                                          subtitle: Text('ID: ${child.id}'),
+                                        ),
                                       );
                                     },
                                   )

@@ -1,3 +1,4 @@
+import 'package:arta_app/feature/ads/presition/region_view.dart';
 import 'package:arta_app/feature/ads/presition/views/add_advsrtismint.dart';
 import 'package:arta_app/feature/ads/presition/views/my_ads.dart';
 import 'package:arta_app/feature/categorys/presintion/categury_details.dart';
@@ -47,12 +48,15 @@ class AppRoute {
         return MaterialPageRoute(builder: (ctx) => AddAdvertisementView());
       case '/my_ads':
         return MaterialPageRoute(builder: (ctx) => MyAds());
+        case '/region':
+         return MaterialPageRoute(builder: (ctx) => RegionView());
     
    case '/categoryDetails':
         final categoryId = route.arguments as int; 
         return MaterialPageRoute(
           builder: (ctx) => CategoryDetailPage(categoryId: categoryId),
         );
+
         
       default:
         return MaterialPageRoute(

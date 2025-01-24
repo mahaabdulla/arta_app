@@ -17,7 +17,7 @@ class Category {
     this.parent,
   });
 
-  // دالة لتحويل JSON إلى كائن Dart
+
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
       id: json['id'],
@@ -38,7 +38,7 @@ class Category {
     );
   }
 
-  // دالة لتحويل كائن Dart إلى JSON
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,

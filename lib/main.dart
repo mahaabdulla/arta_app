@@ -1,6 +1,7 @@
-import 'package:arta_app/feature/categorys/presintion/test_ctg_api.dart';
+
+import 'package:arta_app/feature/ads/presition/views/add_advsrtismint.dart';
 import 'package:arta_app/generated/l10n.dart';
-import 'package:arta_app/core/utils/routes.dart';
+import 'package:arta_app/core/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       onGenerateRoute: AppRoute.generatedRoute,
-     initialRoute: '/home',
+    // initialRoute: '/region',
       localizationsDelegates: [
         S.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
       ],
       supportedLocales: S.delegate.supportedLocales,
       debugShowCheckedModeBanner: false, 
-      //home: TestCtgApi()
+      home: AddAdvertisementView()
     );
   }
 }

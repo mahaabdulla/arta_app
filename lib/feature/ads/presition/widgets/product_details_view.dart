@@ -1,8 +1,8 @@
 import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/core/constants/text.dart';
-import 'package:arta_app/core/views/widgets/products_widgets/blue_container.dart';
-import 'package:arta_app/core/views/widgets/products_widgets/products_card.dart';
-import 'package:arta_app/core/views/widgets/products_widgets/send_commint_bottom.dart';
+import 'package:arta_app/core/widgets/products_widgets/blue_container.dart';
+import 'package:arta_app/core/widgets/products_widgets/products_card.dart';
+import 'package:arta_app/core/widgets/products_widgets/send_commint_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

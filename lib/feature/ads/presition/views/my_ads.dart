@@ -1,7 +1,7 @@
 import 'package:arta_app/core/constants/text.dart';
 import 'package:arta_app/feature/ads/presition/widgets/advs_card_info.dart';
 import 'package:arta_app/feature/ads/presition/widgets/advs_showdialog.dart';
-import 'package:arta_app/core/views/widgets/basic_scafoold.dart';
+import 'package:arta_app/core/widgets/basic_scafoold.dart';
 import 'package:arta_app/feature/home/presention/widgets/details_bottum.dart';
 import 'package:flutter/material.dart';
 

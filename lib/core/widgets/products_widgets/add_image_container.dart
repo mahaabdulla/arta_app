@@ -4,7 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddImageContainer extends StatefulWidget {
-  const AddImageContainer({super.key});
+  final Function(List<File?>) onImagesUpdated; // Callback لتمرير الصور
+
+  const AddImageContainer({
+    required this.onImagesUpdated, // تمرير الدالة في الإنشاء
+    super.key,
+  });
 
   @override
   _AddImageContainerState createState() => _AddImageContainerState();
@@ -25,6 +30,7 @@ class _AddImageContainerState extends State<AddImageContainer> {
         if (_mainImageIndex == null) {
           _mainImageIndex = index;
         }
+        widget.onImagesUpdated(_images); // تمرير الصور إلى الواجهة الأساسية
       });
     }
   }
@@ -40,6 +46,7 @@ class _AddImageContainerState extends State<AddImageContainer> {
         if (_mainImageIndex == null) {
           _mainImageIndex = index;
         }
+        widget.onImagesUpdated(_images); // تمرير الصور إلى الواجهة الأساسية
       });
     }
   }
@@ -48,6 +55,7 @@ class _AddImageContainerState extends State<AddImageContainer> {
     if (_images[index] != null) {
       setState(() {
         _mainImageIndex = index;
+        widget.onImagesUpdated(_images); // تمرير الصور إلى الواجهة الأساسية
       });
     }
   }
@@ -73,7 +81,7 @@ class _AddImageContainerState extends State<AddImageContainer> {
         children: [
           Text(
             'رفع الصور',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
@@ -101,7 +109,7 @@ class _AddImageContainerState extends State<AddImageContainer> {
                         : null,
                   ),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 Text('حدد الصورة الرئيسية', style: TextStyles.smallReguler),
               ],
             ),
@@ -146,9 +154,9 @@ class _AddImageContainerState extends State<AddImageContainer> {
               );
             }),
           ),
-          SizedBox(height: 15),
+          const SizedBox(height: 15),
           Text(
-            'اضغط مطولًا للاتقاط صورة أو اضغط مره واحدة للاختيار من معرض الصور',
+            'اضغط مطولًا لالتقاط صورة أو اضغط مرة واحدة للاختيار من معرض الصور',
             style: TextStyles.reguler12,
             textAlign: TextAlign.center,
           ),
