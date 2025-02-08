@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-
+import 'dart:developer' as dev;
 import '../constants/api_urls.dart';
 import '../constants/global_constants.dart';
 import '../utils/global_methods/check_connection.dart';
@@ -169,6 +169,48 @@ class OnlineDataRepo extends DataRepo {
     //   }
     //   return {};
     // }
+  }
+
+  Future<Response> postForm(
+      {required String url,
+      required FormData data,
+      Map<String, dynamic>? query,
+      Map? jsonData}) async {
+
+      dio.options.headers.addAll({
+        "Authorization": "Bearer ${LocalStorage.getStringFromDisk(key: TOKEN)}",
+      });
+    
+
+    Response? response;
+    try {
+      if (!await checkConnection()) {
+        await CacheHelper.saveCacheData(
+            key: url,
+            data: jsonData ?? {},
+            isOnline: false,
+          );
+        response = Response(
+            requestOptions: RequestOptions(), statusCode: 200, data: {});
+        return response;
+      } else {
+        response = await dio.post(
+          url,
+          queryParameters: query,
+          data: data,
+        );
+        
+      }
+    
+    } catch (e) {
+    
+      
+    }
+
+    dev.log((response?.data['error'] != null).toString());
+
+    
+    return response!;
   }
 
   @override

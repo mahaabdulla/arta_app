@@ -6,6 +6,8 @@ import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'dart:developer' as dev;
 
+import '../../../feature/data/models/user/user_model.dart';
+
 void logResponse({required String tagKey, required bool isInfo, required response, required String url}) {
   if (LocalStorage.getBoolFromDisk(key: tagKey)) {
     errorLogger(
@@ -35,7 +37,7 @@ void logResponse({required String tagKey, required bool isInfo, required respons
     );
     Map<String, dynamic> body = {
       "user_id": LocalStorage.getStringFromDisk(key: USERID),
-      "user_email": LocalStorage.getStringFromDisk(key: USEREMAIL),
+      "user_email": LocalStorage.getStringFromDisk(key: USERE_EMAIL),
       "status_code": statusCode,
       "url": url,
       "date": DateFormat(
@@ -66,3 +68,45 @@ void logResponse({required String tagKey, required bool isInfo, required respons
 
     return false;
   }
+
+  
+Future<void> saveUserData(UserModel userModel) async {
+  await LocalStorage.saveStringToDisk(
+    key: USERID,
+    value: userModel.id ?? '',
+  );
+
+  await LocalStorage.saveStringToDisk(
+    key: USERE_EMAIL,
+    value: userModel.email ?? '',
+  );
+
+  await LocalStorage.saveStringToDisk(
+    key: USER_NAME,
+    value: userModel.name ?? '',
+  );
+
+  await LocalStorage.saveStringToDisk(
+    key: USERE_UNIC_NAME,
+    value: userModel.username ?? '',
+  );
+
+await LocalStorage.saveStringToDisk(
+    key: USER_CONTANT_NUMBER,
+    value: userModel.contactNumber ?? '',
+  );
+
+await LocalStorage.saveStringToDisk(
+    key: USER_WATSAPP_NUMBER,
+    value: userModel.whatsappNumber ?? '',
+  );
+
+
+    //TODO: هندلي الصورة حق المستخدم بعدين
+  // await LocalStorage.saveStringToDisk(
+  //   key: USER_IMAGE,
+  //   value: userModel.image ?? '',
+  // );
+
+
+}

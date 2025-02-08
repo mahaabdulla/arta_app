@@ -14,6 +14,6 @@ class ApiUrls {
     return '$root/category/$id';
   }
 
- static const String postAdstUrl = '$root /listing';
- 
+  static const String postAdstUrl = '$root /listing';
+  static const String LOGIN = '$root/login';
 }
