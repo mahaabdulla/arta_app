@@ -1,7 +1,7 @@
 import 'dart:io';
 
 class UserModel {
-  String? id;
+  int? id;
   String? name;
   String? username;
   String? email;

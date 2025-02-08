@@ -38,7 +38,7 @@ class OnlineDataRepo extends DataRepo {
     log("CHECK BASE URL $_baseUrl");
     dio = Dio(
       BaseOptions(
-        connectTimeout: const Duration(seconds: 30),
+        connectTimeout: const Duration(seconds: 50),
         baseUrl: _baseUrl,
         receiveDataWhenStatusError: true,
         followRedirects: false,
@@ -47,7 +47,8 @@ class OnlineDataRepo extends DataRepo {
         },
         headers: {
           "Accept": "application/json",
-          "Authorization": "Bearer ${SharedPrefsHelper.getString(TOKEN)}",
+          "Authorization":
+              "Bearer ${LocalStorage.getStringFromDisk(key: TOKEN)}",
         },
       ),
     );
@@ -98,15 +99,15 @@ class OnlineDataRepo extends DataRepo {
       Map<String, dynamic> content = jsonDecode(response.data!);
       return content;
     } on DioException catch (dioError) {
-    final errorHandled = Diohandling.fromDioError(dioError);
-     toast(errorHandled.errorMessage,
-        gravity: ToastGravity.BOTTOM,
-        bgColor: Colors.red,
-        textColor: Colors.white,
-        print: true);
-    log("Dio Error: ${errorHandled.errorMessage}");
-    return {"status": false, "message": errorHandled.errorMessage};
-  }catch (ex) {
+      final errorHandled = Diohandling.fromDioError(dioError);
+      toast(errorHandled.errorMessage,
+          gravity: ToastGravity.BOTTOM,
+          bgColor: Colors.red,
+          textColor: Colors.white,
+          print: true);
+      log("Dio Error: ${errorHandled.errorMessage}");
+      return {"status": false, "message": errorHandled.errorMessage};
+    } catch (ex) {
       if (response?.statusCode == 401) {
         log("ON ERROR Unauthorized : ${response?.statusCode}");
       }
@@ -122,7 +123,6 @@ class OnlineDataRepo extends DataRepo {
     });
 
     Response? response;
-    late Map<String, dynamic> content;
     try {
       if (!await checkConnection()) {
         await CacheHelper.saveCacheData(
@@ -132,64 +132,59 @@ class OnlineDataRepo extends DataRepo {
         );
         response = Response(
             requestOptions: RequestOptions(), statusCode: 200, data: {});
-        content = jsonDecode(response.data!);
       } else {
+        print("Dio instance: $dio");
         response = await dio.post(
           url,
           data: dataToSend,
+          options: Options(
+            contentType: Headers.jsonContentType,
+            responseType: ResponseType.json,
+          ),
         );
+
         if (response.statusCode == 401) {
-          log("ON ERROR Unauthorized : ${response.statusCode}");
+          dev.log("ON ERROR Unauthorized : ${response.statusCode}");
         }
       }
-    }on DioException catch (dioError) {
-    final errorHandled = Diohandling.fromDioError(dioError);
-     toast(errorHandled.errorMessage,
-        gravity: ToastGravity.BOTTOM,
-        bgColor: Colors.red,
-        textColor: Colors.white,
-        print: true);
-    log("Dio Error: ${errorHandled.errorMessage}");
-    return {"status": false, "message": errorHandled.errorMessage};
-  } catch (e) {
+    } on DioException catch (dioError) {
+      final errorHandled = Diohandling.fromDioError(dioError);
+      toast(errorHandled.errorMessage,
+          gravity: ToastGravity.BOTTOM,
+          bgColor: Colors.red,
+          textColor: Colors.white,
+          print: true);
+      dev.log("Dio Error: ${errorHandled.errorMessage}");
+      return {"status": false, "message": errorHandled.errorMessage};
+    } catch (e) {
       return {"status": false, "message": "An error occurred: $e"};
     }
-    //TODO: بعدين تأك\ي من فايدة  الانفو تاق والايرور تاق
-    logResponse(tagKey: INFOTAG, isInfo: true, response: response, url: url);
-    logResponse(tagKey: ERRORTAG, isInfo: false, response: response, url: url);
-    return content;
-    // } on DioException catch (e) {
-    //   if (e.response != null) {
-    //     print(e.response!.data);
-    //     print(e.response!.headers);
-    //     print(e.response!.requestOptions);
-    //   } else {
-    //     print(e.requestOptions);
-    //     print(e.message);
-    //   }
-    //   return {};
-    // }
+    // content = response.data;
+    // jsonDecode(response.data!);
+    if (response.data == null) {
+      return {"status": false, "message": "Response data is null"};
+    }
+    return response.data;
   }
+
 
   Future<Response> postForm(
       {required String url,
       required FormData data,
       Map<String, dynamic>? query,
       Map? jsonData}) async {
-
-      dio.options.headers.addAll({
-        "Authorization": "Bearer ${LocalStorage.getStringFromDisk(key: TOKEN)}",
-      });
-    
+    // dio.options.headers.addAll({
+    //   "Authorization": "Bearer ${LocalStorage.getStringFromDisk(key: TOKEN)}",
+    // });
 
     Response? response;
     try {
       if (!await checkConnection()) {
         await CacheHelper.saveCacheData(
-            key: url,
-            data: jsonData ?? {},
-            isOnline: false,
-          );
+          key: url,
+          data: jsonData ?? {},
+          isOnline: false,
+        );
         response = Response(
             requestOptions: RequestOptions(), statusCode: 200, data: {});
         return response;
@@ -199,17 +194,11 @@ class OnlineDataRepo extends DataRepo {
           queryParameters: query,
           data: data,
         );
-        
       }
-    
-    } catch (e) {
-    
-      
-    }
+    } catch (e) {}
 
     dev.log((response?.data['error'] != null).toString());
 
-    
     return response!;
   }
 
@@ -229,25 +218,24 @@ class OnlineDataRepo extends DataRepo {
       response = await dio.delete(deleteUrl, data: data);
       content = jsonDecode(response.data!);
       if (content.containsKey("data")) {
-              // Map<String, dynamic>? result =
-               content["data"];
+        // Map<String, dynamic>? result =
+        content["data"];
       }
-    }on DioException catch (dioError) {
-    final errorHandled = Diohandling.fromDioError(dioError);
-     toast(errorHandled.errorMessage,
-        gravity: ToastGravity.BOTTOM,
-        bgColor: Colors.red,
-        textColor: Colors.white,
-        print: true);
-    log("Dio Error: ${errorHandled.errorMessage}");
-    return {"status": false, "message": errorHandled.errorMessage};
-  } catch (e) {
+    } on DioException catch (dioError) {
+      final errorHandled = Diohandling.fromDioError(dioError);
+      toast(errorHandled.errorMessage,
+          gravity: ToastGravity.BOTTOM,
+          bgColor: Colors.red,
+          textColor: Colors.white,
+          print: true);
+      log("Dio Error: ${errorHandled.errorMessage}");
+      return {"status": false, "message": errorHandled.errorMessage};
+    } catch (e) {
       return {"status": false, "message": "An error occurred: $e"};
     }
     logResponse(tagKey: INFOTAG, isInfo: true, response: response, url: url);
     logResponse(tagKey: ERRORTAG, isInfo: false, response: response, url: url);
     return content;
-    
   }
 
   @override
@@ -265,15 +253,15 @@ class OnlineDataRepo extends DataRepo {
       );
       content = jsonDecode(response.data!);
     } on DioException catch (dioError) {
-    final errorHandled = Diohandling.fromDioError(dioError);
-     toast(errorHandled.errorMessage,
-        gravity: ToastGravity.BOTTOM,
-        bgColor: Colors.red,
-        textColor: Colors.white,
-        print: true);
-    log("Dio Error: ${errorHandled.errorMessage}");
-    return {"status": false, "message": errorHandled.errorMessage};
-  }catch (e) {
+      final errorHandled = Diohandling.fromDioError(dioError);
+      toast(errorHandled.errorMessage,
+          gravity: ToastGravity.BOTTOM,
+          bgColor: Colors.red,
+          textColor: Colors.white,
+          print: true);
+      log("Dio Error: ${errorHandled.errorMessage}");
+      return {"status": false, "message": errorHandled.errorMessage};
+    } catch (e) {
       return {"status": false, "message": "An error occurred: $e"};
     }
     logResponse(tagKey: INFOTAG, isInfo: true, response: response, url: url);

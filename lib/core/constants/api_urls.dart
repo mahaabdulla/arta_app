@@ -1,5 +1,5 @@
 class ApiUrls {
-  static const String root = 'http://192.168.245.62:8000/api';
+  static const String root = 'http://192.168.225.108:8000/api';
   static const String getParentUrl = '$root/categories/parents';
 
   static String getChildrenUrl(int parentId) {
