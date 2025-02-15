@@ -3,13 +3,13 @@ import 'package:arta_app/core/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get.dart';
 
 import 'bloc_providers.dart';
 import 'core/notifications/handleLocalNotification.dart';
 import 'feature/presentations/cubits/login/login_cubit.dart';
 import 'feature/presentations/pages/login/login_screen.dart';
 import 'generated/l10n.dart';
-
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ],
       child: MaterialApp(
-        navigatorKey: navigatorKey,
+          navigatorKey: navigatorKey,
           onGenerateRoute: AppRoute.generatedRoute,
           // initialRoute: '/region',
           localizationsDelegates: [

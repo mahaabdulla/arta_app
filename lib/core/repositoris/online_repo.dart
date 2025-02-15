@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:arta_app/core/helper/shared_preference_helper.dart';
 import 'package:arta_app/core/utils/online_repo/online_methods.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -94,10 +93,10 @@ class OnlineDataRepo extends DataRepo {
 
       // Response<String> serverResponse = await DioConnection.connect().get(url);
 
-      // //Response<String> serverResponse=await Dio().get(source);
 
-      Map<String, dynamic> content = jsonDecode(response.data!);
-      return content;
+           //تأكدي من ذا 
+      // Map<String, dynamic> content = jsonDecode(response.data!);
+      // return content;
     } on DioException catch (dioError) {
       final errorHandled = Diohandling.fromDioError(dioError);
       toast(errorHandled.errorMessage,
@@ -113,6 +112,7 @@ class OnlineDataRepo extends DataRepo {
       }
       return {"status": false, "message": "An error occurred: $ex"};
     }
+     return response.data;
   }
 
   @override
@@ -133,7 +133,6 @@ class OnlineDataRepo extends DataRepo {
         response = Response(
             requestOptions: RequestOptions(), statusCode: 200, data: {});
       } else {
-        print("Dio instance: $dio");
         response = await dio.post(
           url,
           data: dataToSend,
@@ -245,13 +244,13 @@ class OnlineDataRepo extends DataRepo {
       "Authorization": "Bearer ${LocalStorage.getStringFromDisk(key: TOKEN)}",
     });
     Response? response;
-    late Map<String, dynamic> content;
+    // late Map<String, dynamic> content;
     try {
       response = await dio.put(
         url,
         data: data,
       );
-      content = jsonDecode(response.data!);
+      // content = jsonDecode(response.data!);
     } on DioException catch (dioError) {
       final errorHandled = Diohandling.fromDioError(dioError);
       toast(errorHandled.errorMessage,
@@ -266,6 +265,6 @@ class OnlineDataRepo extends DataRepo {
     }
     logResponse(tagKey: INFOTAG, isInfo: true, response: response, url: url);
     logResponse(tagKey: ERRORTAG, isInfo: false, response: response, url: url);
-    return content;
+    return response.data;
   }
 }

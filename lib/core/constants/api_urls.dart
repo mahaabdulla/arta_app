@@ -1,6 +1,8 @@
 class ApiUrls {
-  static const String root = 'http://192.168.225.108:8000/api';
+  static const String ipconfig = '192.168.25.107';
+  static const String root = 'http://$ipconfig:8000/api';
   static const String getParentUrl = '$root/categories/parents';
+  static const String getcategories = '$root/category';
 
   static String getChildrenUrl(int parentId) {
     return '$root/categories/$parentId/children';

@@ -4,10 +4,12 @@ import 'package:arta_app/core/utils/global_methods/global_methods.dart';
 import 'package:arta_app/core/utils/local_repo/local_storage.dart';
 import 'package:arta_app/feature/presentations/cubits/login/login_cubit.dart';
 import 'package:arta_app/feature/presentations/cubits/login/login_state.dart';
+import 'package:arta_app/feature/presentations/pages/login/test_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'dart:developer' as dev;
 import '../../../../core/utils/extensions/app_dialog.dart';
@@ -64,6 +66,11 @@ class LoginScreen extends StatelessWidget {
                     msg: state.message,
                     backgroundColor: Colors.green,
                   );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TestScreen()),
+                  );
+                  // Get.to(TestScreen);
                   // .then((_) {
                   //   TopLoader.stopLoading();
                   // });

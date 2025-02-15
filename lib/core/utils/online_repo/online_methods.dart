@@ -63,13 +63,14 @@ errorLogger(
   }
 }
 
-bool isSuccessResponse({required Response<dynamic> response}) {
-  if (response.statusCode! == 200 ||
-      response.statusCode! == 201 ||
-      response.statusCode! == 204) {
+bool isSuccessResponse({required Map<String,dynamic> response}) {
+  // if (response.statusCode! == 200 ||
+  //     response.statusCode! == 201 ||
+  //     response.statusCode! == 204) {
+  //   return true;
+  if (response["success"] == true) {
     return true;
   }
-
   return false;
 }
 

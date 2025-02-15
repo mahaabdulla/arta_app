@@ -2,15 +2,12 @@
 
 import 'dart:ui';
 
-import 'package:arta_app/core/constants/global_constants.dart';
-import 'package:arta_app/core/utils/local_repo/local_storage.dart';
-import 'package:dio/dio.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:developer' as dev;
 
-import 'package:intl/intl.dart';
 
 void log(Object? value) {
   if (!kReleaseMode) print(value);
