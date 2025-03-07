@@ -1,7 +1,7 @@
 import 'package:arta_app/core/constants/colors.dart';
 import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/core/constants/text.dart';
-import 'package:arta_app/feature/home/presention/widgets/details_bottum.dart';
+import 'package:arta_app/feature/presentations/pages/home/presention/widgets/details_bottum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
