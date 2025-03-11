@@ -1,11 +1,17 @@
 import 'package:arta_app/core/routes/routes_name.dart';
 import 'package:arta_app/core/utils/global_methods/global_methods.dart';
+import 'package:arta_app/feature/presentations/cubits/login/login_cubit.dart';
+import 'package:arta_app/feature/presentations/cubits/login/login_state.dart';
 import 'package:arta_app/feature/presentations/pages/login/widgets/login_button.dart';
 import 'package:arta_app/feature/presentations/pages/login/widgets/shred_login_scaffold.dart';
 import 'package:arta_app/feature/presentations/pages/login/widgets/title_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
+import 'test_screen.dart';
 import 'widgets/custom_login_textField.dart';
 import 'widgets/login_by_widget.dart';
 
@@ -40,10 +46,27 @@ class SginupScreen extends StatelessWidget {
         "validator": phoneValidator
       },
     ];
+
+    // تهيئة controllers بعد controllersText
+    controllers = List.generate(
+      6,
+      (index) => TextEditingController(
+          text: kDebugMode ? controllersText[index] : null),
+    );
   }
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final List<TextEditingController> controllers =
-      List.generate(6, (index) => TextEditingController());
+
+  final List<String> controllersText = [
+    'Heba',
+    'hebazubidi@gmail.com',
+    '1234567890',
+    '1234567890',
+    '777777777',
+    '777777777',
+  ];
+
+  late final List<TextEditingController> controllers;
 
   late final List<Map<String, dynamic>> fields;
 
@@ -58,8 +81,6 @@ class SginupScreen extends StatelessWidget {
               title: "انشاء حساب",
               supTitle: "نرحب بوجودك معنا استمتع بخدماتنا المميزة"),
           Expanded(
-            // height: 1500,
-            // width: double.infinity,
             child: ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 itemCount: controllers.length,
@@ -75,11 +96,48 @@ class SginupScreen extends StatelessWidget {
                   );
                 }),
           ),
-          LoginButton(
-              onTap: () {
-                if (formKey.currentState!.validate()) {}
-              },
-              text: 'إنشاء حساب'),
+          BlocConsumer<LoginCubit, LoginState>(
+            listener: (context, state) {
+              if (state is SuccessRegisterState) {
+                Fluttertoast.showToast(
+                  msg: state.message,
+                  backgroundColor: Colors.green,
+                );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TestScreen()),
+                );
+              } else if (state is ErrorRegisterState) {
+                toast(
+                  state.message,
+                  bgColor: Colors.red,
+                  print: true,
+                  gravity: ToastGravity.BOTTOM,
+                  textColor: Colors.white,
+                );
+              }
+            },
+            builder: (context, state) {
+              return LoginButton(
+                state: state,
+                onTap: state is LoadingRegisterState
+                    ? null
+                    : () async {
+                        if (formKey.currentState!.validate()) {
+                          await LoginCubit.get(context).register(
+                            name: controllers[0].text,
+                            email: controllers[1].text,
+                            password: controllers[2].text,
+                            confirmPassword: controllers[3].text,
+                            phoneNumber: controllers[4].text,
+                            whatsappNumber: controllers[5].text,
+                          );
+                        }
+                      },
+                text: 'إنشاء حساب',
+              );
+            },
+          ),
           LoginByWidget(
             mainText: 'لديك حساب بالفعل؟',
             secondaryText: 'سجل الدخول',
@@ -97,7 +155,6 @@ String? emailValidator(String? value) {
   if (value == null || value.isEmpty) {
     return 'البريد الإلكتروني مطلوب';
   }
-  // تحقق من صحة البريد باستخدام regex
   final emailRegex =
       RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
   if (!emailRegex.hasMatch(value)) {
@@ -110,10 +167,9 @@ String? phoneValidator(String? value) {
   if (value == null || value.isEmpty) {
     return 'رقم الجوال مطلوب';
   }
-  // تحقق من صحة رقم الجوال (يجب أن يكون 10 أرقام مثلاً)
-  final phoneRegex = RegExp(r'^[0-9]{10}$');
+  final phoneRegex = RegExp(r'^[0-9]{9}$');
   if (!phoneRegex.hasMatch(value)) {
-    return 'رقم الجوال غير صالح، يجب أن يكون مكونًا من 10 أرقام';
+    return 'رقم الجوال غير صالح، يجب أن يكون مكونًا من 9 أرقام';
   }
   return null;
 }

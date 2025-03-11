@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
 import 'core/notifications/handleLocalNotification.dart';
+import 'feature/presentations/cubits/ads/ads_cubit.dart';
 import 'feature/presentations/cubits/login/login_cubit.dart';
 import 'feature/presentations/pages/login/login_screen.dart';
 import 'generated/l10n.dart';
@@ -33,22 +34,27 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider(
           create: (_) => LoginCubit(OnlineDataRepo()),
+          
+        ),
+         BlocProvider(
+          create: (_) => AdsCubit(OnlineDataRepo()),
         ),
       ],
       child: MaterialApp(
-          navigatorKey: navigatorKey,
-          onGenerateRoute: AppRoute.generatedRoute,
-          // initialRoute: '/region',
-          locale: Locale('ar'),
-          localizationsDelegates: [
-            S.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: S.delegate.supportedLocales,
-          debugShowCheckedModeBanner: false,
-          home: LoginScreen()),
+        navigatorKey: navigatorKey,
+        onGenerateRoute: AppRoute.generatedRoute,
+        initialRoute: '/splash',
+        locale: Locale('ar'),
+        localizationsDelegates: [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        debugShowCheckedModeBanner: false,
+        // home: LoginScreen()
+      ),
     );
   }
 }

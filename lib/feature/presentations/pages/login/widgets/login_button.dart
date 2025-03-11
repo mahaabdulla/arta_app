@@ -43,7 +43,7 @@ class LoginButton extends StatelessWidget {
           ],
         ),
         child: Center(
-          child: state is LoadingLoginState
+          child: state is LoadingLoginState || state is LoadingRegisterState
               ? SizedBox(
                   width: 200,
                   height: 50,

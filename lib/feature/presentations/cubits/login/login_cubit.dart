@@ -57,6 +57,75 @@ class LoginCubit extends Cubit<LoginState> {
       emit(ErrorLoginState(message: "Unexpected error"));
     }
   }
+
+  Future<void> register({
+    required String name,
+    required String email,
+    required String password,
+    required String confirmPassword,
+    required String phoneNumber,
+    required String whatsappNumber,
+  }) async {
+    emit(LoadingRegisterState());
+
+    var data = {
+      'name': name,
+      'email': email,
+      'password': password,
+      'password_confirmation': confirmPassword,
+      'contact_number': phoneNumber,
+      'whatsapp_number': whatsappNumber,
+    };
+
+    dev.log("The registration form data is: $data");
+
+    try {
+      final response = await _api.postData(data, ApiUrls.REGISTER);
+
+      if (isSuccessResponse(response: response)) {
+        var userData = response['data'];
+        UserModel user = UserModel.fromJson(userData);
+
+        if (userData['id'] != null) {
+          LocalStorage.saveStringToDisk(
+              key: 'USER_ID', value: userData['id'].toString());
+        }
+        if (userData['email'] != null) {
+          LocalStorage.saveStringToDisk(
+              key: 'USER_EMAIL', value: userData['email']);
+        }
+        if (userData['name'] != null) {
+          LocalStorage.saveStringToDisk(
+              key: 'USER_NAME', value: userData['name']);
+        }
+        if (userData['whatsapp_number'] != null) {
+          LocalStorage.saveStringToDisk(
+              key: 'USER_WHATSAPP', value: userData['whatsapp_number']);
+        }
+        if (userData['contact_number'] != null) {
+          LocalStorage.saveStringToDisk(
+              key: 'USER_PHONE', value: userData['contact_number']);
+        }
+
+        await saveUserData(user);
+        storeCredentials(password);
+        emit(SuccessRegisterState(message: response['message'] ?? ""));
+      } else {
+        emit(ErrorRegisterState(message: response['message'] ?? ""));
+      }
+    } on DioException catch (dioError) {
+      final errorHandled = Diohandling.fromDioError(dioError);
+      toast(errorHandled.errorMessage,
+          gravity: ToastGravity.BOTTOM,
+          bgColor: Colors.red,
+          textColor: Colors.white,
+          print: true);
+      dev.log("Dio Error: \${errorHandled.errorMessage}");
+    } catch (e) {
+      dev.log(e.toString());
+      emit(ErrorRegisterState(message: "Unexpected error"));
+    }
+  }
 }
 
 void storeCredentials(String password) async {

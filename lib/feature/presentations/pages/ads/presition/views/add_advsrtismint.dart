@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:arta_app/feature/presentations/pages/ads/model/region.dart';
+import 'package:arta_app/feature/data/models/ads/region.dart';
 import 'package:arta_app/feature/presentations/pages/ads/presition/widgets/add_ads_textfield.dart';
 import 'package:arta_app/feature/presentations/pages/ads/presition/widgets/save_ads_button.dart';
 import 'package:arta_app/feature/presentations/pages/ads/view_model/ads_vm.dart';
