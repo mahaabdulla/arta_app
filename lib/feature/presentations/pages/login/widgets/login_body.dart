@@ -16,6 +16,8 @@ import 'login_button.dart';
 import 'login_by_widget.dart';
 import 'title_page.dart';
 
+import 'dart:developer' as dev;
+
 class LoginBody extends StatelessWidget {
   LoginBody({
     super.key,
@@ -36,84 +38,87 @@ class LoginBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TitlePage(title: title, supTitle: supTitle),
-        vSpace(39.h),
-        CustomLoginTextField(
-          controller: _usernameController,
-          hintText: "اسم المستخدم او البريد الإلكتروني",
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "هذا الحقل مطلوب";
-            } else if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+\$')
-                .hasMatch(value)) {
-              return "الرجاء إدخال بريد إلكتروني صحيح";
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          TitlePage(title: title, supTitle: supTitle),
+          vSpace(39.h),
+          CustomLoginTextField(
+            controller: _usernameController,
+            hintText: "اسم المستخدم او البريد الإلكتروني",
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "هذا الحقل مطلوب";
+              }
+              //  else if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+\$')
+              //     .hasMatch(value)) {
+              //   return "الرجاء إدخال بريد إلكتروني صحيح";
+              // }
+              return null;
+            },
+          ),
+          vSpace(24.h),
+          CustomLoginTextField(
+            controller: _passwordController,
+            hintText: "كلمة السر",
+            isPassword: true,
+            validator: (value) {
+              if (value == null || value.length < 6) {
+                return "يجب أن تكون كلمة السر 6 أحرف على الأقل";
+              }
+              return null;
+            },
+          ),
+          vSpace(39.h),
+          BlocConsumer<LoginCubit, LoginState>(listener: (context, state) {
+            if (state is SuccessLoginState) {
+              Fluttertoast.showToast(
+                msg: state.message,
+                backgroundColor: Colors.green,
+              );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TestScreen()),
+              );
+              // Get.to(TestScreen);
+              // .then((_) {
+              //   TopLoader.stopLoading();
+              // });
+            } else if (state is ErrorLoginState) {
+              // TopLoader.stopLoading();
+              toast(
+                state.message,
+                bgColor: Colors.red,
+                print: true,
+                gravity: ToastGravity.BOTTOM,
+                textColor: Colors.white,
+              );
             }
-            return null;
-          },
-        ),
-        vSpace(24.h),
-        CustomLoginTextField(
-          controller: _passwordController,
-          hintText: "كلمة السر",
-          isPassword: true,
-          validator: (value) {
-            if (value == null || value.length < 6) {
-              return "يجب أن تكون كلمة السر 6 أحرف على الأقل";
-            }
-            return null;
-          },
-        ),
-        vSpace(39.h),
-        BlocConsumer<LoginCubit, LoginState>(listener: (context, state) {
-          if (state is LoadingLoginState) {
-            // TopLoader.startLoading();
-          } else if (state is SuccessLoginState) {
-            Fluttertoast.showToast(
-              msg: state.message,
-              backgroundColor: Colors.green,
+          }, builder: (context, state) {
+            return LoginButton(
+              text: 'تسجيل الدخول',
+              state: state,
+              onTap: state is LoadingLoginState
+                  ? null
+                  : () async {
+                      if (formKey.currentState!.validate()) {
+                        dev.log("tapped");
+                        await LoginCubit.get(context).login(
+                          email: _usernameController.text,
+                          password: _passwordController.text,
+                        );
+                      }
+                    },
             );
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => TestScreen()),
-            );
-            // Get.to(TestScreen);
-            // .then((_) {
-            //   TopLoader.stopLoading();
-            // });
-          } else if (state is ErrorLoginState) {
-            // TopLoader.stopLoading();
-            toast(
-              state.message,
-              bgColor: Colors.red,
-              print: true,
-              gravity: ToastGravity.BOTTOM,
-              textColor: Colors.white,
-            );
-          }
-        }, builder: (context, state) {
-          return LoginButton(
-            text: 'تسجيل الدخول',
-            state: state,
-            onTap: state is LoadingLoginState
-                ? null
-                : () async {
-                    if (formKey.currentState!.validate()) {
-                      await LoginCubit.get(context).login(
-                        email: _usernameController.text,
-                        password: _passwordController.text,
-                      );
-                    }
-                  },
-          );
-        }),
-        LoginByWidget(
-          mainText: 'ليس لديك حساب؟',
-          secondaryText: 'انشاء حساب',
-          navigatorPage: SIGNUP,
-        ),
-      ],
+          }),
+          LoginByWidget(
+            mainText: 'ليس لديك حساب؟',
+            secondaryText: 'انشاء حساب',
+            navigatorPage: SIGNUP,
+          ),
+        ],
+      ),
     );
   }
 }

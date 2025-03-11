@@ -1,5 +1,5 @@
-import 'package:arta_app/feature/presentations/pages/ads/model/region_children_model.dart';
-import 'package:arta_app/feature/presentations/pages/ads/model/region_parent_model.dart';
+import 'package:arta_app/feature/data/models/ads/region_children_model.dart';
+import 'package:arta_app/feature/data/models/ads/region_parent_model.dart';
 
 class Region {
   int? id;
