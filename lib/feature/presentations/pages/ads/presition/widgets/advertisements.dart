@@ -40,64 +40,66 @@ class _AdvertisementsViewState extends State<AdvertisementsView> {
     //   },
     // ];
 
-    return BlocBuilder<AdsCubit, AdsState>(
-      builder: (context, state) {
+    return BlocBuilder<AdsCubit, AdsState>(builder: (context, state) {
+      print("ads work");
       if (state is LoadingAdsState) {
         return Center(child: CircularProgressIndicator());
       } else if (state is SuccessAdsState) {
         if (state.ads.data == null || state.ads.data!.isEmpty) {
           return Center(child: Text("لا توجد إعلانات متاحة"));
-        }else{
+        } else {
           return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: CarouselSlider.builder(
-                itemCount: state.ads.links!.length,
-                options: CarouselOptions(
-                  height: 180,
-                  autoPlay: true,
-                  enlargeCenterPage: true,
-                  viewportFraction: 0.85,
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      _currentPage = index;
-                    });
-                  },
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: CarouselSlider.builder(
+                    itemCount: state.ads.links!.length,
+                    options: CarouselOptions(
+                      height: 180,
+                      autoPlay: true,
+                      enlargeCenterPage: true,
+                      viewportFraction: 0.85,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          _currentPage = index;
+                        });
+                      },
+                    ),
+                    itemBuilder: (context, index, realIndex) {
+                      //  final ad = state.ads;
+                      //  [index];
+                      // final ad = ads[index];
+                      return _buildAdContainer(
+                        title: state.ads.links?[index].label ?? "",
+                        description: "",
+                        //الصورة لما تكون حقيقية المفروض نجيبها من ملف مش رابط
+                        //لأنها ترفع في السيرفر على شكل ملف
+                        imagePath:
+                            // state.ads.links?[index].url ??
+                            "assets/png_images/adv.png",
+                      );
+                    },
+                  ),
                 ),
-                itemBuilder: (context, index, realIndex) {
-                  //  final ad = state.ads;
-                  //  [index];
-                  // final ad = ads[index];
-                  return _buildAdContainer(
-                    title:state.ads.links?[index].label?? "",
-                    description: "",
-                    //الصورة لما تكون حقيقية المفروض نجيبها من ملف مش رابط
-                    //لأنها ترفع في السيرفر على شكل ملف 
-                    imagePath: state.ads.links?[index].url ?? "imagePath': 'assets/png_images/adv.png" ,
-                  );
-                },
-              ),
+                const SizedBox(height: 12),
+                AnimatedSmoothIndicator(
+                  activeIndex: _currentPage,
+                  count: state.ads.links!.length,
+                  effect: const ScrollingDotsEffect(
+                    activeDotColor: Color(0xff33869C),
+                    dotColor: Colors.grey,
+                    dotHeight: 8,
+                    dotWidth: 8,
+                    spacing: 6,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 12),
-            AnimatedSmoothIndicator(
-              activeIndex: _currentPage,
-              count: state.ads.links!.length,
-              effect: const ScrollingDotsEffect(
-                activeDotColor: Color(0xff33869C),
-                dotColor: Colors.grey,
-                dotHeight: 8,
-                dotWidth: 8,
-                spacing: 6,
-              ),
-            ),
-          ],
-        ),
-      );
+          );
         }
       }
-       return SizedBox();
+      return SizedBox();
     });
   }
 

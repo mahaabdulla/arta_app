@@ -14,14 +14,14 @@ import '../../../data/models/ads/ads_model.dart';
 import 'ads_state.dart';
 import 'dart:developer' as dev;
 
-class AdsCubit extends Cubit<AdsState>{
+class AdsCubit extends Cubit<AdsState> {
   late final OnlineDataRepo _api;
 
   AdsCubit(this._api) : super(AdsInitial());
 
   static AdsCubit get(context) => BlocProvider.of(context);
 
-   int currentPage = 1;
+  int currentPage = 1;
   bool hasMore = true;
   List<dynamic> adsList = [];
 
@@ -38,13 +38,13 @@ class AdsCubit extends Cubit<AdsState>{
   //     final response = await _api.getData(url: ApiUrls.postAdstUrl,
   //     //  columns: {"page": currentPage}
   //      );
-      
+
   //     if (isSuccessResponse(response: response)) {
   //       AdsModel adsModel = AdsModel.fromJson(response["data"]);
-        
+
   //       adsList.addAll(adsModel.data ?? []);
   //       hasMore = adsModel.currentPage! < adsModel.lastPage!;
-        
+
   //       emit(SuccessAdsState(ads: adsModel));
   //       currentPage++;
   //     } else {
@@ -63,13 +63,14 @@ class AdsCubit extends Cubit<AdsState>{
   //   }
   // }
 
-   Future<void> fetchAds() async {
+  Future<void> fetchAds() async {
     emit(LoadingAdsState());
     try {
-      final response = await _api.getData(url: ApiUrls.postAdstUrl,
-      //  columns: {"page": currentPage}
-       );
-
+      final response = await _api.getData(
+        url: ApiUrls.postAdstUrl,
+        //  columns: {"page": currentPage}
+      );
+      dev.log("the responce is $response");
       if (isSuccessResponse(response: response)) {
         final jsonResponse = json.decode(response['data']);
         if (jsonResponse["success"]) {
@@ -89,11 +90,8 @@ class AdsCubit extends Cubit<AdsState>{
           textColor: Colors.white,
           print: true);
       dev.log("Dio Error: ${errorHandled.errorMessage}");
-    }catch (e) {
-      emit(ErrorAdsState(message:"Failed to load ads: $e"));
+    } catch (e) {
+      emit(ErrorAdsState(message: "Failed to load ads: $e"));
     }
   }
-
 }
-
-
