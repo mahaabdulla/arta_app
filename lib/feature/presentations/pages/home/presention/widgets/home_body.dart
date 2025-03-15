@@ -13,40 +13,40 @@ import 'package:flutter_svg/svg.dart';
 class HomeBody extends StatelessWidget {
   HomeBody({super.key});
 
-  final List<Category> categories = [
-    Category(
-      id: 1,
-      name: 'السيارات',
-    ),
-    Category(
-      id: 2,
-      name: 'الدراجات',
-    ),
-    Category(
-      id: 54,
-      name: 'الأجهزة',
-    ),
-    Category(
-      id: 92,
-      name: 'الأثاث',
-    ),
-    Category(
-      id: 5,
-      name: 'الرياضة',
-    ),
-    Category(
-      id: 6,
-      name: 'الملابس النسائية',
-    ),
-    Category(
-      id: 26,
-      name: 'عقارات',
-    ),
-    Category(
-      id: 8,
-      name: 'المزيد',
-    ),
-  ];
+  // final List<Category> categories = [
+  //   Category(
+  //     id: 1,
+  //     name: 'السيارات',
+  //   ),
+  //   Category(
+  //     id: 2,
+  //     name: 'الدراجات',
+  //   ),
+  //   Category(
+  //     id: 54,
+  //     name: 'الأجهزة',
+  //   ),
+  //   Category(
+  //     id: 92,
+  //     name: 'الأثاث',
+  //   ),
+  //   Category(
+  //     id: 5,
+  //     name: 'الرياضة',
+  //   ),
+  //   Category(
+  //     id: 6,
+  //     name: 'الملابس النسائية',
+  //   ),
+  //   Category(
+  //     id: 26,
+  //     name: 'عقارات',
+  //   ),
+  //   Category(
+  //     id: 8,
+  //     name: 'المزيد',
+  //   ),
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,8 @@ class HomeBody extends StatelessWidget {
           const SliverToBoxAdapter(
             child: SizedBox(height: 16),
           ),
-          CateguryList(categ: categories), 
+          // categ: categories
+          CateguryList(), 
           const SliverToBoxAdapter(child: SearchBarFiltter()),
           CatguryList(
             color: const Color(0xff046998),

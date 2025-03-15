@@ -6,6 +6,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../cubits/ads/ads_cubit.dart';
 import '../../../../cubits/ads/ads_state.dart';
+import "dart:developer" as dev;
 
 // Ads Slider
 
@@ -18,7 +19,13 @@ class AdvertisementsView extends StatefulWidget {
 
 class _AdvertisementsViewState extends State<AdvertisementsView> {
   int _currentPage = 0;
-
+  @override
+void initState() {
+  super.initState();
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    context.read<AdsCubit>().fetchAds(); 
+  });
+}
   @override
   Widget build(BuildContext context) {
     // final List<Map<String, String>> ads = [
@@ -41,13 +48,14 @@ class _AdvertisementsViewState extends State<AdvertisementsView> {
     // ];
 
     return BlocBuilder<AdsCubit, AdsState>(builder: (context, state) {
-      print("ads work");
+
       if (state is LoadingAdsState) {
         return Center(child: CircularProgressIndicator());
       } else if (state is SuccessAdsState) {
-        if (state.ads.data == null || state.ads.data!.isEmpty) {
+        if (state.ads.links == null || state.ads.links!.isEmpty) {
           return Center(child: Text("لا توجد إعلانات متاحة"));
         } else {
+          dev.log("Ads Links: ${state.ads.links}");
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Column(
