@@ -46,6 +46,7 @@ class CategoryCubit extends Cubit<CategoryState> {
     } catch (e) {
       dev.log(e.toString());
       emit(ErrorCategoryState(message: "Unexpected error"));
+      
     }
   }
 }
