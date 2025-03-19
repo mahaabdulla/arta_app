@@ -98,9 +98,21 @@ class _CategoryListState extends State<CategoryList> {
                   children: [
                     Expanded(
                       child: category.id == -1
-                          ?  Container(
-                            
-                          )
+                          ? Container(
+                              width: 57.79.w,
+                              height: 59.17.h,
+                              decoration: ShapeDecoration(
+                                color: const Color(0xFFF2F2F7),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(55.04),
+                                ),
+                              ),
+                              child: Icon(
+                                Icons.more_horiz_rounded,
+                                color: Colors.blue,
+                                size: 50.sp,
+                              ),
+                            )
                           //  SvgPicture.asset(
                           //     moreImage,
                           //   )
