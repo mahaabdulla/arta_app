@@ -1,31 +1,24 @@
+import 'package:arta_app/core/utils/myblocobserver.dart';
 
-import 'package:arta_app/feature/ads/presition/views/add_advsrtismint.dart';
-import 'package:arta_app/generated/l10n.dart';
-import 'package:arta_app/core/routes/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import 'core/helper/shared_preference_helper.dart';
+import 'material_app.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedPrefsHelper.init();
+  Bloc.observer = MyBlocObserver();
+  runApp(
+    ScreenUtilInit(
+      designSize: Size(390, 844), 
+      builder: (context, child) {
+        return MyApp();
+      },
+    ),
+  );
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      onGenerateRoute: AppRoute.generatedRoute,
-    // initialRoute: '/region',
-      localizationsDelegates: [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: S.delegate.supportedLocales,
-      debugShowCheckedModeBanner: false, 
-      home: AddAdvertisementView()
-    );
-  }
+  // runApp(const MyApp());
 }

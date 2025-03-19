@@ -16,3 +16,5 @@ const String locationImage = '${root}Map Point.svg';
 const String boardImage = '${root}banner.svg';
 const String iconsArrow = '${root}icon-notif.svg';
 const String sendCommint = '${root}Plain.svg';
+
+const String googleLogo = '${root}google icon.svg';
