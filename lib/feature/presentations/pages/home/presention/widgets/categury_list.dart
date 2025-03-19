@@ -1,4 +1,6 @@
+import 'package:arta_app/core/constants/api_urls.dart';
 import 'package:arta_app/core/constants/png_images.dart';
+import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/core/constants/text.dart';
 import 'package:arta_app/core/utils/global_methods/global_methods.dart';
 import 'package:arta_app/feature/data/models/category.dart';
@@ -6,6 +8,7 @@ import 'package:arta_app/feature/presentations/pages/categorys/presintion/ctagur
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../cubits/categories/categories_cubit.dart';
@@ -25,7 +28,7 @@ class _CategoryListState extends State<CategoryList> {
   @override
   void initState() {
     categoryCubit = context.read<CategoryCubit>();
-    categoryCubit.getCategoris();
+    categoryCubit.getCategoris(isHome: true);
     super.initState();
   }
 
@@ -75,6 +78,8 @@ class _CategoryListState extends State<CategoryList> {
             ),
             itemCount: state.categories.length,
             itemBuilder: (ctx, index) {
+              dev.log(
+                  " image URL is ${ApiUrls.image_root}/${state.categories[0].image}");
               Category category = state.categories[index];
 
               return GestureDetector(
@@ -91,12 +96,20 @@ class _CategoryListState extends State<CategoryList> {
                 },
                 child: Column(
                   children: [
-                    AspectRatio(
-                      aspectRatio: 1,
-                      child: Image.asset(
-                        ctgImages[index % ctgImages.length],
-                        fit: BoxFit.contain,
-                      ),
+                    Expanded(
+                      child: category.id == -1
+                          ?  Container(
+                            
+                          )
+                          //  SvgPicture.asset(
+                          //     moreImage,
+                          //   )
+                          : Image.network(
+                              "${ApiUrls.image_root}/${category.image}",
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(ctgImages[1]);
+                              },
+                            ),
                     ),
                     SizedBox(height: 8.h),
                     Text(

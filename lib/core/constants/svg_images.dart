@@ -18,3 +18,6 @@ const String iconsArrow = '${root}icon-notif.svg';
 const String sendCommint = '${root}Plain.svg';
 
 const String googleLogo = '${root}google icon.svg';
+const String moreImage = '${root}more.svg';
+
+

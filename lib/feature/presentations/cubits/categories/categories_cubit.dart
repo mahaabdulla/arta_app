@@ -1,3 +1,4 @@
+import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/core/repositoris/online_repo.dart';
 import 'package:arta_app/core/utils/global_methods/global_methods.dart';
 import 'package:arta_app/core/utils/online_repo/dio_handling.dart';
@@ -20,16 +21,27 @@ class CategoryCubit extends Cubit<CategoryState> {
 
   static CategoryCubit get(context) => BlocProvider.of(context);
 
-  Future<void> getCategoris() async {
+  Future<void> getCategoris({bool isHome = false}) async {
     emit(LoadingCategoryState());
     try {
       final response = await _api.getData(url: ApiUrls.getcategories);
 
       if (isSuccessResponse(response: response)) {
+        List<Category> categories = [];
         // UserModel user = UserModel.fromJson(response['data']['user']);
-        List<Category> categories = (response['data']['data'] as List)
-            .map((json) => Category.fromJson(json))
-            .toList();
+        if (isHome) {
+            categories = (response['data']['data'] as List).take(7)
+              .map((json) => Category.fromJson(json))
+              .toList();
+
+            categories.add(Category(id: -1, name: "كل الحراج", image: moreImage));
+        } else {
+          categories = (response['data']['data'] as List)
+              .map((json) => Category.fromJson(json))
+              .toList();
+        }
+
+        // List<Category> categories = data.take(7).map((e) => Category.fromJson(e)).toList();
         emit(SuccessCategoryState(categories: categories));
       } else {
         emit(ErrorCategoryState(message: response['message'] ?? ""));
@@ -46,7 +58,6 @@ class CategoryCubit extends Cubit<CategoryState> {
     } catch (e) {
       dev.log(e.toString());
       emit(ErrorCategoryState(message: "Unexpected error"));
-      
     }
   }
 }
