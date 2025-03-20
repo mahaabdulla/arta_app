@@ -91,7 +91,8 @@ class AdsModel {
   factory AdsModel.fromJson(Map<String, dynamic> json) {
     return AdsModel(
       currentPage: json['current_page'],
-      data: json['data'] != null ? List<dynamic>.from(json['data']) : null,
+       data: json['data'] != null ? List<dynamic>.from(json['data']) : null,
+      // data: json['data'] != null ? List<dynamic>.from(json['data']) : null,
       firstPageUrl: json['first_page_url'],
       from: json['from'],
       lastPage: json['last_page'],

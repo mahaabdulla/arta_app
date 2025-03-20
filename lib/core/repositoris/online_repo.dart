@@ -93,8 +93,7 @@ class OnlineDataRepo extends DataRepo {
 
       // Response<String> serverResponse = await DioConnection.connect().get(url);
 
-
-           //تأكدي من ذا 
+      //تأكدي من ذا
       // Map<String, dynamic> content = jsonDecode(response.data!);
       // return content;
     } on DioException catch (dioError) {
@@ -112,7 +111,7 @@ class OnlineDataRepo extends DataRepo {
       }
       return {"status": false, "message": "An error occurred: $ex"};
     }
-     return response.data;
+    return response.data;
   }
 
   @override
@@ -165,7 +164,6 @@ class OnlineDataRepo extends DataRepo {
     }
     return response.data;
   }
-
 
   Future<Response> postForm(
       {required String url,

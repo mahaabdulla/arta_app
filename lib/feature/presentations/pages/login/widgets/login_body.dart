@@ -70,7 +70,7 @@ class LoginBody extends StatelessWidget {
               return null;
             },
           ),
-          vSpace(39.h),
+          vSpace( 39.h),
           BlocConsumer<LoginCubit, LoginState>(listener: (context, state) {
             if (state is SuccessLoginState) {
               Fluttertoast.showToast(

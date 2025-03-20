@@ -3,12 +3,11 @@ import 'package:arta_app/core/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:get/get.dart';
 
 import 'core/notifications/handleLocalNotification.dart';
 import 'feature/presentations/cubits/ads/ads_cubit.dart';
+import 'feature/presentations/cubits/categories/categories_cubit.dart';
 import 'feature/presentations/cubits/login/login_cubit.dart';
-import 'feature/presentations/pages/login/login_screen.dart';
 import 'generated/l10n.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -34,16 +33,18 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider(
           create: (_) => LoginCubit(OnlineDataRepo()),
-          
         ),
-         BlocProvider(
+        BlocProvider(
           create: (_) => AdsCubit(OnlineDataRepo()),
+        ),
+        BlocProvider(
+          create: (_) => CategoryCubit(OnlineDataRepo()),
         ),
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,
         onGenerateRoute: AppRoute.generatedRoute,
-        initialRoute: '/splash',
+        initialRoute: '/home',
         locale: Locale('ar'),
         localizationsDelegates: [
           S.delegate,

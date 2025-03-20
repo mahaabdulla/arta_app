@@ -20,12 +20,12 @@ class _CategoryChildrenViewState extends State<CategoryChildrenView> {
   List<Category> children = [];
   bool loading = true;
 
-  @override
-  void initState() {
-    super.initState();
-    ctgVM = CateguryVM();
-    fetchChildren();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   ctgVM = CateguryVM();
+  //   fetchChildren();
+  // }
 
   Future<void> fetchChildren() async {
     setState(() {

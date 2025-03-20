@@ -68,17 +68,16 @@ class AdsCubit extends Cubit<AdsState> {
     try {
       final response = await _api.getData(
         url: ApiUrls.postAdstUrl,
+
         //  columns: {"page": currentPage}
       );
       dev.log("the responce is $response");
       if (isSuccessResponse(response: response)) {
-        final jsonResponse = json.decode(response['data']);
-        if (jsonResponse["success"]) {
+        final jsonResponse = response['data'];
           AdsModel adsModel = AdsModel.fromJson(jsonResponse["data"]);
+          // AdsModel adsModel = AdsModel.fromJson(jsonResponse["data"]);
           emit(SuccessAdsState(ads: adsModel));
-        } else {
-          emit(ErrorAdsState(message: "Failed to raetrieve ads"));
-        }
+       
       } else {
         emit(ErrorAdsState(message: "Error: ${response['message']}"));
       }

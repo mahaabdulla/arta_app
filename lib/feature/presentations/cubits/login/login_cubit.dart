@@ -38,6 +38,7 @@ class LoginCubit extends Cubit<LoginState> {
         UserModel user = UserModel.fromJson(response['data']['user']);
 
         await saveUserData(user);
+
         //TODO: thers a problem here try to fix this
         storeCredentials(password);
         emit(SuccessLoginState(message: response['message'] ?? ""));
@@ -51,7 +52,7 @@ class LoginCubit extends Cubit<LoginState> {
           bgColor: Colors.red,
           textColor: Colors.white,
           print: true);
-      dev.log("Dio Error: ${errorHandled.errorMessage}");
+      dev.log("Dio Error: ${errorHandled.errorMessage}",name: "Dio Error");
     } catch (e) {
       dev.log(e.toString());
       emit(ErrorLoginState(message: "Unexpected error"));
