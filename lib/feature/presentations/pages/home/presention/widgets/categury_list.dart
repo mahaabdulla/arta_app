@@ -81,7 +81,8 @@ class _CategoryListState extends State<CategoryList> {
               dev.log(
                   " image URL is ${ApiUrls.image_root}/${state.categories[0].image}");
               Category category = state.categories[index];
-
+              dev.log(
+                  "the image response is : http://localhost:8000/${category.image}");
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -117,7 +118,7 @@ class _CategoryListState extends State<CategoryList> {
                           //     moreImage,
                           //   )
                           : Image.network(
-                              "${ApiUrls.image_root}/${category.image}",
+                              "${ApiUrls.image_root}${category.image}",
                               errorBuilder: (context, error, stackTrace) {
                                 return Image.asset(ctgImages[1]);
                               },

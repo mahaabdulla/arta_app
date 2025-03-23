@@ -13,11 +13,11 @@ class AdsInitial extends AdsState {}
 class LoadingAdsState extends AdsState {}
 
 class SuccessAdsState extends AdsState {
-  final AdsModel ads;
+  final List<ListingModel> listing;
 
-  const SuccessAdsState({required this.ads});
+  const SuccessAdsState({required this.listing});
   @override
-  List<Object> get props => [ads];
+  List<Object> get props => [listing];
 }
 
 class ErrorAdsState extends AdsState {

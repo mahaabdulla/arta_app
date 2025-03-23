@@ -71,13 +71,17 @@ class AdsCubit extends Cubit<AdsState> {
 
         //  columns: {"page": currentPage}
       );
-      dev.log("the responce is $response");
+      
       if (isSuccessResponse(response: response)) {
-        final jsonResponse = response['data'];
-          AdsModel adsModel = AdsModel.fromJson(jsonResponse["data"]);
-          // AdsModel adsModel = AdsModel.fromJson(jsonResponse["data"]);
-          emit(SuccessAdsState(ads: adsModel));
-       
+        // final jsonResponse = response['data'];
+        //  = AdsModel.fromJson(jsonResponse["data"]);
+        // AdsModel adsModel = AdsModel.fromJson(jsonResponse["data"]);
+
+        List<ListingModel> adsModel = (response['data']['data'] as List)
+            .map((json) => ListingModel.fromJson(json))
+            .toList();
+            dev.log("the ADS responce is ${adsModel[0].title}");
+        emit(SuccessAdsState(listing: adsModel));
       } else {
         emit(ErrorAdsState(message: "Error: ${response['message']}"));
       }

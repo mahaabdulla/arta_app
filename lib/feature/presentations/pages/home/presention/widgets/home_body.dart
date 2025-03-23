@@ -1,7 +1,7 @@
 import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/core/constants/text.dart';
 import 'package:arta_app/feature/presentations/pages/ads/presition/widgets/advertisements.dart';
-import 'package:arta_app/core/widgets/catgury_list.dart';
+import 'package:arta_app/core/widgets/products_list.dart';
 import 'package:arta_app/feature/presentations/pages/home/presention/widgets/searchbar.dart';
 import 'package:arta_app/feature/presentations/pages/home/presention/widgets/categury_list.dart';
 import 'package:arta_app/feature/presentations/pages/home/presention/widgets/see_more_buttom.dart';
@@ -80,19 +80,8 @@ class HomeBody extends StatelessWidget {
               CategoryList(),
               const SizedBox(height: 16),
               SearchBarFiltter(),
-              CatguryList(
-                color: const Color(0xff046998),
-                title: 'سيارة تويوتا موديل 2006',
-                text: '',
-                userName: 'أحمد',
-                time: '30',
-                price: '30.000',
-                location: 'سيئون',
-                imagePath:
-                    'https://cp.slaati.com//wp-content/uploads/2024/04/WhatsApp-Image-2024-04-09-at-12.52.56-PM.jpeg',
-                onTap: () {
-                  Navigator.pushNamed(context, '/product');
-                },
+              ProductsList(
+               
               ),
               const SizedBox(height: 16),
               SeeMoreButtom(),

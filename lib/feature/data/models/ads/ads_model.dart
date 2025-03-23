@@ -1,157 +1,124 @@
-// class Listing {
-//   String? title;
-//   String? price;
-//   String? categoryId;
-//   String? regionId;
-//   String? status;
-//   String? description;
-//   int? userId;
-//   String? primaryImage;
-//   String? updatedAt;
-//   String? createdAt;
-//   int? id;
+class ListingModel {
+  final int? id;
+  final String? title;
+  final int? userId;
+  final String? description;
+  final String? price;
+  final int? currencyId;
+  final int? categoryId;
+  final int? regionId;
+  final String? status;
+  final String? primaryImage;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final UserModel? user;
+  final CategoryModel? category;
+  final RegionModel? region;
+  final List<String>? images;
+  final List<String>? comments;
+  final CurrencyModel? currency;
 
-//   Listing({
-//     this.title,
-//     this.price,
-//     this.categoryId,
-//     this.regionId,
-//     this.status,
-//     this.description,
-//     this.userId,
-//     this.primaryImage,
-//     this.updatedAt,
-//     this.createdAt,
-//     this.id,
-//   });
-
-//   Listing.fromJson(Map<String, dynamic> json) {
-//     title = json['title'];
-//     price = json['price'];
-//     categoryId = json['category_id'];
-//     regionId = json['region_id'];
-//     status = json['status'];
-//     description = json['description'];
-//     userId = json['user_id'];
-//     primaryImage = json['primary_image'];
-//     updatedAt = json['updated_at'];
-//     createdAt = json['created_at'];
-//     id = json['id'];
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     return {
-//       'title': title,
-//       'price': price,
-//       'category_id': categoryId,
-//       'region_id': regionId,
-//       'status': status,
-//       'description': description,
-//       'user_id': userId,
-//       'primary_image': primaryImage,
-//       'updated_at': updatedAt,
-//       'created_at': createdAt,
-//       'id': id,
-//     };
-//   }
-// }
-
-
-class AdsModel {
-  int? currentPage;
-  List<dynamic>? data; // Use `dynamic` or a specific model class if the structure is known
-  String? firstPageUrl;
-  dynamic from; // Use `dynamic` or a specific type if the structure is known
-  int? lastPage;
-  String? lastPageUrl;
-  List<AdsLinks>? links;
-  dynamic nextPageUrl; // Use `dynamic` or a specific type if the structure is known
-  String? path;
-  int? perPage;
-  dynamic prevPageUrl; // Use `dynamic` or a specific type if the structure is known
-  dynamic to; // Use `dynamic` or a specific type if the structure is known
-  int? total;
-
-  AdsModel({
-    this.currentPage,
-    this.data,
-    this.firstPageUrl,
-    this.from,
-    this.lastPage,
-    this.lastPageUrl,
-    this.links,
-    this.nextPageUrl,
-    this.path,
-    this.perPage,
-    this.prevPageUrl,
-    this.to,
-    this.total,
+  ListingModel({
+    this.id,
+    this.title,
+    this.userId,
+    this.description,
+    this.price,
+    this.currencyId,
+    this.categoryId,
+    this.regionId,
+    this.status,
+    this.primaryImage,
+    this.createdAt,
+    this.updatedAt,
+    this.user,
+    this.category,
+    this.region,
+    this.images,
+    this.comments,
+    this.currency,
   });
 
-  factory AdsModel.fromJson(Map<String, dynamic> json) {
-    return AdsModel(
-      currentPage: json['current_page'],
-       data: json['data'] != null ? List<dynamic>.from(json['data']) : null,
-      // data: json['data'] != null ? List<dynamic>.from(json['data']) : null,
-      firstPageUrl: json['first_page_url'],
-      from: json['from'],
-      lastPage: json['last_page'],
-      lastPageUrl: json['last_page_url'],
-      links: json['links'] != null
-          ? (json['links'] as List).map((v) => AdsLinks.fromJson(v)).toList()
-          : null,
-      nextPageUrl: json['next_page_url'],
-      path: json['path'],
-      perPage: json['per_page'],
-      prevPageUrl: json['prev_page_url'],
-      to: json['to'],
-      total: json['total'],
+  factory ListingModel.fromJson(Map<String, dynamic> json) {
+    return ListingModel(
+      id: json['id'] as int?,
+      title: json['title'] as String?,
+      userId: json['user_id'] as int?,
+      description: json['description'] as String?,
+      price: json['price'] as String?,
+      currencyId: json['currency_id'] as int?,
+      categoryId: json['category_id'] as int?,
+      regionId: json['region_id'] as int?,
+      status: json['status'] as String?,
+      primaryImage: json['primary_image'] as String?,
+      createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at']) : null,
+      updatedAt: json['updated_at'] != null ? DateTime.tryParse(json['updated_at']) : null,
+      user: json['user'] != null ? UserModel.fromJson(json['user']) : null,
+      category: json['category'] != null ? CategoryModel.fromJson(json['category']) : null,
+      region: json['region'] != null ? RegionModel.fromJson(json['region']) : null,
+      images: (json['images'] as List?)?.map((e) => e as String).toList() ?? [],
+      comments: (json['comments'] as List?)?.map((e) => e as String).toList() ?? [],
+      currency: json['currency'] != null ? CurrencyModel.fromJson(json['currency']) : null,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['current_page'] = currentPage;
-    if (this.data != null) {
-      data['data'] = this.data!;
-    }
-    data['first_page_url'] = firstPageUrl;
-    data['from'] = from;
-    data['last_page'] = lastPage;
-    data['last_page_url'] = lastPageUrl;
-    if (links != null) {
-      data['links'] = links!.map((v) => v.toJson()).toList();
-    }
-    data['next_page_url'] = nextPageUrl;
-    data['path'] = path;
-    data['per_page'] = perPage;
-    data['prev_page_url'] = prevPageUrl;
-    data['to'] = to;
-    data['total'] = total;
-    return data;
   }
 }
 
-class AdsLinks {
-  String? url;
-  String? label;
-  bool? active;
+class UserModel {
+  final int? id;
+  final String? name;
 
-  AdsLinks({this.url, this.label, this.active});
+  UserModel({this.id, this.name});
 
-  factory AdsLinks.fromJson(Map<String, dynamic> json) {
-    return AdsLinks(
-      url: json['url'],
-      label: json['label'],
-      active: json['active'],
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'] as int?,
+      name: json['name'] as String?,
     );
   }
+}
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['url'] = url;
-    data['label'] = label;
-    data['active'] = active;
-    return data;
+class CategoryModel {
+  final int? id;
+  final String? name;
+
+  CategoryModel({this.id, this.name});
+
+  factory CategoryModel.fromJson(Map<String, dynamic> json) {
+    return CategoryModel(
+      id: json['id'] as int?,
+      name: json['name'] as String?,
+    );
+  }
+}
+
+class RegionModel {
+  final int? id;
+  final String? name;
+
+  RegionModel({this.id, this.name});
+
+  factory RegionModel.fromJson(Map<String, dynamic> json) {
+    return RegionModel(
+      id: json['id'] as int?,
+      name: json['name'] as String?,
+    );
+  }
+}
+
+class CurrencyModel {
+  final int? id;
+  final String? code;
+  final String? name;
+  final String? abbr;
+
+  CurrencyModel({this.id, this.code, this.name, this.abbr});
+
+  factory CurrencyModel.fromJson(Map<String, dynamic> json) {
+    return CurrencyModel(
+      id: json['id'] as int?,
+      code: json['code'] as String?,
+      name: json['name'] as String?,
+      abbr: json['abbr'] as String?,
+    );
   }
 }
