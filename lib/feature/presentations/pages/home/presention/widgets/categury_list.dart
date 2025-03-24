@@ -5,10 +5,10 @@ import 'package:arta_app/core/constants/text.dart';
 import 'package:arta_app/core/utils/global_methods/global_methods.dart';
 import 'package:arta_app/feature/data/models/category.dart';
 import 'package:arta_app/feature/presentations/pages/categorys/presintion/ctagurey_children_view.dart';
+import 'package:arta_app/feature/presentations/pages/home/presention/widgets/states_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../cubits/categories/categories_cubit.dart';
@@ -60,16 +60,16 @@ class _CategoryListState extends State<CategoryList> {
       },
       builder: (context, state) {
         if (state is LoadingCategoryState) {
-          return const Center(child: CircularProgressIndicator());
+          return buildLoadingHomeState(context);
         } else if (state is SuccessCategoryState) {
           if (state.categories.isEmpty) {
-            return const Center(child: Text("No categories available"));
+            return buildEmptyHomeState();
           }
 
           return GridView.builder(
             physics:
-                const NeverScrollableScrollPhysics(), // يمنع التمرير داخل الجريد
-            shrinkWrap: true, // يجعل الجريد يأخذ حجمه الطبيعي
+                const NeverScrollableScrollPhysics(), 
+            shrinkWrap: true, 
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: MediaQuery.of(context).size.width > 600 ? 6 : 4,
               mainAxisSpacing: 8,
@@ -145,113 +145,3 @@ class _CategoryListState extends State<CategoryList> {
     );
   }
 }
-
-// class CateguryList extends StatefulWidget {
-//   // final List<Category> categ;
-
-//   CateguryList({
-//     super.key,
-//     // required this.categ,
-//   });
-
-//   @override
-//   State<CateguryList> createState() => _CateguryListState();
-// }
-
-// class _CateguryListState extends State<CateguryList> {
-//   late CategoryCubit categoryCubit;
-
-//   @override
-//   void initState() {
-//     categoryCubit = context.read<CategoryCubit>();
-//     categoryCubit.getCategoris();
-//     super.initState();
-//   }
-
-//   // final List<String> ctgImages = [
-//   final List<String> ctgImages = [
-//     cars,
-//     motors,
-//     electronic,
-//     home,
-//     sports,
-//     clothing,
-//     ecomiric,
-//     more,
-//   ];
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SingleChildScrollView(
-//         child: BlocConsumer<CategoryCubit, CategoryState>(
-//             listener: (context, state) {
-//       if (state is ErrorCategoryState) {
-//         toast(
-//           state.message,
-//           bgColor: Colors.red,
-//           print: true,
-//           gravity: ToastGravity.BOTTOM,
-//           textColor: Colors.white,
-//         );
-//       }
-//     }, builder: (context, state) {
-//       if (state is LoadingCategoryState) {
-//         return Center(child: CircularProgressIndicator());
-//       } else if (state is SuccessCategoryState) {
-//         return Padding(
-//           padding: const EdgeInsets.symmetric(horizontal: 16),
-//           // sliver: SliverGrid(
-//           //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//           //     crossAxisCount: MediaQuery.of(context).size.width > 600 ? 6 : 4,
-//           //     mainAxisSpacing: 8,
-//           //     crossAxisSpacing: 8,
-//           //     childAspectRatio: 1,
-//           //   ),
-//           // delegate:
-//           child: ListView.builder(
-//             itemCount: state.categories.length,
-//             itemBuilder: (ctx, index) {
-//               Category category = state.categories[index];
-
-//               return GestureDetector(
-//                 onTap: () {
-//                   Navigator.push(
-//                     context,
-//                     MaterialPageRoute(
-//                       builder: (ctx) => CategoryChildrenView(
-//                         parentId: category.id ?? 1,
-//                         parentName: category.name ?? "",
-//                       ),
-//                     ),
-//                   );
-//                 },
-//                 child: Column(
-//                   children: [
-//                     Expanded(
-//                       child: Image.asset(
-//                         ctgImages[index % ctgImages.length],
-//                         fit: BoxFit.contain,
-//                       ),
-//                     ),
-//                     const SizedBox(height: 4),
-//                     Text(
-//                       category.name ?? "",
-//                       style: TextStyles.reguler14.copyWith(
-//                         color: Colors.black,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                       textAlign: TextAlign.center,
-//                     ),
-//                   ],
-//                 ),
-//               );
-//             },
-//           ),
-//           // ),
-//         );
-//       } else {
-//         return Center(child: Text("Error loading categories"));
-//       }
-//     }));
-//   }
-// }

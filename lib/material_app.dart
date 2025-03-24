@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'core/notifications/handleLocalNotification.dart';
-import 'feature/presentations/cubits/ads/ads_cubit.dart';
+import 'feature/presentations/cubits/ads/listing_cubit.dart';
 import 'feature/presentations/cubits/categories/categories_cubit.dart';
 import 'feature/presentations/cubits/login/login_cubit.dart';
 import 'generated/l10n.dart';
@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
           create: (_) => LoginCubit(OnlineDataRepo()),
         ),
         BlocProvider(
-          create: (_) => AdsCubit(OnlineDataRepo()),
+          create: (_) => ListingCubit(OnlineDataRepo()),
         ),
         BlocProvider(
           create: (_) => CategoryCubit(OnlineDataRepo()),

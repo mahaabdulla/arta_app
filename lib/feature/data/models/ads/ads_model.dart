@@ -1,3 +1,5 @@
+import '../user/user_model.dart';
+
 class ListingModel {
   final int? id;
   final String? title;
@@ -63,19 +65,19 @@ class ListingModel {
   }
 }
 
-class UserModel {
-  final int? id;
-  final String? name;
+// class UserModel {
+//   final int? id;
+//   final String? name;
 
-  UserModel({this.id, this.name});
+//   UserModel({this.id, this.name});
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      id: json['id'] as int?,
-      name: json['name'] as String?,
-    );
-  }
-}
+//   factory UserModel.fromJson(Map<String, dynamic> json) {
+//     return UserModel(
+//       id: json['id'] as int?,
+//       name: json['name'] as String?,
+//     );
+//   }
+// }
 
 class CategoryModel {
   final int? id;
