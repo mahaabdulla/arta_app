@@ -24,19 +24,20 @@ class CategoryCubit extends Cubit<CategoryState> {
   Future<void> getCategoris({bool isHome = false}) async {
     emit(LoadingCategoryState());
     try {
-      final response = await _api.getData(url: ApiUrls.getcategories);
+      final response = await _api.getData(url: ApiUrls.PERENT);
 
       if (isSuccessResponse(response: response)) {
         List<Category> categories = [];
         // UserModel user = UserModel.fromJson(response['data']['user']);
         if (isHome) {
-            categories = (response['data']['data'] as List).take(7)
+          categories = (response['data'] as List)
+              .take(7)
               .map((json) => Category.fromJson(json))
               .toList();
 
-            categories.add(Category(id: -1, name: "كل الحراج", image: moreImage));
+          categories.add(Category(id: -1, name: "كل الحراج", image: moreImage));
         } else {
-          categories = (response['data']['data'] as List)
+          categories = (response['data'] as List)
               .map((json) => Category.fromJson(json))
               .toList();
         }
