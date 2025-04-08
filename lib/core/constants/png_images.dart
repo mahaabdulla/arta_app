@@ -14,5 +14,13 @@ const String dollars = '${root}Dollar Minimalistic.png';
 const String clock = '${root}Clock Circle.png';
 const String onBordingBackgoung = '${root}Vector (1).png';
 const String onBordingImage = '${root}Purchase online (1).png';
+const String topBackground = '${root}"Group 9276.png"';
 
 const String DEFULT_IMAGE = '${root}cars2.png';
+// profile images
+const String changeProfileImage = "${root}change_profile_info.png";
+const String languageImage = "${root}language.png";
+const String helpsSpport = "${root}help&spport.png";
+const String logoutImage = "${root}lougot.png";
+const String profileImage = "${root}profile_png.png";
+const String condditions = "${root}condditions.png";
