@@ -1,0 +1,2 @@
+D:/arta_app/arta_app/android/app/.cxx/Debug/1m6m5p3e/x86_64/CMakeFiles/edit_cache.dir
+D:/arta_app/arta_app/android/app/.cxx/Debug/1m6m5p3e/x86_64/CMakeFiles/rebuild_cache.dir
