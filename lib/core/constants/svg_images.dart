@@ -20,4 +20,9 @@ const String sendCommint = '${root}Plain.svg';
 const String googleLogo = '${root}google icon.svg';
 const String moreImage = '${root}more.svg';
 
-
+// profile icons
+const String profile_icon = "${root}edite_user_profile.svg";
+const String language = "${root}language.svg";
+const String term_condations = "${root}trem_condation.svg";
+const String help_spport = "${root}help_spport.svg";
+const String lougot = "${root}logout.svg";

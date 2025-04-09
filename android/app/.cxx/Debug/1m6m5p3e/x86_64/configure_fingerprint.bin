@@ -2,6 +2,7 @@ C/C++ Structured LogK
 I
 GC:\flutter\packages\flutter_tools\gradle\src\main\groovy\CMakeLists.txtC
 A
+<<<<<<< HEAD
 ?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	ÆºæÙá2§ Ú¹Õá×2\
 Z
 XD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\x86_64\additional_project_files.txt	ÆºæÙá2 ÁºæÙá2Y
@@ -26,3 +27,29 @@ P
 ND:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\x86_64\prefab_config.json	ÆºæÙá2( ÁºæÙá2W
 U
 SD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\x86_64\symbol_folder_index.txt	ÆºæÙá2J ÁºæÙá2
+=======
+?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	ÂÉ¦ÒÜ2§ Ú¹Õá×2\
+Z
+XD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\x86_64\additional_project_files.txt	ÂÉ¦ÒÜ2 Šô“ŽÛ2Y
+W
+UD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\x86_64\android_gradle_build.json	ÂÉ¦ÒÜ2€ ‹ô“ŽÛ2^
+\
+ZD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\x86_64\android_gradle_build_mini.json	ÂÉ¦ÒÜ2á Œô“ŽÛ2K
+I
+GD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\x86_64\build.ninja	ÂÉ¦ÒÜ2•Ð ¦ó“ŽÛ2O
+M
+KD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\x86_64\build.ninja.txt	ÂÉ¦ÒÜ2T
+R
+PD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\x86_64\build_file_index.txt	ÂÉ¦ÒÜ2G Žô“ŽÛ2U
+S
+QD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\x86_64\compile_commands.json	ÂÉ¦ÒÜ2	Y
+W
+UD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\x86_64\compile_commands.json.bin	ÂÉ¦ÒÜ2
+_
+]
+[D:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\x86_64\metadata_generation_command.txt	ÂÉ¦ÒÜ2 ô“ŽÛ2R
+P
+ND:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\x86_64\prefab_config.json	ÂÉ¦ÒÜ2( Žô“ŽÛ2W
+U
+SD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\x86_64\symbol_folder_index.txt	ÂÉ¦ÒÜ2J Žô“ŽÛ2
+>>>>>>> 2077b7d (create profile ui)
