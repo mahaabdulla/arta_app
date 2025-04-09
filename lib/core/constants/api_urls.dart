@@ -20,4 +20,5 @@ class ApiUrls {
   static const String postAdstUrl = '$root/listing';
   static const String LOGIN = '$root/login';
   static const String REGISTER = '$root/register';
+  static const String PERENT = '$root/categories/parents';
 }

@@ -1,12 +1,7 @@
 import 'package:arta_app/core/constants/text.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
-import '../../../../cubits/ads/ads_cubit.dart';
-import '../../../../cubits/ads/ads_state.dart';
-import "dart:developer" as dev;
 
 // Ads Slider
 
@@ -19,96 +14,71 @@ class AdvertisementsView extends StatefulWidget {
 
 class _AdvertisementsViewState extends State<AdvertisementsView> {
   int _currentPage = 0;
-  @override
-void initState() {
-  super.initState();
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    context.read<AdsCubit>().fetchAds(); 
-  });
-}
+
   @override
   Widget build(BuildContext context) {
-    // final List<Map<String, String>> ads = [
-    //   {
-    //     'title': 'هل لديك منتج للبيع',
-    //     'description':
-    //         'إبدا رحلتك في منصة عرطة وانشر إعلانك مجاناً وحقق أرباحك. لا تفوت الفرصة!',
-    //     'imagePath': 'assets/png_images/adv.png',
-    //   },
-    //   {
-    //     'title': 'اعلن عن خدماتك الآن',
-    //     'description': 'انشر إعلانك الخاص بالخدمات لتحقيق المزيد من الأرباح.',
-    //     'imagePath': 'assets/png_images/adv.png',
-    //   },
-    //   {
-    //     'title': 'فرصتك لبيع المنتجات!',
-    //     'description': 'استفد من منصة عرطة للوصول إلى آلاف العملاء.',
-    //     'imagePath': 'assets/png_images/adv.png',
-    //   },
-    // ];
+    final List<Map<String, String>> ads = [
+      {
+        'title': 'هل لديك منتج للبيع',
+        'description':
+            'إبدا رحلتك في منصة عرطة وانشر إعلانك مجاناً وحقق أرباحك. لا تفوت الفرصة!',
+        'imagePath': 'assets/png_images/adv.png',
+      },
+      {
+        'title': 'اعلن عن خدماتك الآن',
+        'description': 'انشر إعلانك الخاص بالخدمات لتحقيق المزيد من الأرباح.',
+        'imagePath': 'assets/png_images/adv.png',
+      },
+      {
+        'title': 'فرصتك لبيع المنتجات!',
+        'description': 'استفد من منصة عرطة للوصول إلى آلاف العملاء.',
+        'imagePath': 'assets/png_images/adv.png',
+      },
+    ];
 
-    return BlocBuilder<AdsCubit, AdsState>(builder: (context, state) {
-
-      if (state is LoadingAdsState) {
-        return Center(child: CircularProgressIndicator());
-      } else if (state is SuccessAdsState) {
-        if (state.ads.links == null || state.ads.links!.isEmpty) {
-          return Center(child: Text("لا توجد إعلانات متاحة"));
-        } else {
-          dev.log("Ads Links: ${state.ads.links}");
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Column(
-              children: [
-                Expanded(
-                  child: CarouselSlider.builder(
-                    itemCount: state.ads.links!.length,
-                    options: CarouselOptions(
-                      height: 180,
-                      autoPlay: true,
-                      enlargeCenterPage: true,
-                      viewportFraction: 0.85,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          _currentPage = index;
-                        });
-                      },
-                    ),
-                    itemBuilder: (context, index, realIndex) {
-                      //  final ad = state.ads;
-                      //  [index];
-                      // final ad = ads[index];
-                      return _buildAdContainer(
-                        title: state.ads.links?[index].label ?? "",
-                        description: "",
-                        //الصورة لما تكون حقيقية المفروض نجيبها من ملف مش رابط
-                        //لأنها ترفع في السيرفر على شكل ملف
-                        imagePath:
-                            // state.ads.links?[index].url ??
-                            "assets/png_images/adv.png",
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 12),
-                AnimatedSmoothIndicator(
-                  activeIndex: _currentPage,
-                  count: state.ads.links!.length,
-                  effect: const ScrollingDotsEffect(
-                    activeDotColor: Color(0xff33869C),
-                    dotColor: Colors.grey,
-                    dotHeight: 8,
-                    dotWidth: 8,
-                    spacing: 6,
-                  ),
-                ),
-              ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Column(
+        children: [
+          Expanded(
+            child: CarouselSlider.builder(
+              itemCount: ads.length,
+              options: CarouselOptions(
+                height: 180,
+                autoPlay: true,
+                enlargeCenterPage: true,
+                viewportFraction: 0.85,
+                onPageChanged: (index, reason) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                },
+              ),
+              itemBuilder: (context, index, realIndex) {
+                final ad = ads[index];
+                return _buildAdContainer(
+                  title: ad['title']!,
+                  description: ad['description']!,
+                  imagePath: ad['imagePath']!,
+                );
+              },
             ),
-          );
-        }
-      }
-      return SizedBox();
-    });
+          ),
+          const SizedBox(height: 12),
+          AnimatedSmoothIndicator(
+            activeIndex: _currentPage,
+            count: ads.length,
+            effect: const ScrollingDotsEffect(
+              activeDotColor: Color(0xff33869C),
+              dotColor: Colors.grey,
+              dotHeight: 8,
+              dotWidth: 8,
+              spacing: 6,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildAdContainer({

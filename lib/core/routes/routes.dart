@@ -45,7 +45,8 @@ class AppRoute {
       case '/more':
         return MaterialPageRoute(builder: (ctx) => MorevView());
       case '/product':
-        return MaterialPageRoute(builder: (ctx) => ProductDetailsView());
+      final productId = route.arguments as int;
+        return MaterialPageRoute(builder: (ctx) => ProductDetailsView(id: productId));
       case '/add_advr':
         return MaterialPageRoute(builder: (ctx) => AddAdvertisementView());
       case '/my_ads':

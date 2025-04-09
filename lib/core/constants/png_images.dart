@@ -14,3 +14,5 @@ const String dollars = '${root}Dollar Minimalistic.png';
 const String clock = '${root}Clock Circle.png';
 const String onBordingBackgoung = '${root}Vector (1).png';
 const String onBordingImage = '${root}Purchase online (1).png';
+
+const String DEFULT_IMAGE = '${root}cars2.png';

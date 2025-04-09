@@ -1,10 +1,15 @@
 import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/core/constants/text.dart';
+import 'package:arta_app/feature/data/models/ads/ads_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../constants/api_urls.dart';
+import '../../constants/png_images.dart';
+
 class ProductsCard extends StatelessWidget {
-  const ProductsCard({super.key});
+  final ListingModel product;
+  const ProductsCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -27,18 +32,26 @@ class ProductsCard extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    image: const DecorationImage(
-                      image: AssetImage(
-                        'assets/png_images/cars_shop.jpg',
-                      ),
-                      fit: BoxFit.cover,
-                    ),
+                    // image:  DecorationImage(
+                    //   image: AssetImage(
+                    //     //image of product
+                    //     "${ApiUrls.image_root}/${product.primaryImage}"
+
+                    //   ),
+                    //   fit: BoxFit.cover,
+                    // ),
+                  ),
+                  child: Image.network(
+                    "${ApiUrls.image_root}/${product.primaryImage}",
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                        Image.asset(DEFULT_IMAGE),
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.02),
                 // اسم المنتج
                 Text(
-                  'سيارة تويوتا موديل 2006',
+                  product.title ?? "",
                   style: TextStyles.medium18.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -61,8 +74,8 @@ class ProductsCard extends StatelessWidget {
                                 height: screenHeight * 0.03,
                               ),
                               SizedBox(width: screenWidth * 0.02),
-                              const Text(
-                                'المكلاء',
+                              Text(
+                                product.region?.name ?? "الموقع",
                                 style: TextStyles.smallReguler,
                               ),
                             ],
@@ -75,8 +88,8 @@ class ProductsCard extends StatelessWidget {
                                 height: screenHeight * 0.03,
                               ),
                               SizedBox(width: screenWidth * 0.02),
-                              const Text(
-                                '30 دقيقة',
+                              Text(
+                                product.status ?? "الحالة",
                                 style: TextStyles.smallReguler,
                               ),
                             ],
@@ -96,8 +109,8 @@ class ProductsCard extends StatelessWidget {
                                 height: screenHeight * 0.03,
                               ),
                               SizedBox(width: screenWidth * 0.02),
-                              const Text(
-                                'أحمد علي',
+                              Text(
+                                product.user?.name ?? "",
                                 style: TextStyles.smallReguler,
                               ),
                             ],
@@ -110,8 +123,8 @@ class ProductsCard extends StatelessWidget {
                                 height: screenHeight * 0.03,
                               ),
                               SizedBox(width: screenWidth * 0.02),
-                              const Text(
-                                '300.000 ر.ي',
+                              Text(
+                                product.price ?? "",
                                 style: TextStyles.smallReguler,
                               ),
                             ],
@@ -138,7 +151,7 @@ class ProductsCard extends StatelessWidget {
                 ),
               ),
               child: Text(
-                'سيارات',
+                product.category?.name ?? "",
                 style: TextStyles.smallReguler.copyWith(
                     fontWeight: FontWeight.bold, color: Color(0xff01496B)),
               ),
