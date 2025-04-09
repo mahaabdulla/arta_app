@@ -65,6 +65,7 @@ flutter:
   assets:
     - assets/svg_images/
     - assets/png_images/
+    - assets/png_images/Group 9276.png
   #   - images/a_dot_ham.jpeg
 
   #------------------------------FONTS------------------------------

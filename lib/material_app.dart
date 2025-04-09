@@ -1,7 +1,8 @@
 import 'package:arta_app/core/repositoris/online_repo.dart';
 import 'package:arta_app/core/routes/routes.dart';
+import 'package:arta_app/feature/presentations/cubits/cubit/change_password_cubit.dart';
 import 'package:arta_app/feature/presentations/pages/login/login_screen.dart';
-import 'package:arta_app/feature/presentations/pages/user/widgets/chang_phonenumber_screan.dart';
+import 'package:arta_app/feature/presentations/pages/user/widgets/change_pass_screan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -42,21 +43,25 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (_) => CategoryCubit(OnlineDataRepo()),
         ),
+        BlocProvider(
+          create: (_) => ChangePasswordCubit(OnlineDataRepo()),
+        ),
       ],
       child: MaterialApp(
-          navigatorKey: navigatorKey,
-          onGenerateRoute: AppRoute.generatedRoute,
-          //  initialRoute: '/home',
-          locale: Locale('ar'),
-          localizationsDelegates: [
-            S.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: S.delegate.supportedLocales,
-          debugShowCheckedModeBanner: false,
-          home: LoginScreen()),
+        navigatorKey: navigatorKey,
+        onGenerateRoute: AppRoute.generatedRoute,
+        // initialRoute: '/home',
+        locale: Locale('ar'),
+        localizationsDelegates: [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        debugShowCheckedModeBanner: false,
+        home: ChangePasswordScreen(),
+      ),
     );
   }
 }
