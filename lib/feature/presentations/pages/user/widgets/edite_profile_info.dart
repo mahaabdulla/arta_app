@@ -9,27 +9,27 @@ class EditeProfileInfo extends StatelessWidget {
   final List<Map<String, dynamic>> profileOptions = [
     {
       "title": "تعديل الاسم",
-      "icon": changeProfileImage,
+      // "icon": change_profile_info,
       "route": "/home",
     },
     {
       "title": "تعديل كلمة المرور",
-      "icon": changeProfileImage,
+      // "icon": change_profile_info,
       "route": "/home",
     },
     {
       "title": "تعديل البريد الالكتروني",
-      "icon": changeProfileImage,
+      // "icon": change_profile_info,
       "route": "/home",
     },
     {
       "title": "تعديل رقم الهاتف",
-      "icon": changeProfileImage,
+      // "icon": change_profile_info,
       "route": "/home",
     },
     {
       "title": "تعديل رقم الواتساب",
-      "icon": changeProfileImage,
+      // "icon": change_profile_info,
       "route": "/home",
     },
   ];

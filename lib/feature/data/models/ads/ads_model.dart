@@ -17,7 +17,7 @@ class ListingModel {
   final CategoryModel? category;
   final RegionModel? region;
   final List<String>? images;
-  final List<String>? comments;
+  final List<CommentModel>? comments; // ✅ تم تعديل نوع comments هنا
   final CurrencyModel? currency;
 
   ListingModel({
@@ -53,31 +53,65 @@ class ListingModel {
       regionId: json['region_id'] as int?,
       status: json['status'] as String?,
       primaryImage: json['primary_image'] as String?,
-      createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at']) : null,
-      updatedAt: json['updated_at'] != null ? DateTime.tryParse(json['updated_at']) : null,
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'])
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json['updated_at'])
+          : null,
       user: json['user'] != null ? UserModel.fromJson(json['user']) : null,
-      category: json['category'] != null ? CategoryModel.fromJson(json['category']) : null,
-      region: json['region'] != null ? RegionModel.fromJson(json['region']) : null,
+      category: json['category'] != null
+          ? CategoryModel.fromJson(json['category'])
+          : null,
+      region:
+          json['region'] != null ? RegionModel.fromJson(json['region']) : null,
       images: (json['images'] as List?)?.map((e) => e as String).toList() ?? [],
-      comments: (json['comments'] as List?)?.map((e) => e as String).toList() ?? [],
-      currency: json['currency'] != null ? CurrencyModel.fromJson(json['currency']) : null,
+      comments: (json['comments'] as List?)
+              ?.map((e) => CommentModel.fromJson(e))
+              .toList() ??
+          [], // ✅ تعديل هنا
+      currency: json['currency'] != null
+          ? CurrencyModel.fromJson(json['currency'])
+          : null,
     );
   }
 }
 
-// class UserModel {
-//   final int? id;
-//   final String? name;
+class CommentModel {
+  final int? id;
+  final int? listingId;
+  final int? userId;
+  final String? content;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final UserModel? user; // ✅ إضافة دعم لمعلومات المستخدم داخل التعليق
 
-//   UserModel({this.id, this.name});
+  CommentModel({
+    this.id,
+    this.listingId,
+    this.userId,
+    this.content,
+    this.createdAt,
+    this.updatedAt,
+    this.user,
+  });
 
-//   factory UserModel.fromJson(Map<String, dynamic> json) {
-//     return UserModel(
-//       id: json['id'] as int?,
-//       name: json['name'] as String?,
-//     );
-//   }
-// }
+  factory CommentModel.fromJson(Map<String, dynamic> json) {
+    return CommentModel(
+      id: json['id'] as int?,
+      listingId: json['listing_id'] as int?,
+      userId: json['user_id'] as int?,
+      content: json['content'] as String?,
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'])
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json['updated_at'])
+          : null,
+      user: json['user'] != null ? UserModel.fromJson(json['user']) : null,
+    );
+  }
+}
 
 class CategoryModel {
   final int? id;

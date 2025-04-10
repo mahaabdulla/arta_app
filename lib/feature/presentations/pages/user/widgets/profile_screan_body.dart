@@ -1,5 +1,4 @@
 import 'package:arta_app/core/constants/png_images.dart';
-import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/feature/presentations/pages/user/widgets/profile_list_tile_widget.dart';
 import 'package:arta_app/feature/presentations/pages/user/widgets/profile_scafoold.dart';
 import 'package:flutter/material.dart';
@@ -12,27 +11,27 @@ class ProfileScreenBody extends StatelessWidget {
     final List<Map<String, dynamic>> profileOptions = [
       {
         "title": "تعديل المعلومات الشخصية",
-        "icon": profileImage,
+        // "icon": profile_image,
         "route": "/home",
       },
       {
         "title": "اللغة",
-        "icon": languageImage,
+        // "icon": language,
         "route": "/home",
       },
       {
         "title": "المساعدة والدعم",
-        "icon": helpsSpport,
+        // "icon": helps_spport,
         "route": "/home",
       },
       {
         "title": "الأحكام والشروط",
-        "icon": condditions,
+        // "icon": condditions,
         "route": "/home",
       },
       {
         "title": "تسجيل الخروج",
-        "icon": lougot,
+        //  "icon": lougot,
         "route": "/home",
         "showArrow": false,
       },
