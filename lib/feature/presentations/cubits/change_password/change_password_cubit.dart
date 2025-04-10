@@ -39,11 +39,10 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
 
       if (isSuccessResponse(response: responseData)) {
         emit(ChangePasswordSuccess(
-            message:
-                responseData['message'] ?? "Password changed successfully"));
+            message: responseData['message'] ?? "تم تغيير كلمة المرور بنجاح"));
       } else {
         emit(ChangePasswordFailure(
-            message: responseData['message'] ?? "Failed to change password"));
+            message: responseData['message'] ?? "تغيير كلمة المرور فشل"));
       }
     } on DioException catch (dioError) {
       final errorHandled = Diohandling.fromDioError(dioError);

@@ -22,4 +22,5 @@ class ApiUrls {
   static const String CHANGEPASSOWRD = '$root/changePassword';
   static const String REGISTER = '$root/register';
   static const String PERENT = '$root/categories/parents';
+  static const String COMMINT = '$root/comment';
 }

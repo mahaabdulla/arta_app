@@ -9,16 +9,20 @@ sealed class CommintsState extends Equatable {
 
 final class CommintsInitial extends CommintsState {}
 
-class LoadingCommint extends CommintsState {}
+class LoadingCommintState extends CommintsState {}
 
-class SuccessCommint extends CommintsState {
-  List<CommintModel> commints;
-  SuccessCommint({required this.commints});
+class SuccessCommintState extends CommintsState {
+  final CommintModel commint;
+
+  const SuccessCommintState({required this.commint});
+
+  @override
+  List<Object> get props => [commint];
 }
 
-class ErrorCommint extends CommintsState {
+class ErrorCommintState extends CommintsState {
   final String message;
-  ErrorCommint({required this.message});
+  ErrorCommintState({required this.message});
 
   @override
   List<Object> get props => [message];
