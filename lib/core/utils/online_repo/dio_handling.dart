@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-
+import 'dart:developer' as dev;
 import 'package:dio/dio.dart';
 // import 'package:easy_localization/easy_localization.dart';
 
@@ -38,7 +38,9 @@ class Diohandling extends Failure {
 
 dioHandlinResponse(int? statusCode, dynamic response) {
   log(statusCode.toString());
+
   var res = jsonDecode(response);
+  dev.log('${response}');
 
   if (statusCode == 400 ||
       statusCode == 401 ||

@@ -18,29 +18,26 @@ class DetailsBottum extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomLeft,
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          height: 35.h,
-          width: 121.w,
-          decoration: BoxDecoration(
-              color: color, borderRadius: BorderRadius.circular(12)),
-          alignment: Alignment.center,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                text,
-                style: TextStyles.reguler14.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: 35.h,
+        width: 121.w,
+        decoration: BoxDecoration(
+            color: color, borderRadius: BorderRadius.circular(12)),
+        alignment: Alignment.center,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              text,
+              style: TextStyles.reguler14.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
-              if (imagePath != null) SvgPicture.asset(imagePath!)
-            ],
-          ),
+            ),
+            if (imagePath != null) SvgPicture.asset(imagePath!)
+          ],
         ),
       ),
     );

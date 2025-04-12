@@ -1,6 +1,5 @@
 import 'package:arta_app/core/constants/api_urls.dart';
 import 'package:arta_app/core/constants/png_images.dart';
-import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/core/constants/text.dart';
 import 'package:arta_app/core/utils/global_methods/global_methods.dart';
 import 'package:arta_app/feature/data/models/category.dart';
@@ -67,9 +66,8 @@ class _CategoryListState extends State<CategoryList> {
           }
 
           return GridView.builder(
-            physics:
-                const NeverScrollableScrollPhysics(), 
-            shrinkWrap: true, 
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: MediaQuery.of(context).size.width > 600 ? 6 : 4,
               mainAxisSpacing: 8,
@@ -78,11 +76,8 @@ class _CategoryListState extends State<CategoryList> {
             ),
             itemCount: state.categories.length,
             itemBuilder: (ctx, index) {
-              dev.log(
-                  " image URL is ${ApiUrls.image_root}/${state.categories[0].image}");
               Category category = state.categories[index];
-              dev.log(
-                  "the image response is : http://localhost:8000/${category.image}");
+
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -97,11 +92,10 @@ class _CategoryListState extends State<CategoryList> {
                 },
                 child: Column(
                   children: [
-                    Expanded(
+                    Flexible(
+                      // استبدلنا Expanded بـ Flexible
                       child: category.id == -1
                           ? Container(
-                              width: 57.79.w,
-                              height: 59.17.h,
                               decoration: ShapeDecoration(
                                 color: const Color(0xFFF2F2F7),
                                 shape: RoundedRectangleBorder(
@@ -114,11 +108,9 @@ class _CategoryListState extends State<CategoryList> {
                                 size: 50.sp,
                               ),
                             )
-                          //  SvgPicture.asset(
-                          //     moreImage,
-                          //   )
                           : Image.network(
                               "${ApiUrls.image_root}${category.image}",
+                              fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
                                 return Image.asset(ctgImages[1]);
                               },
