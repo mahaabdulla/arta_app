@@ -5,12 +5,10 @@ import 'package:arta_app/core/utils/global_methods/global_methods.dart';
 import 'package:arta_app/core/utils/local_repo/local_storage.dart';
 import 'package:arta_app/core/utils/online_repo/dio_handling.dart';
 import 'package:arta_app/core/utils/online_repo/online_methods.dart';
-import 'package:arta_app/feature/presentations/pages/login/test_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
 import 'dart:developer' as dev;
 import '../../../../core/utils/local_repo/secure_storage.dart';
 import '../../../data/models/user/user_model.dart';
@@ -52,7 +50,7 @@ class LoginCubit extends Cubit<LoginState> {
           bgColor: Colors.red,
           textColor: Colors.white,
           print: true);
-      dev.log("Dio Error: ${errorHandled.errorMessage}",name: "Dio Error");
+      dev.log("Dio Error: ${errorHandled.errorMessage}", name: "Dio Error");
     } catch (e) {
       dev.log(e.toString());
       emit(ErrorLoginState(message: "Unexpected error"));

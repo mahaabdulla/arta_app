@@ -2,6 +2,7 @@ C/C++ Structured LogK
 I
 GC:\flutter\packages\flutter_tools\gradle\src\main\groovy\CMakeLists.txtC
 A
+<<<<<<< HEAD
 ?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	±«æÙá2§ Ú¹Õá×2a
 _
 ]D:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\armeabi-v7a\additional_project_files.txt	±«æÙá2 ¬«æÙá2^
@@ -26,3 +27,29 @@ U
 SD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\armeabi-v7a\prefab_config.json	±«æÙá2( ¯«æÙá2\
 Z
 XD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\armeabi-v7a\symbol_folder_index.txt	±«æÙá2O ¯«æÙá2
+=======
+?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	ÙñÒƒÝ2§ Ú¹Õá×2a
+_
+]D:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\armeabi-v7a\additional_project_files.txt	ÙñÒƒÝ2 ÕŒ¶ÜÜ2^
+\
+ZD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\armeabi-v7a\android_gradle_build.json	ÙñÒƒÝ2Š ÜŒ¶ÜÜ2c
+a
+_D:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\armeabi-v7a\android_gradle_build_mini.json	ÙñÒƒÝ2ë ÞŒ¶ÜÜ2P
+N
+LD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\armeabi-v7a\build.ninja	ÙñÒƒÝ2®Ð ‚Œ¶ÜÜ2T
+R
+PD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\armeabi-v7a\build.ninja.txt	ÙñÒƒÝ2Y
+W
+UD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\armeabi-v7a\build_file_index.txt	ÙñÒƒÝ2G ßŒ¶ÜÜ2Z
+X
+VD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\armeabi-v7a\compile_commands.json	ÙñÒƒÝ2	^
+\
+ZD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\armeabi-v7a\compile_commands.json.bin	ÙñÒƒÝ2
+d
+b
+`D:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\armeabi-v7a\metadata_generation_command.txt	ÙñÒƒÝ2š ÞŒ¶ÜÜ2W
+U
+SD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\armeabi-v7a\prefab_config.json	ÙñÒƒÝ2( ßŒ¶ÜÜ2\
+Z
+XD:\arta_app\arta_app\android\app\.cxx\Debug\1m6m5p3e\armeabi-v7a\symbol_folder_index.txt	ÙñÒƒÝ2O ßŒ¶ÜÜ2
+>>>>>>> 241e7a662be34e23553c12d69e8ad14e34447fc8

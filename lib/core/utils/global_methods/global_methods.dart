@@ -1,15 +1,10 @@
-
-
 import 'dart:ui';
-
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:developer' as dev;
 
 import 'package:get/get.dart';
-
 
 void log(Object? value) {
   if (!kReleaseMode) print(value);
@@ -34,7 +29,6 @@ Color getColorFromHex(String hexColor,
   }
 }
 
-
 void toast(String? value,
     {ToastGravity? gravity,
     length = Toast.LENGTH_SHORT,
@@ -55,6 +49,7 @@ void toast(String? value,
     if (print) log(value);
   }
 }
+
 //vertical spacing  between Widgets
 vSpace(double height) {
   return SizedBox(
@@ -68,6 +63,7 @@ hSpace(double width) {
     width: width,
   );
 }
+
 bool get isArabic {
   return Get.locale?.languageCode == 'ar' ? true : false;
 }
@@ -82,6 +78,3 @@ bool get isTablet {
       ? true
       : false;
 }
-
-
-
