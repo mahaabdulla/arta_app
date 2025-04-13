@@ -70,8 +70,8 @@ class _CategoryListState extends State<CategoryList> {
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: MediaQuery.of(context).size.width > 600 ? 6 : 4,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
+              mainAxisSpacing: 2,
+              crossAxisSpacing: 2,
               childAspectRatio: 1,
             ),
             itemCount: state.categories.length,
