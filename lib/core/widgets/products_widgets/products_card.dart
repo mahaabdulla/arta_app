@@ -51,6 +51,7 @@ class ProductsCard extends StatelessWidget {
                 SizedBox(height: screenHeight * 0.02),
                 // اسم المنتج
                 Text(
+                  
                   product.title ?? "",
                   style: TextStyles.medium18.copyWith(
                     fontWeight: FontWeight.bold,

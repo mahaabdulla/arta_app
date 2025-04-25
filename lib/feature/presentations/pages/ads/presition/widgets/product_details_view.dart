@@ -37,6 +37,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
         if (state is ErrorListingSingleState) {}
       }, builder: (context, state) {
         if (state is LoadingSingleListingState) {
+          //TODO: change loading style
           return const Center(child: CircularProgressIndicator());
         }
         if (state is SuccessSingleListingState) {
@@ -76,7 +77,9 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                         top: screenHeight * 0.13,
                         left: screenWidth * 0.05,
                         right: screenWidth * 0.05,
-                        child:  ProductsCard(product: state.listing,),
+                        child: ProductsCard(
+                          product: state.listing,
+                        ),
                       ),
                     ],
                   ),
@@ -94,8 +97,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                         maxLines: 5,
                       ),
                       SizedBox(height: screenHeight * 0.01),
-                       Text(
-                        state.listing.description?? "",
+                      Text(
+                        state.listing.description ?? "",
                         style: TextStyles.reguler14,
                         maxLines: 10,
                       ),
@@ -115,13 +118,13 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                           final items = [
                             BlueContainerWidget(
                               imagePath: 'assets/svg_images/Smartphone 2.svg',
-                              text: state.listing.user?.contactNumber ??"",
+                              text: state.listing.user?.contactNumber ?? "",
                               onTap: () {
                                 //TODO: Navigate to call App
                               },
                             ),
                             BlueContainerWidget(
-                              text: state.listing.user?.whatsappNumber??"",
+                              text: state.listing.user?.whatsappNumber ?? "",
                               onTap: () {
                                 //TODO: go to watsapp
                               },
@@ -136,7 +139,9 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                             BlueContainerWidget(
                               imagePath: 'assets/svg_images/Dislike.svg',
                               text: 'ابلاغ عن الاعلان',
-                              onTap: () {},
+                              onTap: () {
+                                dev.log(state.listing.id.toString());
+                              },
                             ),
                           ];
                           return items[index];
