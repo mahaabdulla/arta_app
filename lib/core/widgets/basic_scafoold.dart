@@ -45,9 +45,10 @@ class BasicScaffold extends StatelessWidget {
                   children: [
                     InkWell(
                       onTap: onTap,
-                      child: SvgPicture.asset(
-                        iconsArrow,
-                      ),
+                      child: Icon(Icons.broken_image),
+                      // child: SvgPicture.asset(
+                      //   iconsArrow,
+                      // ),
                     ),
                     SizedBox(width: 30),
                     if (title != null)

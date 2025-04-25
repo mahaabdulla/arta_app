@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "131861417970",
+    "project_id": "firbasecrashlyticsarta",
+    "storage_bucket": "firbasecrashlyticsarta.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131861417970:android:0287b4071c53b75bf0656b",
+        "android_client_info": {
+          "package_name": "com.example.arta_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAp-KKVW9wXxAO3obOtBXhsBFULDB_BFqw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

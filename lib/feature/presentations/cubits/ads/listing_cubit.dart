@@ -3,6 +3,7 @@ import 'package:arta_app/core/constants/global_constants.dart';
 import 'package:arta_app/core/utils/local_repo/local_storage.dart';
 import 'package:arta_app/core/utils/online_repo/online_methods.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart'; // لازم عشان compute
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,6 +14,11 @@ import '../../../data/models/ads/ads_model.dart';
 import 'listing_state.dart';
 import 'dart:developer' as dev;
 
+/// فانكشن لفصل عملية البارسينج الثقيلة
+List<ListingModel> parseListings(List<dynamic> data) {
+  return data.map((json) => ListingModel.fromJson(json)).toList();
+}
+
 class ListingCubit extends Cubit<ListingState> {
   late final OnlineDataRepo _api;
 
@@ -22,22 +28,16 @@ class ListingCubit extends Cubit<ListingState> {
 
   Future<void> fetchAds() async {
     emit(LoadingListingState());
-    try {
-      final response = await _api.getData(
-        url: ApiUrls.postAdstUrl,
+    await Future.delayed(Duration.zero); // 🔥
 
-        //  columns: {"page": currentPage}
-      );
+    try {
+      final response = await _api.getData(url: ApiUrls.postAdstUrl);
 
       if (isSuccessResponse(response: response)) {
-        // final jsonResponse = response['data'];
-        //  = AdsModel.fromJson(jsonResponse["data"]);
-        // AdsModel adsModel = AdsModel.fromJson(jsonResponse["data"]);
-
-        List<ListingModel> adsModel = (response['data']['data'] as List)
-            .map((json) => ListingModel.fromJson(json))
-            .toList();
-        dev.log("the ADS responce is ${adsModel[0].title}");
+        final List<dynamic> rawData = response['data']['data'];
+        List<ListingModel> adsModel =
+            await compute(parseListings, rawData); // 🔥
+        dev.log("the ADS response is ${adsModel[0].title}");
         emit(SuccessListingState(listing: adsModel));
       } else {
         emit(ErrorListingState(message: "Error: ${response['message']}"));
@@ -57,20 +57,14 @@ class ListingCubit extends Cubit<ListingState> {
 
   Future<void> getSingleListing(String id) async {
     emit(LoadingSingleListingState());
+    await Future.delayed(Duration.zero); // 🔥
+
     try {
-      final response = await _api.getData(
-        url: '${ApiUrls.postAdstUrl}/$id',
-      );
+      final response = await _api.getData(url: '${ApiUrls.postAdstUrl}/$id');
 
       if (isSuccessResponse(response: response)) {
-        // final jsonResponse = response['data'];
-        //  = AdsModel.fromJson(jsonResponse["data"]);
-        // AdsModel adsModel = AdsModel.fromJson(jsonResponse["data"]);
         ListingModel adsModel = ListingModel.fromJson(response['data']);
-
-        // ListingModel adsModel =
-        //     (response['data']).map((json) => ListingModel.fromJson(json));
-        dev.log("the ADS responce is ${adsModel.title}");
+        dev.log("the ADS response is ${adsModel.title}");
         emit(SuccessSingleListingState(listing: adsModel));
       } else {
         emit(ErrorListingSingleState(message: "Error: ${response['message']}"));
@@ -88,22 +82,21 @@ class ListingCubit extends Cubit<ListingState> {
     }
   }
 
-  // myAds
   Future<void> fetchMyAds() async {
     emit(LoadingListingState());
+    await Future.delayed(Duration.zero); // 🔥
+
     try {
       final response = await _api.getData(url: ApiUrls.postAdstUrl);
 
       if (isSuccessResponse(response: response)) {
         final allAds = response['data']['data'] as List;
-        int myId = 1;
-        //LocalStorage.getStringFromDisk(key: 'userId') as int;
-        // // استرجاع userId من الكاش
+        int myId =
+            1; // استبدل لاحقا بـ LocalStorage.getStringFromDisk(key: 'userId')
 
-        List<ListingModel> myAds = allAds
-            .where((json) => json['user_id'] == myId)
-            .map((json) => ListingModel.fromJson(json))
-            .toList();
+        List<ListingModel> myAds = (await compute(parseListings, allAds))
+            .where((ad) => ad.userId == myId)
+            .toList(); // 🔥
 
         emit(SuccessListingState(listing: myAds));
       } else {
@@ -122,7 +115,6 @@ class ListingCubit extends Cubit<ListingState> {
     }
   }
 
-  // حذف الإعلان
   Future<void> deleteListing(int id) async {
     try {
       Dio dio = Dio();
@@ -133,9 +125,8 @@ class ListingCubit extends Cubit<ListingState> {
           'Authorization': 'Bearer $token',
         };
 
-        final response = await dio.delete(
-          'http://192.168.93.62:8000/api/listing/$id',
-        );
+        final response =
+            await dio.delete('http://192.168.93.62:8000/api/listing/$id');
 
         if (response.statusCode == 200) {
           dev.log('تم حذف الإعلان بنجاح');

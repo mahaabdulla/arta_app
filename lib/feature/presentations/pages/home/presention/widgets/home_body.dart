@@ -64,30 +64,20 @@ class HomeBody extends StatelessWidget {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-              Text(
-                'الفئات',
-                style:
-                    TextStyles.medium24.copyWith(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              CategoryList(),
-              const SizedBox(height: 16),
-              SearchBarFiltter(),
-              ProductsList(
-               
-              ),
-              const SizedBox(height: 16),
-              SeeMoreButtom(),
-            ],
-          ),
-        ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        children: [
+          const SizedBox(height: 16),
+          Text('الفئات',
+              style: TextStyles.medium24.copyWith(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 16),
+          // CategoryList(),
+          const SizedBox(height: 16),
+          SearchBarFiltter(),
+          ProductsList(), // ← راح تبني العناصر بداخلها بدون shrinkWrap
+          const SizedBox(height: 16),
+          SeeMoreButtom(),
+        ],
       ),
     );
   }
