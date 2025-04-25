@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class HomeBody extends StatelessWidget {
-  HomeBody({super.key});
+  const HomeBody({super.key});
 
   // final List<Category> categories = [
   //   Category(
@@ -71,12 +71,12 @@ class HomeBody extends StatelessWidget {
           Text('الفئات',
               style: TextStyles.medium24.copyWith(fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
-          // CategoryList(),
+          CategoryList(),
           const SizedBox(height: 16),
-          SearchBarFiltter(),
-          ProductsList(), // ← راح تبني العناصر بداخلها بدون shrinkWrap
+          const SearchBarFiltter(),
+          //const   ProductsList(),
           const SizedBox(height: 16),
-          SeeMoreButtom(),
+          const SeeMoreButtom(),
         ],
       ),
     );

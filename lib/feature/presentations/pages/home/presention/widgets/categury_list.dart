@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import '../../../../cubits/categories/categories_cubit.dart';
 import '../../../../cubits/categories/categories_state.dart';
 import 'dart:developer' as dev;
@@ -68,11 +67,12 @@ class _CategoryListState extends State<CategoryList> {
           return GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: MediaQuery.of(context).size.width > 600 ? 6 : 4,
-              mainAxisSpacing: 2,
-              crossAxisSpacing: 2,
-              childAspectRatio: 1,
+            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+              childAspectRatio: 0.8,
             ),
             itemCount: state.categories.length,
             itemBuilder: (ctx, index) {
@@ -91,30 +91,37 @@ class _CategoryListState extends State<CategoryList> {
                   );
                 },
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Flexible(
-                      // استبدلنا Expanded بـ Flexible
-                      child: category.id == -1
-                          ? Container(
-                              decoration: ShapeDecoration(
-                                color: const Color(0xFFF2F2F7),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(55.04),
-                                ),
-                              ),
-                              child: Icon(
+                    Container(
+                      height: 70.h,
+                      width: 70.h,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: const Color(0xFFF2F2F7),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: ClipOval(
+                        child: category.id == -1
+                            ? Icon(
                                 Icons.more_horiz_rounded,
                                 color: Colors.blue,
-                                size: 50.sp,
+                                size: 30.sp,
+                              )
+                            : Image.network(
+                                "${ApiUrls.image_root}${category.image}",
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(ctgImages[1]);
+                                },
                               ),
-                            )
-                          : Image.network(
-                              "${ApiUrls.image_root}${category.image}",
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Image.asset(ctgImages[1]);
-                              },
-                            ),
+                      ),
                     ),
                     SizedBox(height: 8.h),
                     Text(
