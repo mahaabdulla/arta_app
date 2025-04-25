@@ -17,6 +17,7 @@ import 'package:arta_app/feature/presentations/pages/login/sginup_screen.dart';
 import 'package:arta_app/feature/presentations/pages/on_boreding/presintion/views/onbording.dart';
 import 'package:arta_app/feature/presentations/pages/ads/presition/widgets/product_details_view.dart';
 import 'package:arta_app/feature/presentations/pages/splash/presention/splash_view.dart';
+import 'package:arta_app/feature/presentations/pages/user/widgets/change_pass_screan.dart';
 import 'package:flutter/material.dart';
 
 class AppRoute {
@@ -45,26 +46,28 @@ class AppRoute {
       case '/more':
         return MaterialPageRoute(builder: (ctx) => MorevView());
       case '/product':
-      final productId = route.arguments as int;
-        return MaterialPageRoute(builder: (ctx) => ProductDetailsView(id: productId));
+        final productId = route.arguments as int;
+        return MaterialPageRoute(
+            builder: (ctx) => ProductDetailsView(id: productId));
       case '/add_advr':
         return MaterialPageRoute(builder: (ctx) => AddAdvertisementView());
       case '/my_ads':
         return MaterialPageRoute(builder: (ctx) => MyAds());
-        case SIGNUP:
+      case SIGNUP:
         return MaterialPageRoute(builder: (ctx) => SginupScreen());
-        case LOGIN:
+      case LOGIN:
         return MaterialPageRoute(builder: (ctx) => LoginScreen());
-        case '/region':
-         return MaterialPageRoute(builder: (ctx) => RegionView());
-    
-   case '/categoryDetails':
-        final categoryId = route.arguments as int; 
+      case '/region':
+        return MaterialPageRoute(builder: (ctx) => RegionView());
+      case '/change_pass':
+        return MaterialPageRoute(builder: (ctx) => ChangePasswordScreen());
+
+      case '/categoryDetails':
+        final categoryId = route.arguments as int;
         return MaterialPageRoute(
           builder: (ctx) => CategoryDetailPage(categoryId: categoryId),
         );
 
-        
       default:
         return MaterialPageRoute(
           builder: (ctx) => Scaffold(

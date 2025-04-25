@@ -118,11 +118,11 @@ class _ProductsListState extends State<ProductsList> {
                                                     color: Color(0xff1C274C))),
                                       ],
                                     ),
-                                    SizedBox(width: 26.w),
+                                    SizedBox(width: 23.w),
                                     Row(
                                       children: [
                                         SvgPicture.asset(locationImage),
-                                        const SizedBox(width: 4),
+                                        SizedBox(width: 1.w),
                                         Text(list.region?.name ?? "الموقع",
                                             style: TextStyles.reguler14
                                                 .copyWith(
@@ -135,7 +135,7 @@ class _ProductsListState extends State<ProductsList> {
                                 Row(
                                   children: [
                                     SvgPicture.asset(clockImage),
-                                    const SizedBox(width: 4),
+                                    SizedBox(width: 1.w),
                                     Text(list.status ?? "الحالة",
                                         style: TextStyles.reguler14.copyWith(
                                             color: Color(0xff1C274C))),
@@ -151,20 +151,25 @@ class _ProductsListState extends State<ProductsList> {
                           ),
                         ],
                       ),
-                      Container(
-                        margin: EdgeInsets.only(left: 10.w, bottom: 5.h),
-                        child: DetailsBottum(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              '/product',
-                              arguments: list.id,
-                            );
-                          },
-                          color: const Color(0xff046998),
-                          text: 'عرض التفاصيل',
-                          imagePath: arrowIcon,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(left: 10.w, bottom: 5.h),
+                            child: DetailsBottum(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/product',
+                                  arguments: list.id,
+                                );
+                              },
+                              color: const Color(0xff046998),
+                              text: 'عرض التفاصيل',
+                              imagePath: arrowIcon,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

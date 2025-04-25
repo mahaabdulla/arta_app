@@ -1,5 +1,9 @@
 class ApiUrls {
   static const String ipconfig = '192.168.93.62';
+  static const String image_root = 'http://$ipconfig:8000/';
+
+  static const String primaryImage =
+      'http://$ipconfig:8000/storage/Primary_images/';
 
   static const String root = 'http://$ipconfig:8000/api';
   static const String getParentUrl = '$root/categories/parents';
@@ -15,6 +19,10 @@ class ApiUrls {
 
   static String deletCatgUrl(int id) {
     return '$root/category/$id';
+  }
+
+  static String deletListing(int id) {
+    return '$root/listing/$id';
   }
 
   static const String postAdstUrl = '$root/listing';
