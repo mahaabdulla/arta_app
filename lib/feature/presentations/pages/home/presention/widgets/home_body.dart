@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class HomeBody extends StatelessWidget {
-  const HomeBody({super.key});
+  HomeBody({super.key});
 
   // final List<Category> categories = [
   //   Category(
@@ -64,20 +64,28 @@ class HomeBody extends StatelessWidget {
           ],
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        children: [
-          const SizedBox(height: 16),
-          Text('الفئات',
-              style: TextStyles.medium24.copyWith(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 16),
-          CategoryList(),
-          const SizedBox(height: 16),
-          const SearchBarFiltter(),
-          //const   ProductsList(),
-          const SizedBox(height: 16),
-          const SeeMoreButtom(),
-        ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16),
+              Text(
+                'الفئات',
+                style:
+                    TextStyles.medium24.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              CategoryList(),
+              const SizedBox(height: 16),
+              SearchBarFiltter(),
+              ProductsList(),
+              const SizedBox(height: 16),
+              SeeMoreButtom(),
+            ],
+          ),
+        ),
       ),
     );
   }

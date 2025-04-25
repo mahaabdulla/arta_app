@@ -8,13 +8,14 @@ import 'package:arta_app/feature/presentations/cubits/categories/categories_stat
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:developer' as dev;
+
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../core/constants/api_urls.dart';
 
 class CategoryCubit extends Cubit<CategoryState> {
-  final OnlineDataRepo _api;
+  late final OnlineDataRepo _api;
 
   CategoryCubit(this._api) : super(CategoryInitial());
 
@@ -22,52 +23,42 @@ class CategoryCubit extends Cubit<CategoryState> {
 
   Future<void> getCategoris({bool isHome = false}) async {
     emit(LoadingCategoryState());
-    dev.log("🚀 Fetching categories... isHome: $isHome");
-
     try {
       final response = await _api.getData(url: ApiUrls.PERENT);
 
-      dev.log("📥 API Response: $response");
-
       if (isSuccessResponse(response: response)) {
-        final rawData = response['data'];
+        List<Category> categories = [];
+        // UserModel user = UserModel.fromJson(response['data']['user']);
+        if (isHome) {
+          categories = (response['data'] as List)
+              .take(7)
+              .map((json) => Category.fromJson(json))
+              .toList();
 
-        if (rawData is List) {
-          List<Category> categories =
-              rawData.map((json) => Category.fromJson(json)).toList();
-
-          if (isHome) {
-            categories = categories.take(7).toList();
-            categories
-                .add(Category(id: -1, name: "كل الحراج", image: moreImage));
-          }
-
-          dev.log("✅ Parsed ${categories.length} categories");
-          emit(SuccessCategoryState(categories: categories));
+          categories.add(Category(id: -1, name: "كل الحراج", image: moreImage));
         } else {
-          dev.log("⚠️ Unexpected data format: $rawData");
-          emit(ErrorCategoryState(
-              message: "خطأ في البيانات المستلمة من السيرفر"));
+          categories = (response['data'] as List)
+              .map((json) => Category.fromJson(json))
+              .toList();
         }
+
+        // List<Category> categories = data.take(7).map((e) => Category.fromJson(e)).toList();
+        emit(SuccessCategoryState(categories: categories));
       } else {
-        final errorMsg = response['message'] ?? "فشل في جلب البيانات";
-        dev.log("❌ API Error: $errorMsg");
-        emit(ErrorCategoryState(message: errorMsg));
+        emit(ErrorCategoryState(message: response['message'] ?? ""));
       }
     } on DioException catch (dioError) {
       final errorHandled = Diohandling.fromDioError(dioError);
-      dev.log("❌ DioException: ${errorHandled.errorMessage}");
-      toast(
-        errorHandled.errorMessage,
-        gravity: ToastGravity.BOTTOM,
-        bgColor: Colors.red,
-        textColor: Colors.white,
-        print: true,
-      );
+      toast(errorHandled.errorMessage,
+          gravity: ToastGravity.BOTTOM,
+          bgColor: Colors.red,
+          textColor: Colors.white,
+          print: true);
+      dev.log("Dio Error: ${errorHandled.errorMessage}");
       emit(ErrorCategoryState(message: errorHandled.errorMessage));
     } catch (e) {
-      dev.log("❌ Unexpected error: $e");
-      emit(ErrorCategoryState(message: "حدث خطأ غير متوقع"));
+      dev.log(e.toString());
+      emit(ErrorCategoryState(message: "Unexpected error"));
     }
   }
 }

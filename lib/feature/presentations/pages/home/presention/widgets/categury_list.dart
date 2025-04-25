@@ -1,5 +1,6 @@
 import 'package:arta_app/core/constants/api_urls.dart';
 import 'package:arta_app/core/constants/png_images.dart';
+import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/core/constants/text.dart';
 import 'package:arta_app/core/utils/global_methods/global_methods.dart';
 import 'package:arta_app/feature/data/models/category.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
 import '../../../../cubits/categories/categories_cubit.dart';
 import '../../../../cubits/categories/categories_state.dart';
 import 'dart:developer' as dev;
@@ -67,17 +69,19 @@ class _CategoryListState extends State<CategoryList> {
           return GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 16,
-              crossAxisSpacing: 16,
-              childAspectRatio: 0.8,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: MediaQuery.of(context).size.width > 600 ? 6 : 4,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              childAspectRatio: 1,
             ),
             itemCount: state.categories.length,
             itemBuilder: (ctx, index) {
+              dev.log(
+                  " image URL is ${ApiUrls.image_root}/${state.categories[0].image}");
               Category category = state.categories[index];
-
+              dev.log(
+                  "the image response is : http://localhost:8000/${category.image}");
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -91,37 +95,33 @@ class _CategoryListState extends State<CategoryList> {
                   );
                 },
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
-                      height: 70.h,
-                      width: 70.h,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xFFF2F2F7),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: ClipOval(
-                        child: category.id == -1
-                            ? Icon(
+                    Expanded(
+                      child: category.id == -1
+                          ? Container(
+                              width: 57.79.w,
+                              height: 59.17.h,
+                              decoration: ShapeDecoration(
+                                color: const Color(0xFFF2F2F7),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(55.04),
+                                ),
+                              ),
+                              child: Icon(
                                 Icons.more_horiz_rounded,
                                 color: Colors.blue,
-                                size: 30.sp,
-                              )
-                            : Image.network(
-                                "${ApiUrls.image_root}${category.image}",
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Image.asset(ctgImages[1]);
-                                },
+                                size: 50.sp,
                               ),
-                      ),
+                            )
+                          //  SvgPicture.asset(
+                          //     moreImage,
+                          //   )
+                          : Image.network(
+                              "${ApiUrls.image_root}${category.image}",
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(ctgImages[1]);
+                              },
+                            ),
                     ),
                     SizedBox(height: 8.h),
                     Text(
