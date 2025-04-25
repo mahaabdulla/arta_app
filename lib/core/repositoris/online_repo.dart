@@ -45,7 +45,6 @@ class OnlineDataRepo extends DataRepo {
           return status! < 500;
         },
         headers: {
-          "Accept": "application/json",
           "Authorization":
               "Bearer 11|BERLVqm9JVvYNY3yOxpZNKONNJWCkCkytsLHqekZ8ee4fb0b",
           // "Authorization":
@@ -119,14 +118,24 @@ class OnlineDataRepo extends DataRepo {
   @override
   Future<Map<String, dynamic>> postData(
       Map<String, dynamic> dataToSend, String url) async {
+
     DioConnection.connect().options.headers.addAll({
       // "Authorization":
       //     "Bearer 8|zitHMktlxP85UOOgPG9zO0pEJwCMqBrQ9yuWaGTq08e8de8b",
       "Authorization": "Bearer ${LocalStorage.getStringFromDisk(key: TOKEN)}",
     });
 
+p
     Response? response;
     try {
+      final token = await LocalStorage.getStringFromDisk(
+          key: TOKEN); // ✅ جلب التوكن بشكل صحيح
+
+      final headers = {
+        "Authorization": "Bearer $token",
+        "Content-Type": Headers.jsonContentType,
+      };
+
       if (!await checkConnection()) {
         await CacheHelper.saveCacheData(
           key: url,
@@ -134,13 +143,16 @@ class OnlineDataRepo extends DataRepo {
           isOnline: false,
         );
         response = Response(
-            requestOptions: RequestOptions(), statusCode: 200, data: {});
+          requestOptions: RequestOptions(),
+          statusCode: 200,
+          data: {},
+        );
       } else {
         response = await dio.post(
           url,
           data: dataToSend,
           options: Options(
-            contentType: Headers.jsonContentType,
+            headers: headers,
             responseType: ResponseType.json,
           ),
         );
@@ -161,8 +173,7 @@ class OnlineDataRepo extends DataRepo {
     } catch (e) {
       return {"status": false, "message": "An error occurred: $e"};
     }
-    // content = response.data;
-    // jsonDecode(response.data!);
+
     if (response.data == null) {
       return {"status": false, "message": "Response data is null"};
     }

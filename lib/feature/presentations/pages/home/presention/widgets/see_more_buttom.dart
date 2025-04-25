@@ -1,4 +1,5 @@
 import 'package:arta_app/core/constants/text.dart';
+import 'package:arta_app/feature/presentations/pages/home/presention/widgets/see_more_listing_view.dart';
 import 'package:flutter/material.dart';
 
 class SeeMoreButtom extends StatelessWidget {
@@ -19,7 +20,8 @@ class SeeMoreButtom extends StatelessWidget {
         child: InkWell(
           onTap: () {
             // Show all categories or implement logic
-            Navigator.pushNamed(context, '/my_ads');
+            Navigator.push(context,
+                MaterialPageRoute(builder: (ctx) => SeeMoreListingView()));
           },
           child: Container(
             height: 50,

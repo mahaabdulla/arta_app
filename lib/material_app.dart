@@ -1,12 +1,11 @@
 import 'package:arta_app/core/repositoris/online_repo.dart';
 import 'package:arta_app/core/routes/routes.dart';
-import 'package:arta_app/feature/presentations/cubits/cubit/change_password_cubit.dart';
+import 'package:arta_app/feature/presentations/cubits/change_password/change_password_cubit.dart';
+import 'package:arta_app/feature/presentations/cubits/commint/commints_cubit.dart';
 import 'package:arta_app/feature/presentations/pages/login/login_screen.dart';
-import 'package:arta_app/feature/presentations/pages/user/widgets/change_pass_screan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 import 'core/notifications/handleLocalNotification.dart';
 import 'feature/presentations/cubits/ads/listing_cubit.dart';
 import 'feature/presentations/cubits/categories/categories_cubit.dart';
@@ -46,6 +45,10 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (_) => ChangePasswordCubit(OnlineDataRepo()),
         ),
+        BlocProvider(
+          create: (_) => CommintsCubit(OnlineDataRepo()),
+        ),
+
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,
@@ -60,6 +63,7 @@ class _MyAppState extends State<MyApp> {
         ],
         supportedLocales: S.delegate.supportedLocales,
         debugShowCheckedModeBanner: false,
+        // home: ChangePasswordScreen(),
         home: ChangePasswordScreen(),
       ),
     );

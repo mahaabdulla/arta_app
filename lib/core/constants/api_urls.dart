@@ -1,6 +1,6 @@
 class ApiUrls {
   static const String ipconfig = '192.168.93.62';
-  static const String image_root = 'http://10.0.2.2:8000/';
+
   static const String root = 'http://$ipconfig:8000/api';
   static const String getParentUrl = '$root/categories/parents';
   static const String getcategories = '$root/category';
@@ -22,4 +22,5 @@ class ApiUrls {
   static const String CHANGEPASSOWRD = '$root/changePassword';
   static const String REGISTER = '$root/register';
   static const String PERENT = '$root/categories/parents';
+  static const String COMMINT = '$root/comment';
 }
