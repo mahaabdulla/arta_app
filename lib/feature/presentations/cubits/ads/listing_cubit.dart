@@ -14,11 +14,6 @@ import '../../../data/models/ads/ads_model.dart';
 import 'listing_state.dart';
 import 'dart:developer' as dev;
 
-/// فانكشن لفصل عملية البارسينج الثقيلة
-List<ListingModel> parseListings(List<dynamic> data) {
-  return data.map((json) => ListingModel.fromJson(json)).toList();
-}
-
 class ListingCubit extends Cubit<ListingState> {
   late final OnlineDataRepo _api;
 
@@ -35,8 +30,9 @@ class ListingCubit extends Cubit<ListingState> {
 
       if (isSuccessResponse(response: response)) {
         final List<dynamic> rawData = response['data']['data'];
-        List<ListingModel> adsModel =
-            await compute(parseListings, rawData); // 🔥
+        List<ListingModel> adsModel = rawData
+            .map((json) => ListingModel.fromJson(json)) // Direct parsing
+            .toList();
         dev.log("the ADS response is ${adsModel[0].title}");
         emit(SuccessListingState(listing: adsModel));
       } else {
@@ -94,10 +90,10 @@ class ListingCubit extends Cubit<ListingState> {
         int myId =
             1; // استبدل لاحقا بـ LocalStorage.getStringFromDisk(key: 'userId')
 
-        List<ListingModel> myAds = (await compute(parseListings, allAds))
+        List<ListingModel> myAds = allAds
+            .map((ad) => ListingModel.fromJson(ad)) // Direct parsing
             .where((ad) => ad.userId == myId)
-            .toList(); // 🔥
-
+            .toList();
         emit(SuccessListingState(listing: myAds));
       } else {
         emit(ErrorListingState(message: "فشل تحميل الإعلانات"));

@@ -25,7 +25,7 @@ class CategoryCubit extends Cubit<CategoryState> {
     emit(LoadingCategoryState());
     try {
       final response = await _api.getData(url: ApiUrls.PERENT);
-
+      dev.log('${response}');
       if (isSuccessResponse(response: response)) {
         List<Category> categories = [];
         // UserModel user = UserModel.fromJson(response['data']['user']);

@@ -76,22 +76,23 @@ class _ProductsListState extends State<ProductsList> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child:
-                                // list.images == null || list.images!.length == 0 || list.images!.isEmpty
-                                // ?Image.asset(cars)
-                                // :
-                                Image.network(
-                              "${ApiUrls.image_root}${list.primaryImage}",
-                              width: 95.w,
-                              height: 114.h,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Image.asset(cars);
-                              },
-                            ),
-                          ),
+                          // ClipRRect(
+                          //   borderRadius: BorderRadius.circular(8),
+                          //   child:
+                          //       // list.images == null || list.images!.length == 0 || list.images!.isEmpty
+                          //       // ?Image.asset(cars)
+                          //       // :
+                          //       Image.network(
+                          //     "${ApiUrls.image_root}${list.primaryImage}",
+                          //     width: 95.w,
+                          //     height: 114.h,
+                          //     fit: BoxFit.cover,
+                          //     errorBuilder: (context, error, stackTrace) {
+                          //       return Image.asset(cars);
+                          //     },
+                          //   ),
+                          // ),
+                          Icon(Icons.person),
                           const SizedBox(width: 15),
                           Expanded(
                             child: Column(
