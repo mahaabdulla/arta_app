@@ -7,6 +7,8 @@ import 'package:flutter_svg/svg.dart';
 import '../../constants/api_urls.dart';
 import '../../constants/png_images.dart';
 
+// كارد تفاصيل المنتج
+
 class ProductsCard extends StatelessWidget {
   final ListingModel product;
   const ProductsCard({super.key, required this.product});

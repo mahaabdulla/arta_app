@@ -12,42 +12,38 @@ Widget buildLoadingHomeState(BuildContext context) {
       crossAxisSpacing: 8,
       childAspectRatio: 1,
     ),
-    // scrollDirection: Axis.horizontal,
-    itemCount: 4,
+    itemCount: 8,
     itemBuilder: (context, index) {
-      return Column(
-        children: [
-          Shimmer.fromColors(
-            baseColor: Colors.grey[350]!,
-            highlightColor: Colors.grey[100]!,
-            child: Expanded(
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            Shimmer.fromColors(
+              baseColor: Colors.grey[350]!,
+              highlightColor: Colors.grey[100]!,
               child: Container(
-                // width: 84.w,
-                // height: 68.h,
+                width: 84.w,
+                height: 68.h,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10.r),
                 ),
               ),
             ),
-          ),
-          SizedBox(height: 12.h),
-          Shimmer.fromColors(
-            baseColor: Colors.grey[350]!,
-            highlightColor: Colors.grey[100]!,
-            child: Expanded(
+            SizedBox(height: 12.h),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[350]!,
+              highlightColor: Colors.grey[100]!,
               child: Container(
-                // width: 84.w,
-                // height: 23.h,
+                width: 84.w,
+                height: 23.h,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(5.r)
+                  borderRadius: BorderRadius.circular(5.r),
                 ),
-                
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     },
   );
@@ -58,7 +54,7 @@ Widget buildErrorHomeState() {
     child: Column(
       children: [
         Icon(Icons.error_outline, size: 50, color: Colors.red),
-         SizedBox(height: 10.h),
+        SizedBox(height: 10.h),
         Text(
           'حدث خطأ أثناء تحميل الفئات',
           style: TextStyle(fontSize: 16, color: Colors.red),
@@ -73,7 +69,7 @@ Widget buildEmptyHomeState() {
     child: Column(
       children: [
         Icon(Icons.category, size: 50.sw, color: Colors.grey),
-         SizedBox(height: 10.h),
+        SizedBox(height: 10.h),
         Text(
           'لا توجد فئات متاحة',
           style: TextStyle(fontSize: 16.sp, color: Colors.grey),

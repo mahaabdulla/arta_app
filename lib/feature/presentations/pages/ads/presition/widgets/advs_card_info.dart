@@ -1,6 +1,7 @@
 import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/core/constants/text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AdvsCardInfo extends StatelessWidget {
@@ -26,48 +27,44 @@ class AdvsCardInfo extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyles.smallReguler.copyWith(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyles.smallReguler,
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 12.h),
         Row(
           children: [
             SvgPicture.asset(userImage),
-            SizedBox(width: 5),
+            SizedBox(width: 1.w),
             Text(
               userName,
               style: TextStyles.reguler14.copyWith(color: Colors.black),
             ),
-            SizedBox(width: 18),
+            SizedBox(width: 60.w),
             SvgPicture.asset(locationImage),
-            SizedBox(width: 5),
+            SizedBox(width: 1.w),
             Text(
               location,
               style: TextStyles.reguler14.copyWith(color: Colors.black),
             ),
           ],
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 12.h),
         Row(
           children: [
             SvgPicture.asset(clockImage),
-            SizedBox(width: 5),
+            SizedBox(width: 1.w),
             Text(
               time,
               style: TextStyles.reguler14.copyWith(color: Colors.black),
             ),
-            SizedBox(width: 45),
+            SizedBox(width: 15.w),
             SvgPicture.asset(dollerImage),
-            SizedBox(width: 5),
+            SizedBox(width: 1.w),
             Text(
               price,
               style: TextStyles.reguler14.copyWith(color: Colors.black),
             ),
           ],
         ),
-        SizedBox(height: 20),
       ],
     );
   }

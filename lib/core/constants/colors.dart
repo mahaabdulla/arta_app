@@ -16,3 +16,5 @@ const Color darkGreenContainer = Color(0xFF075E66);
 const Color textOnPrimary = Color(0xFFFFFFFF);
 const Color lightBlue = Color(0xFF559FC1);
 const Color grayBorder = Color(0xFFDEDEDE);
+const Color redColor = Color(0xff97282A);
+const Color listingCardBackground = Color(0xffF7FBFA);
