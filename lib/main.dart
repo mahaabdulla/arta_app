@@ -8,7 +8,6 @@ import 'core/helper/shared_preference_helper.dart';
 import 'material_app.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefsHelper.init();
   Bloc.observer = MyBlocObserver();
@@ -23,4 +22,3 @@ void main() async {
 
   // runApp(const MyApp());
 }
-
