@@ -44,7 +44,7 @@ class ProductsCard extends StatelessWidget {
                     // ),
                   ),
                   child: Image.network(
-                    "${ApiUrls.image_root}/${product.primaryImage}",
+                    "${ApiUrls.image_root}${product.primaryImage}",
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) =>
                         Image.asset(DEFULT_IMAGE),

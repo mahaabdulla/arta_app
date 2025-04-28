@@ -3,6 +3,7 @@ import 'package:arta_app/feature/presentations/pages/ads/presition/region_view.d
 import 'package:arta_app/feature/presentations/pages/ads/presition/views/add_advsrtismint.dart';
 import 'package:arta_app/feature/presentations/pages/ads/presition/views/my_ads.dart';
 import 'package:arta_app/feature/presentations/pages/categorys/presintion/categury_details.dart';
+import 'package:arta_app/feature/presentations/pages/categorys/presintion/ctagurey_children_view.dart';
 import 'package:arta_app/feature/presentations/pages/categorys/presintion/views/cars.dart';
 import 'package:arta_app/feature/presentations/pages/categorys/presintion/views/electronuc.dart';
 import 'package:arta_app/feature/presentations/pages/categorys/presintion/views/home_catg.dart';
@@ -62,11 +63,22 @@ class AppRoute {
       case '/change_pass':
         return MaterialPageRoute(builder: (ctx) => ChangePasswordScreen());
 
-      case '/categoryDetails':
-        final categoryId = route.arguments as int;
+      case '/ctgChildern':
+        final routeArgs = route.arguments as Map<String, dynamic>;
+        final parentId = routeArgs['parentId'] as int;
+        final parentName = routeArgs['parentName'] as String;
         return MaterialPageRoute(
-          builder: (ctx) => CategoryDetailPage(categoryId: categoryId),
+          builder: (ctx) => CtgChildrenScreen(
+            parentId: parentId,
+            parentName: parentName,
+          ),
         );
+
+      // case '/categoryDetails':
+      //   final categoryId = route.arguments as int;
+      //   return MaterialPageRoute(
+      //     builder: (ctx) => CategoryDetailPage(categoryId: categoryId),
+      //   );
 
       default:
         return MaterialPageRoute(

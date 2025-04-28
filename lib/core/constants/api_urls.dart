@@ -1,3 +1,5 @@
+import 'dart:developer' as dev;
+
 class ApiUrls {
   static const String ipconfig = '192.168.93.62';
   static const String image_root = 'http://$ipconfig:8000/';
@@ -10,7 +12,9 @@ class ApiUrls {
   static const String getcategories = '$root/category';
 
   static String getChildrenUrl(int parentId) {
-    return '$root/categories/$parentId/children';
+    final url = '$root/categories/$parentId/children';
+    dev.log('Generated URL: $url');
+    return url;
   }
 
   static String singleCatgUrl(int id) {

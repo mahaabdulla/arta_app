@@ -61,4 +61,48 @@ class CategoryCubit extends Cubit<CategoryState> {
       emit(ErrorCategoryState(message: "Unexpected error"));
     }
   }
+
+  Future<void> getChildren(int parentId) async {
+    emit(LoadingCategoryState());
+
+    try {
+      final url = ApiUrls.getChildrenUrl(parentId);
+      dev.log('Requesting URL: $url');
+
+      final response = await _api.getData(url: url);
+      dev.log('Raw Response: $response');
+
+      if (response != null && response['success'] == true) {
+        final List<dynamic> data = response['data'] ?? [];
+
+        List<Children> children =
+            data.map((json) => Children.fromJson(json)).toList();
+
+        dev.log('Parsed Children: ${children.length} items');
+
+        emit(SuccessChildrenState(children: children));
+      } else {
+        final errorMessage =
+            response?['message'] ?? "حدث خطأ أثناء تحميل الأطفال.";
+        dev.log('API Error: $errorMessage');
+        emit(ErrorCategoryState(message: errorMessage));
+      }
+    } on DioException catch (dioError) {
+      final errorHandled = Diohandling.fromDioError(dioError);
+
+      toast(
+        errorHandled.errorMessage,
+        gravity: ToastGravity.BOTTOM,
+        bgColor: Colors.red,
+        textColor: Colors.white,
+        print: true,
+      );
+
+      dev.log("Dio Error: ${errorHandled.errorMessage}");
+      emit(ErrorCategoryState(message: errorHandled.errorMessage));
+    } catch (e, stackTrace) {
+      dev.log('Unexpected Error: $e', stackTrace: stackTrace);
+      emit(ErrorCategoryState(message: "حدث خطأ غير متوقع."));
+    }
+  }
 }

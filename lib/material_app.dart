@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         navigatorKey: navigatorKey,
         onGenerateRoute: AppRoute.generatedRoute,
-        // initialRoute: '/home',
+        initialRoute: '/home',
         locale: Locale('ar'),
         localizationsDelegates: [
           S.delegate,
@@ -63,8 +63,8 @@ class _MyAppState extends State<MyApp> {
         ],
         supportedLocales: S.delegate.supportedLocales,
         debugShowCheckedModeBanner: false,
+
         // home: ChangePasswordScreen(),
-        home: ChangePasswordScreen(),
       ),
     );
   }
