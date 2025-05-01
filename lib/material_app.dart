@@ -2,6 +2,8 @@ import 'package:arta_app/core/repositoris/online_repo.dart';
 import 'package:arta_app/core/routes/routes.dart';
 import 'package:arta_app/feature/presentations/cubits/change_password/change_password_cubit.dart';
 import 'package:arta_app/feature/presentations/cubits/commint/commints_cubit.dart';
+import 'package:arta_app/feature/presentations/cubits/region/region_cubit.dart';
+import 'package:arta_app/feature/presentations/pages/home/presention/widgets/filte_page.dart';
 import 'package:arta_app/feature/presentations/pages/login/login_screen.dart';
 import 'package:arta_app/feature/presentations/pages/user/widgets/change_pass_screan.dart';
 import 'package:flutter/material.dart';
@@ -49,11 +51,12 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (_) => CommintsCubit(OnlineDataRepo()),
         ),
+        BlocProvider(create: (_) => RegionCubit(OnlineDataRepo())),
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,
         onGenerateRoute: AppRoute.generatedRoute,
-        // initialRoute: '/home',
+        initialRoute: '/home',
         locale: Locale('ar'),
         localizationsDelegates: [
           S.delegate,
@@ -63,8 +66,8 @@ class _MyAppState extends State<MyApp> {
         ],
         supportedLocales: S.delegate.supportedLocales,
         debugShowCheckedModeBanner: false,
-        // home: ChangePasswordScreen(),
-        home: ChangePasswordScreen(),
+
+        // home: FilterPage(),
       ),
     );
   }

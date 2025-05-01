@@ -31,4 +31,9 @@ class ApiUrls {
   static const String REGISTER = '$root/register';
   static const String PERENT = '$root/categories/parents';
   static const String COMMINT = '$root/comment';
+  static const String PARENTS_REGIONS = '$root/regions/parents';
+
+  static String getRegionChildUrl(int parentId) {
+    return '$root/regions/$parentId/children';
+  }
 }

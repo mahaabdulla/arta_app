@@ -56,7 +56,7 @@ class _AddAdvertisementViewState extends State<AddAdvertisementView> {
     });
   }
 
- Future<void> _fetchParentRegions() async {
+  Future<void> _fetchParentRegions() async {
     final fetchedParentRegions = await regionVM.getParentRegions();
     setState(() {
       // Map dynamic data to List<Region>

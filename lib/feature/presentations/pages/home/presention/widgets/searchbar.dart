@@ -1,8 +1,19 @@
-import 'package:arta_app/core/constants/colors.dart';
+import 'package:arta_app/feature/presentations/pages/home/presention/widgets/search_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:arta_app/core/constants/colors.dart';
+import 'package:arta_app/feature/presentations/cubits/ads/listing_cubit.dart';
+import 'package:arta_app/feature/presentations/cubits/ads/listing_state.dart';
 
-class SearchBarFiltter extends StatelessWidget {
+class SearchBarFiltter extends StatefulWidget {
   const SearchBarFiltter({super.key});
+
+  @override
+  _SearchBarFiltterState createState() => _SearchBarFiltterState();
+}
+
+class _SearchBarFiltterState extends State<SearchBarFiltter> {
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -10,9 +21,9 @@ class SearchBarFiltter extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
       child: Row(
         children: [
-          // شريط البحث
           Expanded(
             child: TextField(
+              controller: _searchController,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search, color: Colors.grey),
                 hintText: 'ابحث هنا',
@@ -24,11 +35,26 @@ class SearchBarFiltter extends StatelessWidget {
                   borderSide: BorderSide.none,
                 ),
               ),
+              onChanged: (value) {
+                // عند كتابة النص في شريط البحث نقوم بتحديث بحث Cubit
+                ListingCubit.get(context).searchByTitle(value);
+              },
             ),
           ),
           const SizedBox(width: 10),
-          // زر الفلتر
           InkWell(
+            onTap: () {
+              String query = _searchController.text;
+              if (query.isNotEmpty) {
+                // إذا كان النص غير فارغ، نقوم بالتوجيه إلى صفحة نتائج البحث
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SearchResultsPage(searchQuery: query),
+                  ),
+                );
+              }
+            },
             child: Container(
               height: 50,
               width: 50,

@@ -16,28 +16,31 @@ import 'dart:developer' as dev;
 class ListingCubit extends Cubit<ListingState> {
   late final OnlineDataRepo _api;
 
+  List<ListingModel> _allAds =
+      []; // تخزين جميع الإعلانات لاستخدامها في البحث والفلترة لاحقًا
+
   ListingCubit(this._api) : super(ListingInitial());
 
   static ListingCubit get(context) => BlocProvider.of(context);
 
+  // جلب الإعلانات من الـ API
   Future<void> fetchAds() async {
     emit(LoadingListingState());
     try {
       final response = await _api.getData(
         url: ApiUrls.postAdstUrl,
-
-        //  columns: {"page": currentPage}
       );
 
       if (isSuccessResponse(response: response)) {
-        // final jsonResponse = response['data'];
-        //  = AdsModel.fromJson(jsonResponse["data"]);
-        // AdsModel adsModel = AdsModel.fromJson(jsonResponse["data"]);
-
         List<ListingModel> adsModel = (response['data']['data'] as List)
             .map((json) => ListingModel.fromJson(json))
             .toList();
-        dev.log("the ADS responce is ${adsModel[0].title}");
+
+        // تخزين الإعلانات في _allAds لاستخدامها في الفلترة أو البحث لاحقًا.
+        _allAds = adsModel;
+        dev.log("Loaded ads is: ${_allAds.length}");
+
+        dev.log("the ADS response is ${adsModel[0].title}");
         emit(SuccessListingState(listing: adsModel));
       } else {
         emit(ErrorListingState(message: "Error: ${response['message']}"));
@@ -55,6 +58,33 @@ class ListingCubit extends Cubit<ListingState> {
     }
   }
 
+  // البحث باستخدام العنوان
+  void searchByTitle(String query) {
+    if (_allAds.isEmpty) {
+      emit(ErrorListingState(message: "لا توجد بيانات للبحث فيها"));
+      return;
+    }
+    if (query.isEmpty) {
+      emit(SuccessListingState(listing: _allAds));
+      return;
+    }
+
+    final filtered = _allAds
+        .where((ad) =>
+            ad.title?.toLowerCase().contains(query.toLowerCase()) ?? false)
+        .toList();
+
+    dev.log("Filtered ads count: ${filtered.length}");
+
+    if (filtered.isEmpty) {
+      emit(ErrorListingState(message: "لا توجد نتائج تطابق البحث"));
+      return;
+    }
+
+    emit(FilteredListingState(filteredListing: filtered));
+  }
+
+  // جلب الإعلان الفردي
   Future<void> getSingleListing(String id) async {
     emit(LoadingSingleListingState());
     try {
@@ -63,14 +93,8 @@ class ListingCubit extends Cubit<ListingState> {
       );
 
       if (isSuccessResponse(response: response)) {
-        // final jsonResponse = response['data'];
-        //  = AdsModel.fromJson(jsonResponse["data"]);
-        // AdsModel adsModel = AdsModel.fromJson(jsonResponse["data"]);
         ListingModel adsModel = ListingModel.fromJson(response['data']);
-
-        // ListingModel adsModel =
-        //     (response['data']).map((json) => ListingModel.fromJson(json));
-        dev.log("the ADS responce is ${adsModel.title}");
+        dev.log("the ADS response is ${adsModel.title}");
         emit(SuccessSingleListingState(listing: adsModel));
       } else {
         emit(ErrorListingSingleState(message: "Error: ${response['message']}"));
@@ -88,7 +112,7 @@ class ListingCubit extends Cubit<ListingState> {
     }
   }
 
-  // myAds
+  // جلب إعلانات المستخدم الخاصة
   Future<void> fetchMyAds() async {
     emit(LoadingListingState());
     try {
@@ -97,8 +121,6 @@ class ListingCubit extends Cubit<ListingState> {
       if (isSuccessResponse(response: response)) {
         final allAds = response['data']['data'] as List;
         int myId = 1;
-        //LocalStorage.getStringFromDisk(key: 'userId') as int;
-        // // استرجاع userId من الكاش
 
         List<ListingModel> myAds = allAds
             .where((json) => json['user_id'] == myId)
@@ -148,7 +170,7 @@ class ListingCubit extends Cubit<ListingState> {
 
           if (adsResponse.statusCode == 200) {
             List allAds = adsResponse.data['data']['data'];
-            int myId = 1; // لو عندك userId مخزن، بدّله هنا
+            int myId = 1;
             List myAds = allAds.where((ad) => ad['user_id'] == myId).toList();
 
             if (myAds.isEmpty) {
