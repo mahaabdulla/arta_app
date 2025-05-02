@@ -2,8 +2,10 @@ import 'package:arta_app/core/constants/colors.dart';
 import 'package:arta_app/core/constants/text.dart';
 import 'package:arta_app/core/widgets/basic_scafoold.dart';
 import 'package:arta_app/feature/data/models/ads/ads_model.dart';
+import 'package:arta_app/feature/presentations/cubits/ads/listing_cubit.dart';
 import 'package:arta_app/feature/presentations/cubits/region/region_cubit.dart';
 import 'package:arta_app/feature/presentations/cubits/region/region_state.dart';
+import 'package:arta_app/feature/presentations/pages/ads/presition/views/add_advsrtismint.dart';
 import 'package:arta_app/feature/presentations/pages/home/presention/widgets/filtter_applay_botton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +21,6 @@ class FilterPage extends StatefulWidget {
 class _FilterPageState extends State<FilterPage> {
   RegionModel? selectedParent;
   RegionModel? selectedChild;
-  String? selectedProductStatus;
   String? selectedSortOrder;
 
   @override
@@ -31,11 +32,16 @@ class _FilterPageState extends State<FilterPage> {
   @override
   Widget build(BuildContext context) {
     return BasicScaffold(
+      title: "فلترة",
+      showBackButton: true,
+      onTap: () {
+        Navigator.pushReplacementNamed(context, '/home');
+      },
       widgets: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            /// Dropdown 1: المدينة
+            // المدينة
             BlocBuilder<RegionCubit, RegionState>(
               builder: (context, state) {
                 List<RegionModel> regions = [];
@@ -72,7 +78,7 @@ class _FilterPageState extends State<FilterPage> {
 
             SizedBox(height: 32.h),
 
-            /// Dropdown 2: المنطقة
+            // المنطقة
             BlocBuilder<RegionCubit, RegionState>(
               builder: (context, state) {
                 List<RegionModel> children = [];
@@ -101,106 +107,49 @@ class _FilterPageState extends State<FilterPage> {
               },
             ),
 
-            SizedBox(height: 24.h),
+            SizedBox(height: 32.h),
 
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 6),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color.fromARGB(255, 116, 172, 196),
-                    Color.fromARGB(255, 112, 164, 158)
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              padding: const EdgeInsets.all(2),
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 14),
-                child: RadioListTile<String>(
-                  title: const Text("الأقل سعرًا"),
-                  value: "low",
-                  groupValue: selectedSortOrder,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedSortOrder = value;
-                    });
-                  },
-                ),
-              ),
-            ),
+            // الأقل سعرًا
+            buildPriceOption("الأقل سعرًا", "low"),
 
-            /// Radio Button 2: الأعلى سعرًا
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 6),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [
-                    Color.fromARGB(255, 116, 172, 196),
-                    Color.fromARGB(255, 112, 164, 158)
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              padding: const EdgeInsets.all(2),
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 14),
-                child: RadioListTile<String>(
-                  title: const Text("الأكثر سعرًا"),
-                  value: "high",
-                  groupValue: selectedSortOrder,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedSortOrder = value;
-                    });
-                  },
-                ),
-              ),
-            ),
-            SizedBox(height: 24.h),
-            // apllay button
+            SizedBox(height: 32.h),
+
+            // الأعلى سعرًا
+            buildPriceOption("الأعلى سعرًا", "high"),
+
+            SizedBox(height: 32.h),
+
+            // زر تطبيق الفلترة
             FilterApplyButton(
               onTap: () {
-                print("tapped");
-                //applay  filtter
+                // مثال: تعيين حدود السعر (يمكن تعديلها حسب الحاجة)
+                double? priceLimitValue;
+                if (selectedSortOrder == "low") {
+                  priceLimitValue = 500;
+                } else if (selectedSortOrder == "high") {
+                  priceLimitValue = 1000;
+                }
+
+                context.read<ListingCubit>().filterAds(
+                      city: selectedParent?.name,
+                      region: selectedChild?.name,
+                      priceLimit: priceLimitValue,
+                      isPriceAbove: selectedSortOrder == "high",
+                    );
+
+                Navigator.pushReplacementNamed(context, '/home');
               },
-            )
+            ),
           ],
         ),
       ),
     );
   }
-}
 
-class DropdownWidget extends StatelessWidget {
-  final String? value;
-  final List<String> items;
-  final ValueChanged<String?> onChanged;
-  final String? hint;
-
-  const DropdownWidget({
-    required this.value,
-    required this.items,
-    required this.onChanged,
-    this.hint,
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget buildPriceOption(String label, String value) {
     return Container(
+      width: 360.w,
+      height: 72.h,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [
@@ -219,22 +168,18 @@ class DropdownWidget extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 14),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            isExpanded: true,
-            value: (value == null || value!.isEmpty) ? null : value,
-            hint: hint != null ? Text(hint!) : null,
-            items: items
-                .map((e) => DropdownMenuItem(
-                      value: e,
-                      child: Text(e, style: const TextStyle(fontSize: 16)),
-                    ))
-                .toList(),
-            onChanged: onChanged,
-            icon: const Icon(Icons.arrow_drop_down),
-            iconSize: 24,
-            style: const TextStyle(color: darkGreenContainer),
+        child: RadioListTile<String>(
+          title: Text(
+            label,
+            style: TextStyles.smallReguler.copyWith(color: darkGreenContainer),
           ),
+          value: value,
+          groupValue: selectedSortOrder,
+          onChanged: (value) {
+            setState(() {
+              selectedSortOrder = value;
+            });
+          },
         ),
       ),
     );

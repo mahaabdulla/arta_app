@@ -16,14 +16,13 @@ import 'dart:developer' as dev;
 class ListingCubit extends Cubit<ListingState> {
   late final OnlineDataRepo _api;
 
-  List<ListingModel> _allAds =
-      []; // تخزين جميع الإعلانات لاستخدامها في البحث والفلترة لاحقًا
+  List<ListingModel> _listing = []; // الإعلانات الأصلية
+  List<ListingModel> _filteredListing = []; // الإعلانات المفلترة
 
   ListingCubit(this._api) : super(ListingInitial());
 
   static ListingCubit get(context) => BlocProvider.of(context);
 
-  // جلب الإعلانات من الـ API
   Future<void> fetchAds() async {
     emit(LoadingListingState());
     try {
@@ -32,15 +31,14 @@ class ListingCubit extends Cubit<ListingState> {
       );
 
       if (isSuccessResponse(response: response)) {
+        dev.log('${response}');
         List<ListingModel> adsModel = (response['data']['data'] as List)
             .map((json) => ListingModel.fromJson(json))
             .toList();
+        dev.log('${adsModel}');
+        _listing = adsModel; // تخزين الإعلانات الأصلية
+        _filteredListing = _listing; // تعيين الإعلانات المفلترة لجميع الإعلانات
 
-        // تخزين الإعلانات في _allAds لاستخدامها في الفلترة أو البحث لاحقًا.
-        _allAds = adsModel;
-        dev.log("Loaded ads is: ${_allAds.length}");
-
-        dev.log("the ADS response is ${adsModel[0].title}");
         emit(SuccessListingState(listing: adsModel));
       } else {
         emit(ErrorListingState(message: "Error: ${response['message']}"));
@@ -58,33 +56,6 @@ class ListingCubit extends Cubit<ListingState> {
     }
   }
 
-  // البحث باستخدام العنوان
-  void searchByTitle(String query) {
-    if (_allAds.isEmpty) {
-      emit(ErrorListingState(message: "لا توجد بيانات للبحث فيها"));
-      return;
-    }
-    if (query.isEmpty) {
-      emit(SuccessListingState(listing: _allAds));
-      return;
-    }
-
-    final filtered = _allAds
-        .where((ad) =>
-            ad.title?.toLowerCase().contains(query.toLowerCase()) ?? false)
-        .toList();
-
-    dev.log("Filtered ads count: ${filtered.length}");
-
-    if (filtered.isEmpty) {
-      emit(ErrorListingState(message: "لا توجد نتائج تطابق البحث"));
-      return;
-    }
-
-    emit(FilteredListingState(filteredListing: filtered));
-  }
-
-  // جلب الإعلان الفردي
   Future<void> getSingleListing(String id) async {
     emit(LoadingSingleListingState());
     try {
@@ -94,7 +65,7 @@ class ListingCubit extends Cubit<ListingState> {
 
       if (isSuccessResponse(response: response)) {
         ListingModel adsModel = ListingModel.fromJson(response['data']);
-        dev.log("the ADS response is ${adsModel.title}");
+        dev.log("the ADS responce is ${adsModel.title}");
         emit(SuccessSingleListingState(listing: adsModel));
       } else {
         emit(ErrorListingSingleState(message: "Error: ${response['message']}"));
@@ -112,7 +83,59 @@ class ListingCubit extends Cubit<ListingState> {
     }
   }
 
-  // جلب إعلانات المستخدم الخاصة
+  void searchInAds(String query) {
+    if (query.isEmpty) {
+      _filteredListing = _listing;
+    } else {
+      _filteredListing = _listing.where((ad) {
+        return ad.title?.toLowerCase().contains(query.toLowerCase()) ?? false;
+      }).toList();
+    }
+
+    emit(SuccessListingState(
+      listing: _listing,
+      filteredListing: _filteredListing,
+    ));
+  }
+
+  // filter function
+  void filterAds(
+      {String? city,
+      String? region,
+      double? priceLimit,
+      bool isPriceAbove = false}) {
+    _filteredListing = _listing.where((ad) {
+      bool matchesCity = city != null ? ad.region?.name == city : true;
+      bool matchesRegion = region != null ? ad.region?.name == region : true;
+      bool matchesPrice = priceLimit != null
+          ? _matchesPriceLimit(ad.price, priceLimit, isPriceAbove)
+          : true;
+
+      return matchesCity && matchesRegion && matchesPrice;
+    }).toList();
+
+    emit(SuccessListingState(
+      listing: _listing,
+      filteredListing: _filteredListing,
+    ));
+  }
+
+// دالة مساعدة لمقارنة السعر
+  bool _matchesPriceLimit(
+      String? adPrice, double priceLimit, bool isPriceAbove) {
+    if (adPrice == null) return false;
+
+    double price = double.tryParse(adPrice) ?? 0;
+
+    if (isPriceAbove) {
+      // إذا كان الفلتر لعرض الإعلانات ذات السعر أعلى من القيمة المحددة
+      return price > priceLimit;
+    } else {
+      // إذا كان الفلتر لعرض الإعلانات ذات السعر أقل من القيمة المحددة
+      return price < priceLimit;
+    }
+  }
+
   Future<void> fetchMyAds() async {
     emit(LoadingListingState());
     try {
@@ -170,7 +193,7 @@ class ListingCubit extends Cubit<ListingState> {
 
           if (adsResponse.statusCode == 200) {
             List allAds = adsResponse.data['data']['data'];
-            int myId = 1;
+            int myId = 1; // لو عندك userId مخزن، بدّله هنا
             List myAds = allAds.where((ad) => ad['user_id'] == myId).toList();
 
             if (myAds.isEmpty) {

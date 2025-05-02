@@ -1,5 +1,5 @@
 class ApiUrls {
-  static const String ipconfig = '192.168.93.62';
+  static const String ipconfig = '192.168.122.62';
   static const String image_root = 'http://$ipconfig:8000/';
 
   static const String primaryImage =

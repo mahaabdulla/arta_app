@@ -18,7 +18,7 @@ class FilterApplyButton extends StatelessWidget {
         width: 355.w,
         height: 55.h,
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 145, 190, 194),
+          color: const Color(0xff055479),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Center(

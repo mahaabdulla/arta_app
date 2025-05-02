@@ -268,15 +268,18 @@ class SectionWidget extends StatelessWidget {
 }
 
 class DropdownWidget extends StatelessWidget {
-  final String value;
+  final String? value;
   final List<String> items;
   final ValueChanged<String?> onChanged;
+  final String? hint;
 
-  const DropdownWidget(
-      {required this.value,
-      required this.items,
-      required this.onChanged,
-      super.key});
+  const DropdownWidget({
+    required this.value,
+    required this.items,
+    required this.onChanged,
+    this.hint,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -298,13 +301,15 @@ class DropdownWidget extends StatelessWidget {
         child: DropdownButtonHideUnderline(
           child: DropdownButton<String>(
             isExpanded: true,
+            value: items.contains(value) ? value : null,
+            hint: (value == null && hint != null) ? Text(hint!) : null,
             items: items
                 .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e, style: const TextStyle(fontSize: 16))))
+                      value: e,
+                      child: Text(e, style: const TextStyle(fontSize: 16)),
+                    ))
                 .toList(),
             onChanged: onChanged,
-            value: items.contains(value) ? value : null,
             icon: const Icon(Icons.arrow_drop_down),
             iconSize: 24,
             style: const TextStyle(color: Colors.black),

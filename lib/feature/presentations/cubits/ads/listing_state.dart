@@ -13,12 +13,6 @@ class SuccessListingState extends ListingState {
   SuccessListingState({required this.listing, this.filteredListing});
 }
 
-class FilteredListingState extends ListingState {
-  final List<ListingModel> filteredListing;
-
-  FilteredListingState({required this.filteredListing});
-}
-
 class ErrorListingState extends ListingState {
   final String message;
 
