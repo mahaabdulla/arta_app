@@ -1,91 +1,66 @@
-// import 'package:flutter/material.dart';
-// import 'package:arta_app/feature/presentations/pages/categorys/data/categury_model.dart';
-// import 'package:arta_app/feature/presentations/pages/categorys/presintion/view_model/catagury_vm.dart';
+import 'package:arta_app/core/repositoris/online_repo.dart';
+import 'package:arta_app/feature/presentations/cubits/ads/listing_cubit.dart';
+import 'package:arta_app/feature/presentations/cubits/ads/listing_state.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-// class CategoryDetailPage extends StatefulWidget {
-//   final int categoryId;
+class CategoryDetailPage extends StatelessWidget {
+  final int categoryId;
+  final String categoryName;
 
-//   CategoryDetailPage({required this.categoryId});
+  const CategoryDetailPage({
+    Key? key,
+    required this.categoryId,
+    required this.categoryName,
+  }) : super(key: key);
 
-//   @override
-//   _CategoryDetailPageState createState() => _CategoryDetailPageState();
-// }
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => ListingCubit(OnlineDataRepo())..fetchAds(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('إعلانات $categoryName'),
+          backgroundColor: Colors.blueAccent,
+        ),
+        body: BlocBuilder<ListingCubit, ListingState>(
+          builder: (context, state) {
+            if (state is LoadingListingState) {
+              return Center(child: CircularProgressIndicator());
+            } else if (state is SuccessListingState) {
+              final filteredAds = state.listing
+                  .where((ad) => ad.categoryId == categoryId)
+                  .toList();
 
-// class _CategoryDetailPageState extends State<CategoryDetailPage> {
-//   late CateguryVM ctgVM;
-//   Category? category;
-//   List<Category> children = [];
-//   bool loading = true;
-//   bool loadingChildren = false;
+              if (filteredAds.isEmpty) {
+                return Center(child: Text('لا توجد إعلانات في هذه الفئة.'));
+              }
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     ctgVM = CateguryVM();
-//     fetchCategoryDetails();
-//     fetchChildren();
-//   }
-
-//   Future<void> fetchCategoryDetails() async {
-//     setState(() {
-//       loading = true;
-//     });
-//     category = await ctgVM.getSingleCatg(widget.categoryId);
-//     setState(() {
-//       loading = false;
-//     });
-//   }
-
-//   Future<void> fetchChildren() async {
-//     setState(() {
-//       loadingChildren = true;
-//     });
-//     children = await ctgVM.getChildren(widget.categoryId);
-//     setState(() {
-//       loadingChildren = false;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(category?.name ?? 'تفاصيل الفئة'),
-//         backgroundColor: Colors.blue[200],
-//       ),
-//       body: loading
-//           ? Center(child: CircularProgressIndicator())
-//           : category != null
-//               ? SingleChildScrollView(
-//                   child: Padding(
-//                     padding: const EdgeInsets.all(16.0),
-//                     child: Column(
-//                       crossAxisAlignment: CrossAxisAlignment.start,
-//                       children: [
-//                         loadingChildren
-//                             ? Center(child: CircularProgressIndicator())
-//                             : children.isNotEmpty
-//                                 ? ListView.builder(
-//                                     shrinkWrap: true,
-//                                     physics: NeverScrollableScrollPhysics(),
-//                                     itemCount: children.length,
-//                                     itemBuilder: (context, index) {
-//                                       Category child = children[index];
-//                                       return Card(
-//                                         child: ListTile(
-//                                           leading: CircleAvatar(),
-//                                           title: Text(child.name),
-//                                           subtitle: Text('ID: ${child.id}'),
-//                                         ),
-//                                       );
-//                                     },
-//                                   )
-//                                 : Text('لا توجد فئات فرعية.')
-//                       ],
-//                     ),
-//                   ),
-//                 )
-//               : Center(child: Text('لا توجد بيانات لهذه الفئة')),
-//     );
-//   }
-// }
+              return ListView.builder(
+                itemCount: filteredAds.length,
+                itemBuilder: (context, index) {
+                  final ad = filteredAds[index];
+                  return Card(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: ListTile(
+                      title: Text(ad.title ?? 'بدون عنوان'),
+                      subtitle: Text(ad.description ?? ''),
+                      onTap: () {
+                        // اذهب إلى تفاصيل الإعلان
+                      },
+                    ),
+                  );
+                },
+              );
+            } else if (state is ErrorListingState) {
+              return Center(child: Text(state.message));
+            } else {
+              return Center(child: Text('حدث خطأ غير متوقع'));
+            }
+          },
+        ),
+      ),
+    );
+  }
+}

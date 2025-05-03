@@ -93,61 +93,67 @@ class _CtgChildrenScreenState extends State<CtgChildrenScreen> {
                       ? "${ApiUrls.image_root}${child.image}"
                       : null;
 
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: listingCardBackground,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          spreadRadius: 2,
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Column(
-                                children: [
-                                  // // إذا كانت الصورة null نعرض صورة افتراضية
-                                  // Image.network(
-                                  //   imageUrl ??
-                                  //       'assets/images/default_avatar.png', // صورة افتراضية
-                                  //   width: 95.w,
-                                  //   height: 114.h,
-                                  //   fit: BoxFit.cover,
-                                  //   errorBuilder: (context, error, stackTrace) {
-                                  //     return Image.asset(
-                                  //         'assets/images/default_avatar.png'); // صورة افتراضية في حالة الخطأ
-                                  //   },
-                                  // ),
-                                ],
-                              ),
-                              SizedBox(width: 6.w),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(child.name ?? 'اسم غير معروف',
-                                      style: TextStyles.reguler14
-                                          .copyWith(color: Colors.black)),
-                                  SizedBox(height: 5.h),
-                                  Text(
-                                      ' منذ تم نشره: ${child.createdAt ?? "-"}',
-                                      style: TextStyles.reguler14),
-                                  Text(
-                                      'تم تحديثه منذ : ${child.createdAt ?? "-"}',
-                                      style: TextStyles.reguler14),
-                                ],
-                              ),
-                            ],
+                  return InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/categoryDetails',
+                        arguments: {
+                          'categoryId': child.id!,
+                          'categoryName': child.name ?? '',
+                        },
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: listingCardBackground,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            spreadRadius: 2,
+                            blurRadius: 8,
+                            offset: Offset(0, 4),
                           ),
                         ],
+                      ),
+                      margin: EdgeInsets.symmetric(vertical: 10),
+                      child: Padding(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Column(
+                                  children: [
+                                    // // إذا كانت الصورة null نعرض صورة افتراضية
+                                    // Image.network(
+                                    //   imageUrl ??
+                                    //       'assets/images/default_avatar.png', // صورة افتراضية
+                                    //   width: 95.w,
+                                    //   height: 114.h,
+                                    //   fit: BoxFit.cover,
+                                    //   errorBuilder: (context, error, stackTrace) {
+                                    //     return Image.asset(
+                                    //         'assets/images/default_avatar.png'); // صورة افتراضية في حالة الخطأ
+                                    //   },
+                                    // ),
+                                  ],
+                                ),
+                                SizedBox(width: 6.w),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(child.name ?? 'اسم غير معروف',
+                                        style: TextStyles.reguler14
+                                            .copyWith(color: Colors.black)),
+                                    SizedBox(height: 5.h),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );

@@ -74,11 +74,16 @@ class AppRoute {
           ),
         );
 
-      // case '/categoryDetails':
-      //   final categoryId = route.arguments as int;
-      //   return MaterialPageRoute(
-      //     builder: (ctx) => CategoryDetailPage(categoryId: categoryId),
-      //   );
+      case '/categoryDetails':
+        final args = route.arguments as Map<String, dynamic>;
+        final categoryId = args['categoryId'] as int;
+        final categoryName = args['categoryName'] as String;
+        return MaterialPageRoute(
+          builder: (ctx) => CategoryDetailPage(
+            categoryId: categoryId,
+            categoryName: categoryName,
+          ),
+        );
 
       default:
         return MaterialPageRoute(

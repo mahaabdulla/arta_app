@@ -1,4 +1,3 @@
-import 'package:arta_app/core/constants/colors.dart';
 import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/core/constants/text.dart';
 import 'package:arta_app/feature/data/models/ads/ads_model.dart';
