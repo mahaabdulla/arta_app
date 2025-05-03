@@ -5,7 +5,6 @@ import 'package:arta_app/core/widgets/products_list.dart';
 import 'package:arta_app/feature/presentations/pages/home/presention/widgets/searchbar.dart';
 import 'package:arta_app/feature/presentations/pages/home/presention/widgets/categury_list.dart';
 import 'package:arta_app/feature/presentations/pages/home/presention/widgets/see_more_buttom.dart';
-import 'package:arta_app/feature/presentations/pages/categorys/data/categury_model.dart'; // Import Category model
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -80,9 +79,7 @@ class HomeBody extends StatelessWidget {
               CategoryList(),
               const SizedBox(height: 16),
               SearchBarFiltter(),
-              ProductsList(
-               
-              ),
+              ProductsList(),
               const SizedBox(height: 16),
               SeeMoreButtom(),
             ],

@@ -1,8 +1,6 @@
-import 'package:arta_app/core/repositoris/online_repo.dart';
-import 'package:arta_app/feature/presentations/cubits/ads/listing_cubit.dart';
-import 'package:arta_app/feature/presentations/cubits/ads/listing_state.dart';
+import 'package:arta_app/core/widgets/basic_scafoold.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CategoryDetailPage extends StatelessWidget {
   final int categoryId;
@@ -16,49 +14,27 @@ class CategoryDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ListingCubit(OnlineDataRepo())..fetchAds(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('إعلانات $categoryName'),
-          backgroundColor: Colors.blueAccent,
-        ),
-        body: BlocBuilder<ListingCubit, ListingState>(
-          builder: (context, state) {
-            if (state is LoadingListingState) {
-              return Center(child: CircularProgressIndicator());
-            } else if (state is SuccessListingState) {
-              final filteredAds = state.listing
-                  .where((ad) => ad.categoryId == categoryId)
-                  .toList();
-
-              if (filteredAds.isEmpty) {
-                return Center(child: Text('لا توجد إعلانات في هذه الفئة.'));
-              }
-
-              return ListView.builder(
-                itemCount: filteredAds.length,
-                itemBuilder: (context, index) {
-                  final ad = filteredAds[index];
-                  return Card(
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: ListTile(
-                      title: Text(ad.title ?? 'بدون عنوان'),
-                      subtitle: Text(ad.description ?? ''),
-                      onTap: () {
-                        // اذهب إلى تفاصيل الإعلان
-                      },
-                    ),
-                  );
-                },
-              );
-            } else if (state is ErrorListingState) {
-              return Center(child: Text(state.message));
-            } else {
-              return Center(child: Text('حدث خطأ غير متوقع'));
-            }
-          },
+    return BasicScaffold(
+      title: '${categoryName}',
+      showBackButton: true,
+      onTap: () {
+        Navigator.pop(context);
+      },
+      widgets: Center(
+        child: Padding(
+          padding: EdgeInsets.all(16.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'تفاصيل التصنيف:',
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10.h),
+              Text('رقم التصنيف: $categoryId'),
+              Text('الاسم: $categoryName'),
+            ],
+          ),
         ),
       ),
     );

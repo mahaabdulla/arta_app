@@ -94,15 +94,35 @@ class _CtgChildrenScreenState extends State<CtgChildrenScreen> {
                       : null;
 
                   return InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/categoryDetails',
-                        arguments: {
-                          'categoryId': child.id!,
-                          'categoryName': child.name ?? '',
-                        },
-                      );
+                    onTap: () async {
+                      final cubit = context.read<CategoryCubit>();
+                      await cubit.getChildren(child.id!);
+
+                      final currentState = cubit.state;
+
+                      if (currentState is SuccessChildrenState &&
+                          currentState.children.isNotEmpty) {
+                        // إذا عنده أبناء، نعرضهم في نفس الشاشة
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CtgChildrenScreen(
+                              parentId: child.id!,
+                              parentName: child.name ?? '',
+                            ),
+                          ),
+                        );
+                      } else {
+                        // إذا ما عنده أبناء، نروح لتفاصيله
+                        Navigator.pushNamed(
+                          context,
+                          '/categoryDetails',
+                          arguments: {
+                            'categoryId': child.id!,
+                            'categoryName': child.name ?? '',
+                          },
+                        );
+                      }
                     },
                     child: Container(
                       decoration: BoxDecoration(
