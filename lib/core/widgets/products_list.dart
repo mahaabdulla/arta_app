@@ -28,10 +28,7 @@ class _ProductsListState extends State<ProductsList> {
   void initState() {
     super.initState();
     final cubit = context.read<ListingCubit>();
-    if (cubit.state is SuccessListingState &&
-        (cubit.state as SuccessListingState).filteredListing == null) {
-      cubit.fetchAds(); // جلب الإعلانات عند بداية الشاشة
-    }
+    cubit.fetchAds(); // جلب الإعلانات مباشرة بدون شرط
     _searchController
         .addListener(_onSearchChanged); // استماع للتغييرات في مربع البحث
   }
