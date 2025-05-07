@@ -16,79 +16,206 @@ import '../../../data/models/regetion/get_pernte.dart';
 class RegetionCubit extends Cubit<RegetionState> {
   late final OnlineDataRepo _api;
 
+  // المتغيرات لتخزين البيانات والقيم المحددة
+  List<RegetionParent> cities = [];
+  List<RegetionParent> regions = [];
+  RegetionParent? selectedCity;
+  RegetionParent? selectedRegion;
+
   RegetionCubit(this._api) : super(RegetionInitial());
 
   static RegetionCubit get(context) => BlocProvider.of(context);
-  List<RegetionParent> lastCountries = [];
 
-// Regetion Parent  = Contreis
-  Future<void> getContreis() async {
-    dev.log("getContreis called");
+  // جلب المدن
+  Future<void> getCities() async {
     emit(LoadingRegetionParentState());
     try {
       final response = await _api.getData(url: ApiUrls.REGETION_PARENT);
 
       if (isSuccessResponse(response: response)) {
-        dev.log(" response regetion is success");
-        List<RegetionParent> cuntreis = [];
+        cities = (response['data'] as List)
+            .map((json) => RegetionParent.fromJson(json))
+            .toList();
 
-        cuntreis = (response['data'] as List).map((json) {
-          dev.log("json item: $json");
-          return RegetionParent.fromJson(json);
-        }).toList();
-        lastCountries = cuntreis;
-        dev.log(" the contreis is $cuntreis");
-
-        emit(SuccessRegetionParentState(cities: cuntreis));
+        // إعادة تعيين المدينة والمنطقة المحددة
+        selectedCity = null;
+        selectedRegion = null;
+        regions = [];
+        
+        emit(SuccessRegetionParentState(cities: cities));
       } else {
         emit(ErrorRegetionParentState(message: response['message'] ?? ""));
       }
-    } on DioException catch (dioError) {
-      final errorHandled = Diohandling.fromDioError(dioError);
-      toast(errorHandled.errorMessage,
-          gravity: ToastGravity.BOTTOM,
-          bgColor: Colors.red,
-          textColor: Colors.white,
-          print: true);
-      dev.log("Dio Error: ${errorHandled.errorMessage}");
-      emit(ErrorRegetionParentState(message: errorHandled.errorMessage));
-    } catch (e) {
-      dev.log(e.toString());
-      emit(ErrorRegetionParentState(message: "Unexpected error"));
+    } catch (error) {
+      _handleError(error, (message) => ErrorRegetionParentState(message: message));
     }
   }
 
-  //------------------Regetion Child (Cities)------------------
-  Future<void> getCities(int countryId) async {
-    emit(LoadingRegetionChildState());
+  // تحديد مدينة واستدعاء المناطق التابعة لها
+  Future<void> selectCity(RegetionParent city) async {
+    if (selectedCity?.id == city.id) return; // تجنب إعادة التحميل بدون داعٍ
+    
+    selectedCity = city;
+    selectedRegion = null;
+    regions = [];
+    
+    // إرسال حالة مؤقتة تحتوي على المدينة المحددة ومناطق فارغة
+    emit(CitySelectedState(
+      cities: cities,
+      selectedCity: selectedCity,
+      regions: regions,
+    ));
+    
+    // جلب المناطق التابعة للمدينة المحددة
+    await getRegions(city.id!);
+  }
+
+  // جلب المناطق التابعة لمدينة محددة
+  Future<void> getRegions(int cityId) async {
+    emit(LoadingRegetionChildState(
+      cities: cities,
+      selectedCity: selectedCity,
+    ));
+    
     try {
-      final response = await _api.getData(url: ApiUrls.cities(countryId));
+      final response = await _api.getData(url: ApiUrls.cities(cityId));
 
       if (isSuccessResponse(response: response)) {
-        List<RegetionParent> cities = [];
-
-        cities = (response['data'] as List).map((json) {
-          return RegetionParent.fromJson(json);
-        }).toList();
-
-        dev.log(" the contreis is $cities");
-
-        emit(SuccessRegetionChildState(regetions: cities));
+        regions = (response['data'] as List)
+            .map((json) => RegetionParent.fromJson(json))
+            .toList();
+        
+        emit(SuccessRegetionChildState(
+          cities: cities,
+          selectedCity: selectedCity,
+          regions: regions,
+        ));
       } else {
-        emit(ErrorRegetionChildState(message: response['message'] ?? ""));
+        emit(ErrorRegetionChildState(
+          message: response['message'] ?? "",
+          cities: cities,
+          selectedCity: selectedCity,
+        ));
       }
-    } on DioException catch (dioError) {
-      final errorHandled = Diohandling.fromDioError(dioError);
-      toast(errorHandled.errorMessage,
+    } catch (error) {
+      _handleError(error, (message) => ErrorRegetionChildState(
+        message: message,
+        cities: cities,
+        selectedCity: selectedCity,
+      ));
+    }
+  }
+
+  // تحديد منطقة 
+  void selectRegion(RegetionParent region) {
+    selectedRegion = region;
+    emit(RegionSelectedState(
+      cities: cities,
+      selectedCity: selectedCity,
+      regions: regions,
+      selectedRegion: selectedRegion,
+    ));
+  }
+
+  // التعامل مع الأخطاء
+  void _handleError(error, Function(String) createErrorState) {
+    String errorMessage = "Unexpected error";
+    
+    if (error is DioException) {
+      final errorHandled = Diohandling.fromDioError(error);
+      errorMessage = errorHandled.errorMessage;
+      
+      toast(errorMessage,
           gravity: ToastGravity.BOTTOM,
           bgColor: Colors.red,
           textColor: Colors.white,
           print: true);
-      dev.log("Dio Error: ${errorHandled.errorMessage}");
-      emit(ErrorRegetionChildState(message: errorHandled.errorMessage));
-    } catch (e) {
-      dev.log(e.toString());
-      emit(ErrorRegetionChildState(message: "Unexpected error"));
+      dev.log("Dio Error: $errorMessage");
+    } else {
+      dev.log(error.toString());
     }
+    
+    emit(createErrorState(errorMessage));
   }
 }
+
+
+// class RegetionCubit extends Cubit<RegetionState> {
+//   late final OnlineDataRepo _api;
+
+//   RegetionCubit(this._api) : super(RegetionInitial());
+
+//   static RegetionCubit get(context) => BlocProvider.of(context);
+//   List<RegetionParent> lastCountries = [];
+
+// // Regetion Parent  = Contreis
+//   Future<void> getContreis() async {
+//     dev.log("getContreis called");
+//     emit(LoadingRegetionParentState());
+//     try {
+//       final response = await _api.getData(url: ApiUrls.REGETION_PARENT);
+
+//       if (isSuccessResponse(response: response)) {
+//         dev.log(" response regetion is success");
+//         List<RegetionParent> cuntreis = [];
+
+//         cuntreis = (response['data'] as List).map((json) {
+//           dev.log("json item: $json");
+//           return RegetionParent.fromJson(json);
+//         }).toList();
+//         lastCountries = cuntreis;
+//         dev.log(" the contreis is $cuntreis");
+
+//         emit(SuccessRegetionParentState(cities: cuntreis));
+//       } else {
+//         emit(ErrorRegetionParentState(message: response['message'] ?? ""));
+//       }
+//     } on DioException catch (dioError) {
+//       final errorHandled = Diohandling.fromDioError(dioError);
+//       toast(errorHandled.errorMessage,
+//           gravity: ToastGravity.BOTTOM,
+//           bgColor: Colors.red,
+//           textColor: Colors.white,
+//           print: true);
+//       dev.log("Dio Error: ${errorHandled.errorMessage}");
+//       emit(ErrorRegetionParentState(message: errorHandled.errorMessage));
+//     } catch (e) {
+//       dev.log(e.toString());
+//       emit(ErrorRegetionParentState(message: "Unexpected error"));
+//     }
+//   }
+
+//   //------------------Regetion Child (Cities)------------------
+//   Future<void> getCities(int countryId) async {
+//     emit(LoadingRegetionChildState());
+//     try {
+//       final response = await _api.getData(url: ApiUrls.cities(countryId));
+
+//       if (isSuccessResponse(response: response)) {
+//         List<RegetionParent> cities = [];
+
+//         cities = (response['data'] as List).map((json) {
+//           return RegetionParent.fromJson(json);
+//         }).toList();
+
+//         dev.log(" the contreis is $cities");
+
+//         emit(SuccessRegetionChildState(regetions: cities));
+//       } else {
+//         emit(ErrorRegetionChildState(message: response['message'] ?? ""));
+//       }
+//     } on DioException catch (dioError) {
+//       final errorHandled = Diohandling.fromDioError(dioError);
+//       toast(errorHandled.errorMessage,
+//           gravity: ToastGravity.BOTTOM,
+//           bgColor: Colors.red,
+//           textColor: Colors.white,
+//           print: true);
+//       dev.log("Dio Error: ${errorHandled.errorMessage}");
+//       emit(ErrorRegetionChildState(message: errorHandled.errorMessage));
+//     } catch (e) {
+//       dev.log(e.toString());
+//       emit(ErrorRegetionChildState(message: "Unexpected error"));
+//     }
+//   }
+// }
