@@ -10,6 +10,7 @@ import 'core/notifications/handleLocalNotification.dart';
 import 'feature/presentations/cubits/ads/listing_cubit.dart';
 import 'feature/presentations/cubits/categories/categories_cubit.dart';
 import 'feature/presentations/cubits/login/login_cubit.dart';
+import 'feature/presentations/cubits/regetion/regetion_cubit.dart';
 import 'generated/l10n.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -47,6 +48,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(
           create: (_) => CommintsCubit(OnlineDataRepo()),
+        ),
+        BlocProvider(
+          create: (_) => RegetionCubit(OnlineDataRepo()),
         ),
 
       ],

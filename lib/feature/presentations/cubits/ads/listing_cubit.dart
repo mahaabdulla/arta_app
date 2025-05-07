@@ -125,6 +125,7 @@ class ListingCubit extends Cubit<ListingState> {
   // حذف الإعلان
   Future<void> deleteListing(int id) async {
     try {
+      //TODO: عدلي ذا بعدين يا مها لازم كلين كود
       Dio dio = Dio();
       String? token = await LocalStorage.getStringFromDisk(key: TOKEN);
 
@@ -180,6 +181,36 @@ class ListingCubit extends Cubit<ListingState> {
         msg: 'حدث خطأ أثناء الحذف',
         backgroundColor: Colors.red,
       );
+    }
+  }
+
+//اضافة اعلان
+  Future<void> addListing(FormData data) async {
+    emit(AddingListingLoadingState());
+    // FormData data =
+    // listing.toJson();
+    try {
+      final response =
+          await _api.postForm(data: data, url: ApiUrls.postAdstUrl);
+
+      if (response.data['success'] == true) {
+        emit(AddedListingSuccessState());
+      } else {
+        emit(ErrorAddingListingState(
+            message: "خطأ: ${response.data['message']}"));
+      }
+    } on DioException catch (dioError) {
+      final errorHandled = Diohandling.fromDioError(dioError);
+      toast(errorHandled.errorMessage,
+          gravity: ToastGravity.BOTTOM,
+          bgColor: Colors.red,
+          textColor: Colors.white,
+          print: true);
+      dev.log("Dio Error: ${errorHandled.errorMessage}", name: "Dio Error");
+      emit(ErrorAddingListingState(message: errorHandled.errorMessage));
+    } catch (e) {
+      dev.log(e.toString());
+      emit(ErrorAddingListingState(message: "Unexpected error"));
     }
   }
 }
