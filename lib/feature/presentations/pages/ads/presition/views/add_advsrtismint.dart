@@ -84,6 +84,13 @@ class _AddAdvertisementViewState extends State<AddAdvertisementView>
 
                       List<String> categories = categoryNameToId.keys.toList();
 
+  Future<void> _fetchParentRegions() async {
+    final fetchedParentRegions = await regionVM.getParentRegions();
+    setState(() {
+      // Map dynamic data to List<Region>
+      parentRegions = fetchedParentRegions
+          .map<Region>((regionJson) => Region.fromJson(regionJson))
+          .toList();
                       if (categories.isEmpty) {
                         return const Center(
                             child: Text('مافي تصنيفات متاحة حالياً'));
@@ -357,6 +364,56 @@ class _AddAdvertisementViewState extends State<AddAdvertisementView>
     context.read<ListingCubit>().addListing(toFormData(listing));
   }
 
+// class DropdownWidget extends StatelessWidget {
+//   final String? value;
+//   final List<String> items;
+//   final ValueChanged<String?> onChanged;
+//   final String? hint;
+
+//   const DropdownWidget({
+//     required this.value,
+//     required this.items,
+//     required this.onChanged,
+//     this.hint,
+//     super.key,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       decoration: BoxDecoration(
+//         gradient: const LinearGradient(
+//           colors: [Color(0xFF74ACC4), Color(0xFF70A49E)],
+//           begin: Alignment.topLeft,
+//           end: Alignment.bottomRight,
+//         ),
+//         borderRadius: BorderRadius.circular(20),
+//       ),
+//       padding: const EdgeInsets.all(2),
+//       child: Container(
+//         decoration: const BoxDecoration(
+//             color: Colors.white,
+//             borderRadius: BorderRadius.all(Radius.circular(20))),
+//         padding: const EdgeInsets.symmetric(horizontal: 14),
+//         child: DropdownButtonHideUnderline(
+//           child: DropdownButton<String>(
+//             isExpanded: true,
+//             value: items.contains(value) ? value : null,
+//             hint: (value == null && hint != null) ? Text(hint!) : null,
+//             items: items
+//                 .map((e) => DropdownMenuItem(
+//                       value: e,
+//                       child: Text(e, style: const TextStyle(fontSize: 16)),
+//                     ))
+//                 .toList(),
+//             onChanged: onChanged,
+//             icon: const Icon(Icons.arrow_drop_down),
+//             iconSize: 24,
+//             style: const TextStyle(color: Colors.black),
+//           ),
+//         ),
+//       ),
+//     );
   FormData toFormData(ListingModel listing) {
     final formDataMap = {
       'title': listing.title,

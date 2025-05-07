@@ -18,6 +18,8 @@ class SeeMoreListingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<ListingCubit>().fetchAds();
+
     return BasicScaffold(
       showBackButton: true,
       onTap: () {

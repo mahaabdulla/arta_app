@@ -49,6 +49,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
           if (state is SuccessSingleListingState) {
             listingId = state.listing.id!;
             return CustomScrollView(
+              physics: const BouncingScrollPhysics(),
               slivers: [
                 SliverAppBar(
                   automaticallyImplyLeading: false,
