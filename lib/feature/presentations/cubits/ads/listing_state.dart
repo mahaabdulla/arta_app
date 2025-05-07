@@ -32,3 +32,15 @@ class ErrorListingSingleState extends ListingState {
 
   ErrorListingSingleState({required this.message});
 }
+
+class AddingListingLoadingState extends ListingState {}
+
+class AddedListingSuccessState extends ListingState {}
+
+class ErrorAddingListingState extends ListingState {
+  final String message;
+
+  const ErrorAddingListingState({required this.message});
+  @override
+  List<Object> get props => [message];
+}

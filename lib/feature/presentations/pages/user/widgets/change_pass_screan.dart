@@ -8,6 +8,8 @@ import 'package:arta_app/feature/presentations/cubits/change_password/change_pas
 import 'package:arta_app/feature/presentations/pages/user/widgets/profile_scafoold.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../../../../core/widgets/custom_text_feild.dart';
+
 class ChangePasswordScreen extends StatefulWidget {
   @override
   _ChangePasswordScreenState createState() => _ChangePasswordScreenState();
@@ -105,44 +107,49 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   Widget _buildPasswordField(String label, TextEditingController controller) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: TextFormField(
+      child: CustomTextFormField(
         controller: controller,
-        obscureText: _isObscure,
-        decoration: InputDecoration(
-          labelText: label,
-          labelStyle: TextStyles.smallReguler,
-          filled: true,
-          fillColor: Colors.white,
-          // prefixIcon: Icon(Icons.lock, color: Colors.teal),
-          suffixIcon: IconButton(
-            icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off,
-                color: Colors.teal),
-            onPressed: () {
-              setState(() {
-                _isObscure = !_isObscure;
-              });
-            },
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16.r),
-            borderSide: BorderSide(color: Colors.teal),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16.r),
-            borderSide: BorderSide(color: Colors.teal, width: 2.w),
-          ),
-        ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return "يرجى إدخال $label";
-          }
-          if (label == "تأكيد كلمة المرور" &&
-              value != newPasswordController.text) {
-            return "كلمات المرور غير متطابقة";
-          }
-          return null;
-        },
+        label: label,
+        isPassword: true,
       ),
+      // child: TextFormField(
+      //   controller: controller,
+      //   obscureText: _isObscure,
+      //   decoration: InputDecoration(
+      //     labelText: label,
+      //     labelStyle: TextStyles.smallReguler,
+      //     filled: true,
+      //     fillColor: Colors.white,
+      //     // prefixIcon: Icon(Icons.lock, color: Colors.teal),
+      //     suffixIcon: IconButton(
+      //       icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off,
+      //           color: Colors.teal),
+      //       onPressed: () {
+      //         setState(() {
+      //           _isObscure = !_isObscure;
+      //         });
+      //       },
+      //     ),
+      //     enabledBorder: OutlineInputBorder(
+      //       borderRadius: BorderRadius.circular(16.r),
+      //       borderSide: BorderSide(color: Colors.teal),
+      //     ),
+      //     focusedBorder: OutlineInputBorder(
+      //       borderRadius: BorderRadius.circular(16.r),
+      //       borderSide: BorderSide(color: Colors.teal, width: 2.w),
+      //     ),
+      //   ),
+      //   validator: (value) {
+      //     if (value == null || value.isEmpty) {
+      //       return "يرجى إدخال $label";
+      //     }
+      //     if (label == "تأكيد كلمة المرور" &&
+      //         value != newPasswordController.text) {
+      //       return "كلمات المرور غير متطابقة";
+      //     }
+      //     return null;
+      //   },
+      // ),
     );
   }
 }

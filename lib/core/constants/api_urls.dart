@@ -1,9 +1,11 @@
 class ApiUrls {
-  static const String ipconfig = '192.168.122.62';
+
+  static const String ipconfig = '10.0.2.2';
+  
   static const String image_root = 'http://$ipconfig:8000/';
 
   static const String primaryImage =
-      'http://$ipconfig:8000/storage/Primary_images/';
+      'http://$ipconfig:8000/assets/listing_images/';
 
   static const String root = 'http://$ipconfig:8000/api';
   static const String getParentUrl = '$root/categories/parents';
@@ -25,6 +27,10 @@ class ApiUrls {
     return '$root/listing/$id';
   }
 
+  static String cities(int id) {
+    return '$root/regions/$id/children';
+  }
+
   static const String postAdstUrl = '$root/listing';
   static const String LOGIN = '$root/login';
   static const String CHANGEPASSOWRD = '$root/changePassword';
@@ -36,4 +42,5 @@ class ApiUrls {
   static String getRegionChildUrl(int parentId) {
     return '$root/regions/$parentId/children';
   }
+  static const String REGETION_PARENT = '$root/regions/parents';
 }
