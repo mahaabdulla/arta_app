@@ -71,7 +71,11 @@ class _MyAppState extends State<MyApp> {
         supportedLocales: S.delegate.supportedLocales,
         debugShowCheckedModeBanner: false,
 
-        // home: FilterPage(),
+// <<<<<<< maha/sub_catg
+//         // home: ChangePasswordScreen(),
+// =======
+//         // home: FilterPage(),
+// >>>>>>> develop
       ),
     );
   }

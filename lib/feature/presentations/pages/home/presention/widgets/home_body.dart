@@ -35,28 +35,53 @@ class HomeBody extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 16),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'الفئات',
-                    style: TextStyles.medium24
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 16),
-                  CategoryList(),
-                  const SizedBox(height: 16),
-                  const SizedBox(height: 16),
-                  ProductsList(),
-                  const SizedBox(height: 16),
-                  SeeMoreButtom(),
-                ],
-              ),
-            ),
+            const Positioned(child: AdvertisementsView()),
           ],
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16),
+              Text(
+                'الفئات',
+                style:
+                    TextStyles.medium24.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              CategoryList(),
+              const SizedBox(height: 16),
+              SearchBarFiltter(),
+              ProductsList(),
+              const SizedBox(height: 16),
+              SeeMoreButtom(),
+            ],
+          ),
+//             const SizedBox(height: 16),
+//             Padding(
+//               padding: const EdgeInsets.symmetric(horizontal: 16.0),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(
+//                     'الفئات',
+//                     style: TextStyles.medium24
+//                         .copyWith(fontWeight: FontWeight.bold),
+//                   ),
+//                   const SizedBox(height: 16),
+//                   CategoryList(),
+//                   const SizedBox(height: 16),
+//                   const SizedBox(height: 16),
+//                   ProductsList(),
+//                   const SizedBox(height: 16),
+//                   SeeMoreButtom(),
+//                 ],
+//               ),
+//             ),
+//           ],
         ),
       ),
     );

@@ -5,3 +5,4 @@ const String PROFILE = '/';
 const String CHANGPHONE = '/';
 const String CHANGnAME = '/';
 const String MYADS = '/my_ads';
+const String CTGCHILDREN = '/ctgChildern';

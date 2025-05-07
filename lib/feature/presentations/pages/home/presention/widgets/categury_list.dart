@@ -82,7 +82,7 @@ class _CategoryListState extends State<CategoryList> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (ctx) => CategoryChildrenView(
+                      builder: (ctx) => CtgChildrenScreen(
                         parentId: category.id ?? 1,
                         parentName: category.name ?? "",
                       ),
