@@ -1,155 +1,58 @@
 import 'dart:io';
-import 'package:arta_app/feature/data/models/ads/region.dart';
-import 'package:arta_app/feature/presentations/pages/ads/presition/widgets/add_ads_textfield.dart';
+import 'package:arta_app/core/constants/global_constants.dart';
+import 'package:arta_app/core/utils/local_repo/local_storage.dart';
+import 'package:arta_app/core/widgets/custom_text_feild.dart';
+import 'package:arta_app/feature/data/models/regetion/get_pernte.dart';
+import 'package:arta_app/feature/presentations/cubits/categories/categories_state.dart';
+import 'package:arta_app/feature/presentations/cubits/regetion/regetion_cubit.dart';
+import 'package:arta_app/feature/presentations/cubits/regetion/regetion_state.dart';
 import 'package:arta_app/feature/presentations/pages/ads/presition/widgets/save_ads_button.dart';
-import 'package:arta_app/feature/presentations/pages/ads/view_model/ads_vm.dart';
-import 'package:arta_app/feature/presentations/pages/ads/view_model/region_vm.dart';
-import 'package:arta_app/feature/presentations/pages/categorys/data/categury_model.dart';
-import 'package:arta_app/feature/presentations/pages/categorys/presintion/view_model/catagury_vm.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:arta_app/core/widgets/basic_scafoold.dart';
 import 'package:arta_app/core/widgets/products_widgets/add_image_container.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../../../../core/utils/global_methods/global_methods.dart';
+import '../../../../../../core/widgets/custom_dropdown_textFeild.dart';
+import '../../../../../data/models/ads/ads_model.dart';
+import '../../../../cubits/ads/listing_cubit.dart';
+import '../../../../cubits/ads/listing_state.dart';
+import '../../../../cubits/categories/categories_cubit.dart';
+import 'dart:developer' as dev;
 
 class AddAdvertisementView extends StatefulWidget {
-  const AddAdvertisementView({super.key});
+  const AddAdvertisementView({Key? key}) : super(key: key);
 
   @override
-  State<AddAdvertisementView> createState() => _AddAdvertisementViewState();
+  _AddAdvertisementViewState createState() => _AddAdvertisementViewState();
 }
 
-class _AddAdvertisementViewState extends State<AddAdvertisementView> {
-  final regionVM = RegionVM();
-  final categoryVM = CateguryVM();
-  final adsVM = AdvertisementVM();
-
-  String selectedCategory = '';
-  String selectedParentRegion = '';
-  String selectedChildRegion = '';
-  String selectedCondition = 'مستخدم';
-
-  List<Category> categories = []; // Updated to List<Category>
-  List<Region> parentRegions = []; // Updated to List<Region>
-  List<Region> childRegions = []; // Updated to List<Region>
+class _AddAdvertisementViewState extends State<AddAdvertisementView>
+    with SingleTickerProviderStateMixin {
+  final LayerLink _layerLink = LayerLink();
+  late CategoryCubit categoryCubit;
+  late RegetionCubit regetionCubit;
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController describeController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
+  final TextEditingController statusController = TextEditingController();
   List<File?> advertisementImages = [];
-
-  final titleController = TextEditingController();
-  final descriptionController = TextEditingController();
-  final priceController = TextEditingController();
+  List<File?> selectedImages = [];
+  File? selectedPrimaryImage;
+  // RegetionParent regetion = RegetionParent();
+  int? categoryId;
+  int? selectedCityId;
+  int? selectedRegitionId;
 
   @override
   void initState() {
+    categoryCubit = context.read<CategoryCubit>();
+    categoryCubit.getCategoris(isHome: false);
+    regetionCubit = context.read<RegetionCubit>();
+    regetionCubit.getCities();
     super.initState();
-    _initializeData();
-  }
-
-  Future<void> _initializeData() async {
-    await _fetchCategories();
-    await _fetchParentRegions();
-  }
-
-  Future<void> _fetchCategories() async {
-    final fetchedCategories = await categoryVM.getCtgParent();
-    setState(() {
-      categories = fetchedCategories;
-      if (categories.isNotEmpty)
-        selectedCategory = categories.first.name!; // Access with .name
-    });
-  }
-
- Future<void> _fetchParentRegions() async {
-    final fetchedParentRegions = await regionVM.getParentRegions();
-    setState(() {
-      // Map dynamic data to List<Region>
-      parentRegions = fetchedParentRegions
-          .map<Region>((regionJson) => Region.fromJson(regionJson))
-          .toList();
-
-      if (parentRegions.isNotEmpty) {
-        selectedParentRegion =
-            parentRegions.first.name ?? ''; // Access with .name
-        _fetchChildRegions(parentRegions.first.id ?? 0); // Access with .id
-      }
-    });
-  }
-
-  Future<void> _fetchChildRegions(int parentId) async {
-    final fetchedChildRegions = await regionVM.getChildRegions(parentId);
-    setState(() {
-      // Map dynamic data to List<Region>
-      childRegions = fetchedChildRegions
-          .map<Region>((regionJson) => Region.fromJson(regionJson))
-          .toList();
-
-      selectedChildRegion = childRegions.isNotEmpty
-          ? childRegions.first.name ?? ''
-          : ''; // Access with .name
-    });
-  }
-
-  void _saveAdvertisement() async {
-    final title = titleController.text.trim();
-    final description = descriptionController.text.trim();
-    final priceText = priceController.text.trim();
-
-    if (!_validateFields(title, description, priceText)) return;
-
-    try {
-      final selectedCategoryId = categories
-          .firstWhere((cat) => cat.name == selectedCategory)
-          .id; // Access with .id
-      final selectedParentRegionId = parentRegions
-          .firstWhere((region) => region.name == selectedParentRegion)
-          .id; // Access with .id
-      final selectedChildRegionId = childRegions
-          .firstWhere((region) => region.name == selectedChildRegion)
-          .id; // Access with .id
-
-      await adsVM.createAdvertisement(
-        title: title,
-        description: description,
-        price: double.parse(priceText),
-        categoryId: selectedCategoryId,
-        regionId: selectedChildRegionId!,
-        status: selectedCondition,
-        primaryImagePath: advertisementImages.isNotEmpty
-            ? advertisementImages.first!.path
-            : '',
-        token:
-            '11|mRbs2xC2W4WjFu5B8lus1QBQTRwinCd2QGq3JIfZ38b8596f', // Replace the token
-      );
-
-      _showSnackbar('تم حفظ الإعلان بنجاح');
-      Navigator.pushNamed(context, '/home');
-    } catch (e) {
-      print('the error is : $e');
-      _showSnackbar('حدث خطأ أثناء الحفظ: $e');
-    }
-  }
-
-  bool _validateFields(String title, String description, String priceText) {
-    if (title.isEmpty) return _showValidationError('يرجى إدخال عنوان الإعلان');
-    if (description.isEmpty)
-      return _showValidationError('يرجى إدخال تفاصيل الإعلان');
-    if (priceText.isEmpty || double.tryParse(priceText) == null) {
-      return _showValidationError('يرجى إدخال سعر صالح');
-    }
-    if (selectedCategory.isEmpty)
-      return _showValidationError('يرجى اختيار القسم الرئيسي');
-    if (selectedParentRegion.isEmpty)
-      return _showValidationError('يرجى اختيار المنطقة الرئيسية');
-    if (selectedChildRegion.isEmpty)
-      return _showValidationError('يرجى اختيار المنطقة الفرعية');
-    return true;
-  }
-
-  bool _showValidationError(String message) {
-    _showSnackbar(message);
-    return false;
-  }
-
-  void _showSnackbar(String message) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -158,84 +61,267 @@ class _AddAdvertisementViewState extends State<AddAdvertisementView> {
       showBackButton: true,
       onTap: () => Navigator.pushNamed(context, '/home'),
       title: 'اضافة اعلان جديد',
-      widgets: Center(
+      widgets: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
+          child: CompositedTransformTarget(
+            link: _layerLink,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SectionWidget(
-                  title: 'اختر القسم الرئيسي',
-                  child: DropdownWidget(
-                    value: selectedCategory,
-                    items: categories
-                        .map((cat) => cat.name!)
-                        .toList(), // Access with .name
-                    onChanged: (val) =>
-                        setState(() => selectedCategory = val ?? ''),
-                  ),
+                BlocBuilder<CategoryCubit, CategoryState>(
+                  builder: (context, state) {
+                    if (state is LoadingCategoryState) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (state is ErrorCategoryState) {
+                      return Text(state.message);
+                    } else if (state is SuccessCategoryState) {
+                      Map<String, int> categoryNameToId = {
+                        for (var item in state.categories)
+                          if (item.name != null && item.id != null)
+                            item.name!: item.id!,
+                      };
+
+                      List<String> categories = categoryNameToId.keys.toList();
+
+                      if (categories.isEmpty) {
+                        return const Center(
+                            child: Text('مافي تصنيفات متاحة حالياً'));
+                      }
+
+                      return CustomDropdownTextField(
+                        label: 'اختر القسم الرئيسي',
+                        items: categories,
+                        onItemSelected: (value) {
+                          categoryId =
+                              categoryNameToId[value]; // خزن الـ ID هنا
+                        },
+                      );
+                    }
+                    return const Text('Error');
+                  },
                 ),
-                SectionWidget(
-                  title: 'اختر المنطقة الرئيسية',
-                  child: DropdownWidget(
-                    value: selectedParentRegion,
-                    items: parentRegions
-                        .map((region) => region.name!)
-                        .toList(), // Access with .name
-                    onChanged: (val) {
-                      setState(() => selectedParentRegion = val ?? '');
-                      _fetchChildRegions(parentRegions
-                          .firstWhere((region) => region.name == val)
-                          .id!); // Access with .id
-                    },
-                  ),
+
+                SizedBox(height: 20.h),
+                // BlocBuilder<RegetionCubit, RegetionState>(
+                //   builder: (context, state) {
+                //     List<String> regitions = [];
+                //     List<String> cities = [];
+
+                //     if (state is SuccessRegetionParentState) {
+                //       // countries = state.cities;
+                //       Map<String, int> cityNameToId = {
+                //         for (var item in state.cities)
+                //           if (item.name != null && item.id != null)
+                //             item.name!: item.id!,
+                //       };
+                //       cities = cityNameToId.keys.toList();
+                //     } else if (state is SuccessRegetionChildState) {
+                //       // countries = state.cities;
+                //       Map<String, int> regitiomNameToId = {
+                //         for (var item in state.regetions)
+                //           if (item.name != null && item.id != null)
+                //             item.name!: item.id!,
+                //       };
+                //       regitions = regitiomNameToId.keys.toList();
+                //       // countries = context.read<RegetionCubit>().lastCountries;
+                //     }
+
+                //     return Column(
+                //       children: [
+                //         if (cities.isEmpty)
+                //           const Center(child: Text("emity"))
+                //         else
+                //           CustomDropdownTextField(
+                //             label: "المدينة",
+                //             items: cities,
+                //             // cities.map((e) => e.name ?? "").toList(),
+                //             onItemSelected: (value) {
+                //               //TODO: عدلي ذا كمان بعدين
+                //               selectedCityId = 6;
+                //               //  cityNameToId[value];
+                //               // regitio
+                //               // regetion =
+                //               //     cities.firstWhere((e) => e.name == value);
+                //               //TODO: ف هذا المكان لازم نمرر الاي دي حق المنطقة
+                //               // selectedRegitionId =
+                //               context
+                //                   .read<RegetionCubit>()
+                //                   .getCities(selectedRegitionId ?? 6);
+                //             },
+                //           ),
+                //         const SizedBox(height: 20),
+                //         // if (state is LoadingRegetionChildState)
+                //         //   const Center(child: CircularProgressIndicator())
+                //         // else
+                //         if (cities.isNotEmpty)
+                //           CustomDropdownTextField(
+                //             label: "المنطقة",
+                //             items: regitions,
+                //             // regitions.map((e) => e.name ?? "").toList(),
+                //             onItemSelected: (value) {
+                //               //TODO: عدلي ذا بعدين
+                //               selectedRegitionId = 18;
+                //             },
+                //           )
+                //         else
+                //           CustomDropdownTextField(
+                //             label: "المنطقة",
+                //             items: [''],
+                //             hintText: "اختر البلد أولاً",
+                //             readOnly: true,
+                //             onItemSelected: (_) {},
+                //           ),
+                //       ],
+                //     );
+                //   },
+                // ),
+
+                BlocBuilder<RegetionCubit, RegetionState>(
+                  builder: (context, state) {
+                    final cubit = context.read<RegetionCubit>();
+
+                    // استخراج القوائم من الحالة
+                    List<String> cities = [];
+                    List<String> regions = [];
+                    String? selectedCityName;
+                    String? selectedRegionName;
+                    bool isLoadingRegions = false;
+
+                    // استخراج البيانات حسب نوع الحالة
+                    if (state is SuccessRegetionParentState) {
+                      cities = state.cities.map((e) => e.name ?? "").toList();
+                    } else if (state is CitySelectedState ||
+                        state is LoadingRegetionChildState ||
+                        state is SuccessRegetionChildState ||
+                        state is ErrorRegetionChildState ||
+                        state is RegionSelectedState) {
+                      if (state is LoadingRegetionChildState) {
+                        isLoadingRegions = true;
+                      }
+
+                      // استخراج المدن والمدينة المحددة
+                      cities = state is CitySelectedState
+                          ? state.cities.map((e) => e.name ?? "").toList()
+                          : cubit.cities.map((e) => e.name ?? "").toList();
+
+                      selectedCityName = state is CitySelectedState
+                          ? state.selectedCity?.name
+                          : cubit.selectedCity?.name;
+
+                      // استخراج المناطق والمنطقة المحددة (إذا وجدت)
+                      if (state is SuccessRegetionChildState ||
+                          state is RegionSelectedState) {
+                        regions = state is SuccessRegetionChildState
+                            ? state.regions.map((e) => e.name ?? "").toList()
+                            : cubit.regions.map((e) => e.name ?? "").toList();
+
+                        if (state is RegionSelectedState) {
+                          selectedRegionName = state.selectedRegion?.name;
+                        }
+                      }
+                    }
+
+                    return Column(
+                      children: [
+                        // قائمة المدن المنسدلة
+                        CustomDropdownTextField(
+                          label: "المدينة",
+                          items: cities,
+                          initialValue: selectedCityName,
+                          onItemSelected: (cityName) {
+                            final city = cubit.cities.firstWhere(
+                              (city) => city.name == cityName,
+                              orElse: () =>
+                                  RegetionParent(), // أو استخدم نوع القيمة الافتراضية المناسب
+                            );
+                            if (city.id != null) {
+                              cubit.selectCity(city);
+                            }
+                          },
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        // قائمة المناطق المنسدلة
+                        if (isLoadingRegions)
+                          const Center(child: CircularProgressIndicator())
+                        else
+                          CustomDropdownTextField(
+                            label: "المنطقة",
+                            items: regions,
+                            initialValue: selectedRegionName,
+                            hintText: cubit.selectedCity == null
+                                ? "اختر المدينة أولاً"
+                                : null,
+                            readOnly: cubit.selectedCity == null,
+                            onItemSelected: (regionName) {
+                              final region = cubit.regions.firstWhere(
+                                (region) => region.name == regionName,
+                                orElse: () => RegetionParent(),
+                              );
+                              if (region.id != null) {
+                                cubit.selectRegion(region);
+                              }
+                            },
+                          ),
+                      ],
+                    );
+                  },
                 ),
-                SectionWidget(
-                  title: 'اختر المنطقة الفرعية',
-                  child: DropdownWidget(
-                    value: selectedChildRegion,
-                    items: childRegions
-                        .map((region) => region.name!)
-                        .toList(), // Access with .name
-                    onChanged: (val) =>
-                        setState(() => selectedChildRegion = val ?? ''),
-                  ),
+
+                SizedBox(height: 20.h),
+                CustomTextFormField(
+                  controller: nameController,
+                  label: "عنوان الاعلان",
+                  hintText: "أدخل عنوان الإعلان",
                 ),
-                SectionWidget(
-                  title: 'اختر الحالة',
-                  child: DropdownWidget(
-                    value: selectedCondition,
-                    items: ['جديد', 'شبه جديد', 'مستخدم'],
-                    onChanged: (val) =>
-                        setState(() => selectedCondition = val ?? ''),
-                  ),
+                SizedBox(height: 20.h),
+                CustomTextFormField(
+                  controller: describeController,
+                  label: "تفاصيل الاعلان",
+                  hintText: "صف الاعلان هنا ",
+                  maxLines: 5,
                 ),
-                SectionWidget(
-                  title: 'عنوان الإعلان',
-                  child: AdsTextFieldWidget(
-                      controller: titleController,
-                      hintText: 'أدخل اسم الإعلان',
-                      maxLines: 2),
+                SizedBox(height: 20.h),
+                CustomTextFormField(
+                  controller: statusController,
+                  label: "حالة الاعلان",
+                  hintText: "مثال: مستعمل نظيف",
                 ),
-                SectionWidget(
-                  title: 'تفاصيل الإعلان',
-                  child: AdsTextFieldWidget(
-                      controller: descriptionController,
-                      hintText: 'أدخل تفاصيل الإعلان',
-                      maxLines: 5),
+                SizedBox(height: 20.h),
+                CustomTextFormField(
+                  controller: priceController,
+                  label: "سعر الاعلان",
+                  hintText: "أدخل سعر الإعلان",
                 ),
-                SectionWidget(
-                  title: 'سعر الإعلان',
-                  child: AdsTextFieldWidget(
-                      controller: priceController,
-                      hintText: 'أدخل سعر الإعلان',
-                      maxLines: 1),
-                ),
+                SizedBox(height: 20.h),
                 AddImageContainer(
-                    onImagesUpdated: (images) =>
-                        setState(() => advertisementImages = images)),
-                SaveButton(onTap: _saveAdvertisement),
+                  onImagesUpdated: (images, primary) {
+                    selectedImages =
+                        images.whereType<File>().toList(); // حذف null
+                    selectedPrimaryImage = primary;
+                  },
+                ),
+
+                // AddImageContainer(
+                //     onImagesUpdated: (images) =>
+                //         setState(() => advertisementImages = images)),
+                BlocListener<ListingCubit, ListingState>(
+                  listener: (context, state) {
+                    if (state is AddedListingSuccessState) {
+                      toast("تمت الإضافة بنجاح", bgColor: Colors.green);
+                      Navigator.pop(context); // ترجع المستخدم مثلاً بعد الإضافة
+                    } else if (state is ErrorAddingListingState) {
+                      toast(state.message, bgColor: Colors.red);
+                    }
+                  },
+                  child: SaveButton(
+                    isLoading: context.watch<ListingCubit>().state
+                        is AddingListingLoadingState,
+                    onTap: _handleAddAd,
+                  ),
+                ),
               ],
             ),
           ),
@@ -243,74 +329,68 @@ class _AddAdvertisementViewState extends State<AddAdvertisementView> {
       ),
     );
   }
-}
 
-class SectionWidget extends StatelessWidget {
-  final String title;
-  final Widget child;
+  void _handleAddAd() {
+    //  final FormData formDataMap = {
+    //   'title': listing.title,
+    //   'description': listing.description,
+    //   'category_id': listing.categoryId.toString(),
+    // };
+    dev.log("category_id is : $categoryId");
+    final listing = ListingModel(
+        title: nameController.text,
+        description: describeController.text,
+        price: priceController.text,
+        categoryId: 1,
+        // categoryId,
+        currencyId: 3,
+        regionId: selectedRegitionId ?? 18,
+        //TODO: بعدين حطي صورة افتراضية في حالة الخطأ هنا عشان النل سيفتي
+        primaryImage: selectedPrimaryImage!.path,
+        images: selectedImages.map((file) => file!.path).toList(),
+        status: statusController.text,
+        userId: int.tryParse(LocalStorage.getStringFromDisk(key: USERID))
+        //  double.tryParse(priceController.text) ?? 0.0,
+        // أضف باقي الحقول حسب ما هو مطلوب، مثلاً الصور، المدينة، التصنيف إلخ
+        );
 
-  const SectionWidget({required this.title, required this.child, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: const TextStyle(fontSize: 18)),
-          const SizedBox(height: 10),
-          child,
-        ],
-      ),
-    );
+    context.read<ListingCubit>().addListing(toFormData(listing));
   }
-}
 
-class DropdownWidget extends StatelessWidget {
-  final String value;
-  final List<String> items;
-  final ValueChanged<String?> onChanged;
+  FormData toFormData(ListingModel listing) {
+    final formDataMap = {
+      'title': listing.title,
+      'description': listing.description,
+      'category_id': 3,
+      // listing.categoryId,
+      'status': 'جديد',
+      // listing.status,
+      'region_id': listing.regionId,
+      'currency_id': listing.currencyId,
+      'price': listing.price,
+    };
 
-  const DropdownWidget(
-      {required this.value,
-      required this.items,
-      required this.onChanged,
-      super.key});
+    final formData = FormData.fromMap(formDataMap);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF74ACC4), Color(0xFF70A49E)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: const EdgeInsets.all(2),
-      child: Container(
-        decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(20))),
-        padding: const EdgeInsets.symmetric(horizontal: 14),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            isExpanded: true,
-            items: items
-                .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e, style: const TextStyle(fontSize: 16))))
-                .toList(),
-            onChanged: onChanged,
-            value: items.contains(value) ? value : null,
-            icon: const Icon(Icons.arrow_drop_down),
-            iconSize: 24,
-            style: const TextStyle(color: Colors.black),
-          ),
-        ),
-      ),
-    );
+    // صورة رئيسية
+    if (listing.primaryImage != null) {
+      formData.files.add(MapEntry(
+        'primary_image',
+        MultipartFile.fromFileSync(listing.primaryImage!,
+            filename: listing.primaryImage?.split('/').last),
+      ));
+    }
+
+    // باقي الصور (images[])
+    for (var file in listing.images!) {
+      if (file != null) {
+        formData.files.add(MapEntry(
+          'images[]',
+          MultipartFile.fromFileSync(file, filename: file.split('/').last),
+        ));
+      }
+    }
+
+    return formData;
   }
 }

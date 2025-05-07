@@ -118,13 +118,11 @@ class OnlineDataRepo extends DataRepo {
   @override
   Future<Map<String, dynamic>> postData(
       Map<String, dynamic> dataToSend, String url) async {
-
     DioConnection.connect().options.headers.addAll({
       // "Authorization":
       //     "Bearer 8|zitHMktlxP85UOOgPG9zO0pEJwCMqBrQ9yuWaGTq08e8de8b",
       "Authorization": "Bearer ${LocalStorage.getStringFromDisk(key: TOKEN)}",
     });
-
 
     Response? response;
     try {
@@ -185,9 +183,12 @@ class OnlineDataRepo extends DataRepo {
       required FormData data,
       Map<String, dynamic>? query,
       Map? jsonData}) async {
-    // dio.options.headers.addAll({
-    //   "Authorization": "Bearer ${LocalStorage.getStringFromDisk(key: TOKEN)}",
-    // });
+    dio.options.headers.addAll({
+      //TODO: رجعي ذا مكانه لما ندمج الصفحات
+      "Authorization":
+          "Bearer 1|9N9BgtXaWx1CnuGBGcD9ZPfA2I1d26Gs1wfm7OvHf40d0655",
+      // ${LocalStorage.getStringFromDisk(key: TOKEN)}"
+    });
 
     Response? response;
     try {
