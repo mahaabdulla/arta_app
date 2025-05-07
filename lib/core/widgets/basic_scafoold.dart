@@ -27,39 +27,71 @@ class BasicScaffold extends StatelessWidget {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(screenHeight * 0.30),
-        child: Stack(
-          children: [
-            // background
-            SvgPicture.asset(
-              group1,
-              fit: BoxFit.cover,
-              width: screenWidth,
-              height: screenHeight * 0.4,
-            ),
-        
-            if (showBackButton)
-              Positioned(
-                top: screenHeight * 0.11,
-                right: screenWidth * 0.09,
-                child: Row(
-                  children: [
-                    InkWell(
-                      onTap: onTap,
-                      child: SvgPicture.asset(
-                        iconsArrow,
-                      ),
-                    ),
-                    SizedBox(width: 30),
-                    if (title != null)
-                      Text(
-                        title!,
-                        style: TextStyles.medium24.copyWith(
-                            fontWeight: FontWeight.bold, color: Colors.black),
-                      ),
-                  ],
-                ),
+        child: SizedBox(
+          height: screenHeight * 0.30,
+          child: Stack(
+            children: [
+              // background
+              SvgPicture.asset(
+                group1,
+                fit: BoxFit.cover,
+                width: screenWidth,
+                height: screenHeight * 0.4,
               ),
-          ],
+
+              if (showBackButton)
+                Positioned(
+                  top: screenHeight * 0.11,
+                  right: screenWidth * 0.09,
+                  child: Row(
+                    children: [
+                      InkWell(
+                        onTap: onTap,
+                        child: SvgPicture.asset(
+                          iconsArrow,
+                        ),
+=======
+//         child: Stack(
+//           children: [
+//             // background
+//             SvgPicture.asset(
+//               group1,
+//               fit: BoxFit.cover,
+//               width: screenWidth,
+//               height: screenHeight * 0.4,
+//             ),
+        
+//             if (showBackButton)
+//               Positioned(
+//                 top: screenHeight * 0.11,
+//                 right: screenWidth * 0.09,
+//                 child: Row(
+//                   children: [
+//                     InkWell(
+//                       onTap: onTap,
+//                       child: SvgPicture.asset(
+//                         iconsArrow,
+//                       ),
+//                     ),
+//                     SizedBox(width: 30),
+//                     if (title != null)
+//                       Text(
+//                         title!,
+//                         style: TextStyles.medium24.copyWith(
+//                             fontWeight: FontWeight.bold, color: Colors.black),
+                      ),
+                      SizedBox(width: 30),
+                      if (title != null)
+                        Text(
+                          title!,
+                          style: TextStyles.medium24.copyWith(
+                              fontWeight: FontWeight.bold, color: Colors.black),
+                        ),
+                    ],
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
       body: widgets,

@@ -68,8 +68,10 @@ class _MyAppState extends State<MyApp> {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
         ],
+
         supportedLocales: S.delegate.supportedLocales,
         debugShowCheckedModeBanner: false,
+
 
 // <<<<<<< maha/sub_catg
 //         // home: ChangePasswordScreen(),

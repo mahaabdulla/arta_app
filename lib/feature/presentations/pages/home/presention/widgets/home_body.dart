@@ -1,20 +1,30 @@
 import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/core/constants/text.dart';
-import 'package:arta_app/feature/presentations/pages/ads/presition/widgets/advertisements.dart';
+import 'package:arta_app/core/utils/extensions/app_nav_bar.dart';
 import 'package:arta_app/core/widgets/products_list.dart';
+import 'package:arta_app/feature/presentations/pages/ads/presition/widgets/advertisements.dart';
 import 'package:arta_app/feature/presentations/pages/home/presention/widgets/categury_list.dart';
+import 'package:arta_app/feature/presentations/pages/home/presention/widgets/searchbar.dart';
 import 'package:arta_app/feature/presentations/pages/home/presention/widgets/see_more_buttom.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeBody extends StatelessWidget {
-  HomeBody({super.key});
+  const HomeBody({super.key});
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
+      bottomNavigationBar: const CustomBottomNavBar(currentIndex: 0),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(280),
+        child: Stack(
+// =======
+//       body: SingleChildScrollView(
+//         child: Column(
+// >>>>>>> develop
           children: [
             Stack(
               children: [
@@ -54,10 +64,12 @@ class HomeBody extends StatelessWidget {
               const SizedBox(height: 16),
               CategoryList(),
               const SizedBox(height: 16),
-              SearchBarFiltter(),
+
+              const SearchBarFiltter(),
+
               ProductsList(),
               const SizedBox(height: 16),
-              SeeMoreButtom(),
+              const SeeMoreButtom(),
             ],
           ),
 //             const SizedBox(height: 16),
