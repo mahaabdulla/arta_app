@@ -13,6 +13,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class HomeBody extends StatelessWidget {
   const HomeBody({super.key});
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,12 +21,29 @@ class HomeBody extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(280),
         child: Stack(
+// =======
+//       body: SingleChildScrollView(
+//         child: Column(
+// >>>>>>> develop
           children: [
-            SvgPicture.asset(
-              group1,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: 300,
+            Stack(
+              children: [
+                SvgPicture.asset(
+                  group1,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 300,
+                ),
+                const Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 40),
+                      child: AdvertisementsView(),
+                    ),
+                  ),
+                ),
+              ],
             ),
             const Positioned(child: AdvertisementsView()),
           ],
@@ -46,12 +64,36 @@ class HomeBody extends StatelessWidget {
               const SizedBox(height: 16),
               CategoryList(),
               const SizedBox(height: 16),
+
               const SearchBarFiltter(),
+
               ProductsList(),
               const SizedBox(height: 16),
               const SeeMoreButtom(),
             ],
           ),
+//             const SizedBox(height: 16),
+//             Padding(
+//               padding: const EdgeInsets.symmetric(horizontal: 16.0),
+//               child: Column(
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Text(
+//                     'الفئات',
+//                     style: TextStyles.medium24
+//                         .copyWith(fontWeight: FontWeight.bold),
+//                   ),
+//                   const SizedBox(height: 16),
+//                   CategoryList(),
+//                   const SizedBox(height: 16),
+//                   const SizedBox(height: 16),
+//                   ProductsList(),
+//                   const SizedBox(height: 16),
+//                   SeeMoreButtom(),
+//                 ],
+//               ),
+//             ),
+//           ],
         ),
       ),
     );

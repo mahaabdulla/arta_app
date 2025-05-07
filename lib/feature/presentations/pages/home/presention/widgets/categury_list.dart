@@ -46,7 +46,6 @@ class _CategoryListState extends State<CategoryList> {
   Widget build(BuildContext context) {
     return BlocConsumer<CategoryCubit, CategoryState>(
       listener: (context, state) {
-        dev.log("Current state is $state");
         if (state is ErrorCategoryState) {
           toast(
             state.message,
@@ -83,7 +82,7 @@ class _CategoryListState extends State<CategoryList> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (ctx) => CategoryChildrenView(
+                      builder: (ctx) => CtgChildrenScreen(
                         parentId: category.id ?? 1,
                         parentName: category.name ?? "",
                       ),

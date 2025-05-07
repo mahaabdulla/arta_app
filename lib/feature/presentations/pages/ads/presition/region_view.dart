@@ -1,4 +1,4 @@
-import 'package:arta_app/feature/presentations/pages/ads/view_model/region_vm.dart';
+// import 'package:arta_app/feature/presentations/pages/ads/view_model/region_vm.dart';
 import 'package:flutter/material.dart';
 
 
@@ -10,7 +10,7 @@ class RegionView extends StatefulWidget {
 }
 
 class _RegionViewState extends State<RegionView> {
-  final RegionVM _regionVM = RegionVM();
+  // final RegionVM _regionVM = RegionVM();
   List<dynamic> parentRegions = [];
   List<dynamic> childRegions = [];
   int? selectedParentId;
@@ -88,18 +88,18 @@ class _RegionViewState extends State<RegionView> {
 
   /// Fetches all parent regions and updates the dropdown.
   void _fetchParentRegions() async {
-    List<dynamic> fetchedParentRegions = await _regionVM.getParentRegions();
+    // List<dynamic> fetchedParentRegions = await _regionVM.getParentRegions();
     setState(() {
-      parentRegions = fetchedParentRegions;
+      // parentRegions = fetchedParentRegions;
     });
   }
 
   /// Fetches child regions for the selected parent and updates the list.
   void _fetchChildRegions(int parentId) async {
-    List<dynamic> fetchedChildRegions =
-        await _regionVM.getChildRegions(parentId);
+    // List<dynamic> fetchedChildRegions =
+        // await _regionVM.getChildRegions(parentId);
     setState(() {
-      childRegions = fetchedChildRegions;
+      // childRegions = fetchedChildRegions;
     });
   }
 }
