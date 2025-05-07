@@ -4,7 +4,6 @@ import 'package:arta_app/core/utils/extensions/app_nav_bar.dart';
 import 'package:arta_app/core/widgets/products_list.dart';
 import 'package:arta_app/feature/presentations/pages/ads/presition/widgets/advertisements.dart';
 import 'package:arta_app/feature/presentations/pages/home/presention/widgets/categury_list.dart';
-import 'package:arta_app/feature/presentations/pages/home/presention/widgets/searchbar.dart';
 import 'package:arta_app/feature/presentations/pages/home/presention/widgets/see_more_buttom.dart';
 
 import 'package:flutter/material.dart';
@@ -64,8 +63,9 @@ class HomeBody extends StatelessWidget {
               const SizedBox(height: 16),
               CategoryList(),
               const SizedBox(height: 16),
-
-              const SearchBarFiltter(),
+                
+                //مها ذا حقه وين؟
+              // const SearchBarFiltter(),
 
               ProductsList(),
               const SizedBox(height: 16),

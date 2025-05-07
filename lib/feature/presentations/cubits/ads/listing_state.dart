@@ -40,7 +40,7 @@ class AddedListingSuccessState extends ListingState {}
 class ErrorAddingListingState extends ListingState {
   final String message;
 
-  const ErrorAddingListingState({required this.message});
+   ErrorAddingListingState({required this.message});
   @override
   List<Object> get props => [message];
 }

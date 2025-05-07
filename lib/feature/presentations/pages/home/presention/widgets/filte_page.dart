@@ -5,7 +5,7 @@ import 'package:arta_app/feature/data/models/ads/ads_model.dart';
 import 'package:arta_app/feature/presentations/cubits/ads/listing_cubit.dart';
 import 'package:arta_app/feature/presentations/cubits/region/region_cubit.dart';
 import 'package:arta_app/feature/presentations/cubits/region/region_state.dart';
-import 'package:arta_app/feature/presentations/pages/ads/presition/views/add_advsrtismint.dart';
+import 'package:arta_app/feature/presentations/pages/ads/presition/widgets/ctg_dropdaon_bottun.dart';
 import 'package:arta_app/feature/presentations/pages/home/presention/widgets/filtter_applay_botton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,7 +54,7 @@ class _FilterPageState extends State<FilterPage> {
                 final isParentValid = regionNames.contains(currentParentName);
 
                 return DropdownWidget(
-                  value: isParentValid ? currentParentName : null,
+                  value: isParentValid ? currentParentName ??"":"",
                   items: regionNames,
                   onChanged: (String? newValue) {
                     final selectedRegion = regions.firstWhere(
@@ -71,7 +71,7 @@ class _FilterPageState extends State<FilterPage> {
                           .getChildRegions(selectedRegion.id!);
                     }
                   },
-                  hint: 'المدينة',
+                  // hint: 'المدينة',
                 );
               },
             ),
@@ -91,7 +91,7 @@ class _FilterPageState extends State<FilterPage> {
                 final isChildValid = childNames.contains(currentChildName);
 
                 return DropdownWidget(
-                  value: isChildValid ? currentChildName : null,
+                  value: isChildValid ? currentChildName ??"": "null",
                   items: childNames,
                   onChanged: (String? newValue) {
                     final selectedRegion = children.firstWhere(
@@ -102,7 +102,7 @@ class _FilterPageState extends State<FilterPage> {
                       selectedChild = selectedRegion;
                     });
                   },
-                  hint: 'المنطقة',
+                  // hint: 'المنطقة',
                 );
               },
             ),

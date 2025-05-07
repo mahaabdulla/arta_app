@@ -50,7 +50,6 @@ class BasicScaffold extends StatelessWidget {
                         child: SvgPicture.asset(
                           iconsArrow,
                         ),
-=======
 //         child: Stack(
 //           children: [
 //             // background

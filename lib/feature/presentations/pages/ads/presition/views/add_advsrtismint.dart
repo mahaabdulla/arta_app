@@ -84,17 +84,7 @@ class _AddAdvertisementViewState extends State<AddAdvertisementView>
 
                       List<String> categories = categoryNameToId.keys.toList();
 
-  Future<void> _fetchParentRegions() async {
-    final fetchedParentRegions = await regionVM.getParentRegions();
-    setState(() {
-      // Map dynamic data to List<Region>
-      parentRegions = fetchedParentRegions
-          .map<Region>((regionJson) => Region.fromJson(regionJson))
-          .toList();
-                      if (categories.isEmpty) {
-                        return const Center(
-                            child: Text('مافي تصنيفات متاحة حالياً'));
-                      }
+
 
                       return CustomDropdownTextField(
                         label: 'اختر القسم الرئيسي',
@@ -110,79 +100,7 @@ class _AddAdvertisementViewState extends State<AddAdvertisementView>
                 ),
 
                 SizedBox(height: 20.h),
-                // BlocBuilder<RegetionCubit, RegetionState>(
-                //   builder: (context, state) {
-                //     List<String> regitions = [];
-                //     List<String> cities = [];
-
-                //     if (state is SuccessRegetionParentState) {
-                //       // countries = state.cities;
-                //       Map<String, int> cityNameToId = {
-                //         for (var item in state.cities)
-                //           if (item.name != null && item.id != null)
-                //             item.name!: item.id!,
-                //       };
-                //       cities = cityNameToId.keys.toList();
-                //     } else if (state is SuccessRegetionChildState) {
-                //       // countries = state.cities;
-                //       Map<String, int> regitiomNameToId = {
-                //         for (var item in state.regetions)
-                //           if (item.name != null && item.id != null)
-                //             item.name!: item.id!,
-                //       };
-                //       regitions = regitiomNameToId.keys.toList();
-                //       // countries = context.read<RegetionCubit>().lastCountries;
-                //     }
-
-                //     return Column(
-                //       children: [
-                //         if (cities.isEmpty)
-                //           const Center(child: Text("emity"))
-                //         else
-                //           CustomDropdownTextField(
-                //             label: "المدينة",
-                //             items: cities,
-                //             // cities.map((e) => e.name ?? "").toList(),
-                //             onItemSelected: (value) {
-                //               //TODO: عدلي ذا كمان بعدين
-                //               selectedCityId = 6;
-                //               //  cityNameToId[value];
-                //               // regitio
-                //               // regetion =
-                //               //     cities.firstWhere((e) => e.name == value);
-                //               //TODO: ف هذا المكان لازم نمرر الاي دي حق المنطقة
-                //               // selectedRegitionId =
-                //               context
-                //                   .read<RegetionCubit>()
-                //                   .getCities(selectedRegitionId ?? 6);
-                //             },
-                //           ),
-                //         const SizedBox(height: 20),
-                //         // if (state is LoadingRegetionChildState)
-                //         //   const Center(child: CircularProgressIndicator())
-                //         // else
-                //         if (cities.isNotEmpty)
-                //           CustomDropdownTextField(
-                //             label: "المنطقة",
-                //             items: regitions,
-                //             // regitions.map((e) => e.name ?? "").toList(),
-                //             onItemSelected: (value) {
-                //               //TODO: عدلي ذا بعدين
-                //               selectedRegitionId = 18;
-                //             },
-                //           )
-                //         else
-                //           CustomDropdownTextField(
-                //             label: "المنطقة",
-                //             items: [''],
-                //             hintText: "اختر البلد أولاً",
-                //             readOnly: true,
-                //             onItemSelected: (_) {},
-                //           ),
-                //       ],
-                //     );
-                //   },
-                // ),
+              
 
                 BlocBuilder<RegetionCubit, RegetionState>(
                   builder: (context, state) {
