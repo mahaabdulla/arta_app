@@ -183,9 +183,12 @@ class OnlineDataRepo extends DataRepo {
       required FormData data,
       Map<String, dynamic>? query,
       Map? jsonData}) async {
-    // dio.options.headers.addAll({
-    //   "Authorization": "Bearer ${LocalStorage.getStringFromDisk(key: TOKEN)}",
-    // });
+    dio.options.headers.addAll({
+      //TODO: رجعي ذا مكانه لما ندمج الصفحات
+      "Authorization":
+          "Bearer 1|9N9BgtXaWx1CnuGBGcD9ZPfA2I1d26Gs1wfm7OvHf40d0655",
+      // ${LocalStorage.getStringFromDisk(key: TOKEN)}"
+    });
 
     Response? response;
     try {

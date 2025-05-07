@@ -34,14 +34,6 @@ class ProductsCard extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    // image:  DecorationImage(
-                    //   image: AssetImage(
-                    //     //image of product
-                    //     "${ApiUrls.image_root}/${product.primaryImage}"
-
-                    //   ),
-                    //   fit: BoxFit.cover,
-                    // ),
                   ),
                   child: Image.network(
                     "${ApiUrls.image_root}${product.primaryImage}",

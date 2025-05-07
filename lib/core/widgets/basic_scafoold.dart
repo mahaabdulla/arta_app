@@ -36,7 +36,7 @@ class BasicScaffold extends StatelessWidget {
               width: screenWidth,
               height: screenHeight * 0.4,
             ),
-
+        
             if (showBackButton)
               Positioned(
                 top: screenHeight * 0.11,
