@@ -1,4 +1,3 @@
-// Widget لإنشاء قوائم منسدلة
 import 'package:flutter/material.dart';
 
 class DropdownWidget extends StatelessWidget {

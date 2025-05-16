@@ -10,12 +10,13 @@ class ListingModel {
   final int? categoryId;
   final int? regionId;
   final String? status;
-  final String? primaryImage;
+
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final UserModel? user;
   final CategoryModel? category;
   final RegionModel? region;
+  final String? primaryImage;
   final List<String>? images;
   final List<CommentModel>? comments; // ✅ تم تعديل نوع comments هنا
   final CurrencyModel? currency;
@@ -65,7 +66,11 @@ class ListingModel {
           : null,
       region:
           json['region'] != null ? RegionModel.fromJson(json['region']) : null,
-      images: (json['images'] as List?)?.map((e) => e as String).toList() ?? [],
+      images:
+          (json['images'] as List?)?.map((e) => e['path'] as String).toList() ??
+              [],
+
+      // images: (json['images'] as List?)?.map((e) => e as String).toList() ?? [],
       comments: (json['comments'] as List?)
               ?.map((e) => CommentModel.fromJson(e))
               .toList() ??
@@ -74,6 +79,41 @@ class ListingModel {
           ? CurrencyModel.fromJson(json['currency'])
           : null,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['title'] = this.title;
+    data['user_id'] = this.userId;
+    data['description'] = this.description;
+    data['price'] = this.price;
+    data['currency_id'] = this.currencyId;
+    data['category_id'] = this.categoryId;
+    data['region_id'] = this.regionId;
+    data['status'] = this.status;
+    data['primary_image'] = this.primaryImage;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
+    // if (this.user != null) {
+    //   data['user'] = this.user!.toJson();
+    // }
+    // if (this.category != null) {
+    //   data['category'] = this.category!.toJson();
+    // }
+    // if (this.region != null) {
+    //   data['region'] = this.region!.toJson();
+    // }
+    // if (this.images != null) {
+    //   data['images'] = this.images!.map((v) => v.toJson()).toList();
+    // }
+    // if (this.comments != null) {
+    //   data['comments'] = this.comments!.map((v) => v.toJson()).toList();
+    // }
+    // if (this.currency != null) {
+    //   data['currency'] = this.currency!.toJson();
+    // }
+    return data;
   }
 }
 

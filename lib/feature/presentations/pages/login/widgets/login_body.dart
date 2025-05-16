@@ -9,8 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
-import '../test_screen.dart';
 import 'custom_login_textField.dart';
 import 'login_button.dart';
 import 'login_by_widget.dart';
@@ -70,17 +68,14 @@ class LoginBody extends StatelessWidget {
               return null;
             },
           ),
-          vSpace( 39.h),
+          vSpace(39.h),
           BlocConsumer<LoginCubit, LoginState>(listener: (context, state) {
             if (state is SuccessLoginState) {
               Fluttertoast.showToast(
                 msg: state.message,
                 backgroundColor: Colors.green,
               );
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TestScreen()),
-              );
+              Navigator.pushNamed(context, '/onboarding');
               // Get.to(TestScreen);
               // .then((_) {
               //   TopLoader.stopLoading();

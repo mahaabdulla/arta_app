@@ -26,9 +26,12 @@ class _CategoryListState extends State<CategoryList> {
 
   @override
   void initState() {
-    categoryCubit = context.read<CategoryCubit>();
-    categoryCubit.getCategoris(isHome: true);
     super.initState();
+    categoryCubit = context.read<CategoryCubit>();
+    // Only fetch categories if we don't have them cached
+    if (categoryCubit.state is! SuccessCategoryState) {
+      categoryCubit.getCategoris(isHome: true);
+    }
   }
 
   final List<String> ctgImages = [
@@ -46,7 +49,6 @@ class _CategoryListState extends State<CategoryList> {
   Widget build(BuildContext context) {
     return BlocConsumer<CategoryCubit, CategoryState>(
       listener: (context, state) {
-        dev.log("Current state is $state");
         if (state is ErrorCategoryState) {
           toast(
             state.message,
@@ -83,7 +85,7 @@ class _CategoryListState extends State<CategoryList> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (ctx) => CategoryChildrenView(
+                      builder: (ctx) => CtgChildrenScreen(
                         parentId: category.id ?? 1,
                         parentName: category.name ?? "",
                       ),
@@ -93,7 +95,6 @@ class _CategoryListState extends State<CategoryList> {
                 child: Column(
                   children: [
                     Flexible(
-                      // استبدلنا Expanded بـ Flexible
                       child: category.id == -1
                           ? Container(
                               decoration: ShapeDecoration(
@@ -131,7 +132,7 @@ class _CategoryListState extends State<CategoryList> {
             },
           );
         } else {
-          return const Center(child: Text("Error loading categories"));
+          return buildErrorHomeState();
         }
       },
     );

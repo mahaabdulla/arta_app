@@ -1,68 +1,84 @@
 import 'package:arta_app/core/constants/svg_images.dart';
-import 'package:arta_app/core/constants/text.dart';
+import 'package:arta_app/core/utils/extensions/app_nav_bar.dart';
+import 'package:arta_app/feature/presentations/pages/ads/presition/widgets/advertisements.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class BasicScaffold extends StatelessWidget {
   final Widget widgets;
-  final VoidCallback? onTap;
-  final String? title;
-  final String? text;
+  final ScrollController scrollController;
+  final bool isScrolled;
+  final Widget? header;
   final bool showBackButton;
 
-  BasicScaffold({
+  const BasicScaffold({
     super.key,
     required this.widgets,
-    this.title,
-    this.text,
-    this.onTap,
+    required this.scrollController,
+    required this.isScrolled,
+    this.header,
     this.showBackButton = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(screenHeight * 0.30),
-        child: Stack(
-          children: [
-            // background
-            SvgPicture.asset(
-              group1,
-              fit: BoxFit.cover,
-              width: screenWidth,
-              height: screenHeight * 0.4,
-            ),
-
-            if (showBackButton)
-              Positioned(
-                top: screenHeight * 0.11,
-                right: screenWidth * 0.09,
-                child: Row(
-                  children: [
-                    InkWell(
-                      onTap: onTap,
-                      child: SvgPicture.asset(
-                        iconsArrow,
+      bottomNavigationBar: const CustomBottomNavBar(currentIndex: 0),
+      body: CustomScrollView(
+        controller: scrollController,
+        slivers: [
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            expandedHeight: 280,
+            pinned: true,
+            backgroundColor:  Colors.transparent,
+            //isScrolled ? Colors.teal : Colors.transparent,
+            elevation: isScrolled ? 2 : 0,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Stack(
+                children: [
+                  SvgPicture.asset(
+                    group1,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: 300,
+                  ),
+                  if (header != null)
+                    const Positioned.fill(
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 40),
+                          child: AdvertisementsView(),
+                        ),
                       ),
                     ),
-                    SizedBox(width: 30),
-                    if (title != null)
-                      Text(
-                        title!,
-                        style: TextStyles.medium24.copyWith(
-                            fontWeight: FontWeight.bold, color: Colors.black),
+                  if (showBackButton)
+                    Positioned(
+                      top: 40,
+                      right: 16,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: SvgPicture.asset(
+                          iconsArrow,
+                        ),
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
-          ],
-        ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
+              child: widgets,
+            ),
+          ),
+        ],
       ),
-      body: widgets,
     );
   }
 }

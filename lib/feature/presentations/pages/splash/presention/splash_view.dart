@@ -1,5 +1,6 @@
 import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/core/constants/text.dart';
+import 'package:arta_app/core/routes/routes_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -29,7 +30,7 @@ class _SplashViewState extends State<SplashView>
     ));
 
     Future.delayed(Duration(seconds: 5), () {
-      Navigator.pushReplacementNamed(context, '/onboarding');
+      Navigator.pushReplacementNamed(context, LOGIN);
     });
   }
 

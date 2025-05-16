@@ -1,8 +1,3 @@
-import 'package:arta_app/core/widgets/basic_scafoold.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:arta_app/core/constants/api_urls.dart';
 import 'package:arta_app/core/constants/png_images.dart';
 import 'package:arta_app/core/constants/svg_images.dart';
@@ -10,20 +5,56 @@ import 'package:arta_app/core/constants/text.dart';
 import 'package:arta_app/feature/presentations/cubits/ads/listing_cubit.dart';
 import 'package:arta_app/feature/presentations/cubits/ads/listing_state.dart';
 import 'package:arta_app/feature/presentations/pages/home/presention/widgets/details_bottum.dart';
+import 'package:arta_app/feature/presentations/pages/home/presention/widgets/home_body.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'dart:developer' as dev;
 
-class SeeMoreListingView extends StatelessWidget {
+class SeeMoreListingView extends StatefulWidget {
   const SeeMoreListingView({super.key});
 
   @override
+  _SeeMoreListingViewState createState() => _SeeMoreListingViewState();
+}
+
+class _SeeMoreListingViewState extends State<SeeMoreListingView> {
+  late ScrollController _scrollController;
+  bool _isScrolled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+    context.read<ListingCubit>().fetchAds();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.offset > 50 && !_isScrolled) {
+      setState(() {
+        _isScrolled = true;
+      });
+    } else if (_scrollController.offset <= 50 && _isScrolled) {
+      setState(() {
+        _isScrolled = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BasicScaffold(
+    return CustomScrollScafold(
       showBackButton: true,
-      onTap: () {
-        Navigator.pushReplacementNamed(context, "/home");
-      },
-      // appBar: AppBar(title: const Text('عرض المزيد')),
+      scrollController: _scrollController, // ربط الـ ScrollController هنا
+      isScrolled: _isScrolled, // استخدام حالة التمرير لتحديد لون الخلفية
       widgets: BlocConsumer<ListingCubit, ListingState>(
         listener: (context, state) {
           if (state is ErrorListingState) {
@@ -40,9 +71,10 @@ class SeeMoreListingView extends StatelessWidget {
           } else if (state is SuccessListingState) {
             return ListView.builder(
               padding: const EdgeInsets.symmetric(vertical: 8),
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: state.listing.length,
               itemBuilder: (ctx, index) {
-                dev.log('عنصر رقم: $index');
                 final list = state.listing[index];
                 return Padding(
                   padding:

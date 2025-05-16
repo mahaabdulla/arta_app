@@ -38,7 +38,7 @@ class LoginCubit extends Cubit<LoginState> {
         await saveUserData(user);
 
         //TODO: thers a problem here try to fix this
-        storeCredentials(password);
+        // storeCredentials(password);
         emit(SuccessLoginState(message: response['message'] ?? ""));
       } else {
         emit(ErrorLoginState(message: response['message'] ?? ""));

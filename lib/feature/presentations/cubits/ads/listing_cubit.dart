@@ -16,6 +16,9 @@ import 'dart:developer' as dev;
 class ListingCubit extends Cubit<ListingState> {
   late final OnlineDataRepo _api;
 
+  List<ListingModel> _listing = []; // الإعلانات الأصلية
+  List<ListingModel> _filteredListing = []; // الإعلانات المفلترة
+
   ListingCubit(this._api) : super(ListingInitial());
 
   static ListingCubit get(context) => BlocProvider.of(context);
@@ -25,19 +28,17 @@ class ListingCubit extends Cubit<ListingState> {
     try {
       final response = await _api.getData(
         url: ApiUrls.postAdstUrl,
-
-        //  columns: {"page": currentPage}
       );
 
       if (isSuccessResponse(response: response)) {
-        // final jsonResponse = response['data'];
-        //  = AdsModel.fromJson(jsonResponse["data"]);
-        // AdsModel adsModel = AdsModel.fromJson(jsonResponse["data"]);
-
+        dev.log('${response}');
         List<ListingModel> adsModel = (response['data']['data'] as List)
             .map((json) => ListingModel.fromJson(json))
             .toList();
-        dev.log("the ADS responce is ${adsModel[0].title}");
+        dev.log('${adsModel}');
+        _listing = adsModel; // تخزين الإعلانات الأصلية
+        _filteredListing = _listing; // تعيين الإعلانات المفلترة لجميع الإعلانات
+
         emit(SuccessListingState(listing: adsModel));
       } else {
         emit(ErrorListingState(message: "Error: ${response['message']}"));
@@ -63,13 +64,7 @@ class ListingCubit extends Cubit<ListingState> {
       );
 
       if (isSuccessResponse(response: response)) {
-        // final jsonResponse = response['data'];
-        //  = AdsModel.fromJson(jsonResponse["data"]);
-        // AdsModel adsModel = AdsModel.fromJson(jsonResponse["data"]);
         ListingModel adsModel = ListingModel.fromJson(response['data']);
-
-        // ListingModel adsModel =
-        //     (response['data']).map((json) => ListingModel.fromJson(json));
         dev.log("the ADS responce is ${adsModel.title}");
         emit(SuccessSingleListingState(listing: adsModel));
       } else {
@@ -88,7 +83,59 @@ class ListingCubit extends Cubit<ListingState> {
     }
   }
 
-  // myAds
+  void searchInAds(String query) {
+    if (query.isEmpty) {
+      _filteredListing = _listing;
+    } else {
+      _filteredListing = _listing.where((ad) {
+        return ad.title?.toLowerCase().contains(query.toLowerCase()) ?? false;
+      }).toList();
+    }
+
+    emit(SuccessListingState(
+      listing: _listing,
+      filteredListing: _filteredListing,
+    ));
+  }
+
+  // filter function
+  void filterAds(
+      {String? city,
+      String? region,
+      double? priceLimit,
+      bool isPriceAbove = false}) {
+    _filteredListing = _listing.where((ad) {
+      bool matchesCity = city != null ? ad.region?.name == city : true;
+      bool matchesRegion = region != null ? ad.region?.name == region : true;
+      bool matchesPrice = priceLimit != null
+          ? _matchesPriceLimit(ad.price, priceLimit, isPriceAbove)
+          : true;
+
+      return matchesCity && matchesRegion && matchesPrice;
+    }).toList();
+
+    emit(SuccessListingState(
+      listing: _listing,
+      filteredListing: _filteredListing,
+    ));
+  }
+
+// دالة مساعدة لمقارنة السعر
+  bool _matchesPriceLimit(
+      String? adPrice, double priceLimit, bool isPriceAbove) {
+    if (adPrice == null) return false;
+
+    double price = double.tryParse(adPrice) ?? 0;
+
+    if (isPriceAbove) {
+      // إذا كان الفلتر لعرض الإعلانات ذات السعر أعلى من القيمة المحددة
+      return price > priceLimit;
+    } else {
+      // إذا كان الفلتر لعرض الإعلانات ذات السعر أقل من القيمة المحددة
+      return price < priceLimit;
+    }
+  }
+
   Future<void> fetchMyAds() async {
     emit(LoadingListingState());
     try {
@@ -97,8 +144,6 @@ class ListingCubit extends Cubit<ListingState> {
       if (isSuccessResponse(response: response)) {
         final allAds = response['data']['data'] as List;
         int myId = 1;
-        //LocalStorage.getStringFromDisk(key: 'userId') as int;
-        // // استرجاع userId من الكاش
 
         List<ListingModel> myAds = allAds
             .where((json) => json['user_id'] == myId)
@@ -122,55 +167,44 @@ class ListingCubit extends Cubit<ListingState> {
     }
   }
 
-  // حذف الإعلان
+// حذف الإعلان
   Future<void> deleteListing(int id) async {
     try {
-      Dio dio = Dio();
-      String? token = await LocalStorage.getStringFromDisk(key: TOKEN);
+      final dio = Dio();
+      final token = await LocalStorage.getStringFromDisk(key: TOKEN);
+      final userId = await LocalStorage.getStringFromDisk(
+          key: USERID); // تأكد أنك خزّنت user_id
 
-      if (token != null) {
-        dio.options.headers = {
-          'Authorization': 'Bearer $token',
-        };
-
-        final response = await dio.delete(
-          'http://192.168.93.62:8000/api/listing/$id',
-        );
-
-        if (response.statusCode == 200) {
-          dev.log('تم حذف الإعلان بنجاح');
-          Fluttertoast.showToast(
-            msg: 'تم حذف الإعلان بنجاح',
-            backgroundColor: Colors.green,
-          );
-
-          final adsResponse = await dio.get(ApiUrls.postAdstUrl);
-
-          if (adsResponse.statusCode == 200) {
-            List allAds = adsResponse.data['data']['data'];
-            int myId = 1; // لو عندك userId مخزن، بدّله هنا
-            List myAds = allAds.where((ad) => ad['user_id'] == myId).toList();
-
-            if (myAds.isEmpty) {
-              Fluttertoast.showToast(
-                msg: 'لا يوجد لديك إعلانات',
-                backgroundColor: Colors.orange,
-              );
-            }
-          } else {
-            dev.log('فشل تحميل الإعلانات بعد الحذف');
-          }
-        } else {
-          dev.log('حدث خطأ أثناء الحذف: ${response.data}');
-          Fluttertoast.showToast(
-            msg: 'حدث خطأ أثناء الحذف',
-            backgroundColor: Colors.red,
-          );
-        }
-      } else {
+      if (token == null) {
         dev.log("التوكن مفقود!");
         Fluttertoast.showToast(
           msg: "التوكن مفقود أو غير صالح",
+          backgroundColor: Colors.red,
+        );
+        return;
+      }
+
+      dio.options.headers = {
+        'Authorization': 'Bearer $token',
+      };
+
+      final response = await dio.delete(
+        ApiUrls.deletListing(id),
+      );
+
+      if (response.statusCode == 200) {
+        dev.log('تم حذف الإعلان بنجاح');
+        Fluttertoast.showToast(
+          msg: 'تم حذف الإعلان بنجاح',
+          backgroundColor: Colors.green,
+        );
+
+        // ✅ إعادة تحميل الإعلانات الخاصة بالمستخدم
+        await fetchMyAds();
+      } else {
+        dev.log('حدث خطأ أثناء الحذف: ${response.data}');
+        Fluttertoast.showToast(
+          msg: 'حدث خطأ أثناء الحذف',
           backgroundColor: Colors.red,
         );
       }
@@ -180,6 +214,36 @@ class ListingCubit extends Cubit<ListingState> {
         msg: 'حدث خطأ أثناء الحذف',
         backgroundColor: Colors.red,
       );
+    }
+  }
+
+//اضافة اعلان
+  Future<void> addListing(FormData data) async {
+    emit(AddingListingLoadingState());
+    // FormData data =
+    // listing.toJson();
+    try {
+      final response =
+          await _api.postForm(data: data, url: ApiUrls.postAdstUrl);
+
+      if (response.data['success'] == true) {
+        emit(AddedListingSuccessState());
+      } else {
+        emit(ErrorAddingListingState(
+            message: "خطأ: ${response.data['message']}"));
+      }
+    } on DioException catch (dioError) {
+      final errorHandled = Diohandling.fromDioError(dioError);
+      toast(errorHandled.errorMessage,
+          gravity: ToastGravity.BOTTOM,
+          bgColor: Colors.red,
+          textColor: Colors.white,
+          print: true);
+      dev.log("Dio Error: ${errorHandled.errorMessage}", name: "Dio Error");
+      emit(ErrorAddingListingState(message: errorHandled.errorMessage));
+    } catch (e) {
+      dev.log(e.toString());
+      emit(ErrorAddingListingState(message: "Unexpected error"));
     }
   }
 }

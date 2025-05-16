@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:arta_app/feature/presentations/cubits/categories/categories_cubit.dart';
 
 Widget buildLoadingHomeState(BuildContext context) {
   return GridView.builder(
-    physics: const NeverScrollableScrollPhysics(), // يمنع التمرير داخل الجريد
-    shrinkWrap: true, // يجعل الجريد يأخذ حجمه الطبيعي
+    physics: const NeverScrollableScrollPhysics(),
+    shrinkWrap: true,
     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: MediaQuery.of(context).size.width > 600 ? 6 : 4,
       mainAxisSpacing: 8,
