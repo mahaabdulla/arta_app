@@ -22,6 +22,7 @@ class _FilterPageState extends State<FilterPage> {
   RegionModel? selectedParent;
   RegionModel? selectedChild;
   String? selectedSortOrder;
+  RangeValues _priceRange = const RangeValues(0, 1000000);
 
   @override
   void initState() {
@@ -53,25 +54,40 @@ class _FilterPageState extends State<FilterPage> {
                 final currentParentName = selectedParent?.name;
                 final isParentValid = regionNames.contains(currentParentName);
 
-                return DropdownWidget(
-                  value: isParentValid ? currentParentName : null,
-                  items: regionNames,
-                  onChanged: (String? newValue) {
-                    final selectedRegion = regions.firstWhere(
-                      (region) => region.name == newValue,
-                      orElse: () => RegionModel(id: null, name: ''),
-                    );
-                    setState(() {
-                      selectedParent = selectedRegion;
-                      selectedChild = null;
-                    });
-                    if (selectedRegion.id != null) {
-                      context
-                          .read<RegionCubit>()
-                          .getChildRegions(selectedRegion.id!);
-                    }
-                  },
-                  hint: 'المدينة',
+                return Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      value: isParentValid ? currentParentName : null,
+                      hint: Text('اختر المدينة', style: TextStyles.reguler14),
+                      items: regionNames.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        final selectedRegion = regions.firstWhere(
+                          (region) => region.name == newValue,
+                          orElse: () => RegionModel(id: null, name: ''),
+                        );
+                        setState(() {
+                          selectedParent = selectedRegion;
+                          selectedChild = null;
+                        });
+                        if (selectedRegion.id != null) {
+                          context
+                              .read<RegionCubit>()
+                              .getChildRegions(selectedRegion.id!);
+                        }
+                      },
+                    ),
+                  ),
                 );
               },
             ),
@@ -90,96 +106,121 @@ class _FilterPageState extends State<FilterPage> {
                 final currentChildName = selectedChild?.name;
                 final isChildValid = childNames.contains(currentChildName);
 
-                return DropdownWidget(
-                  value: isChildValid ? currentChildName : null,
-                  items: childNames,
-                  onChanged: (String? newValue) {
-                    final selectedRegion = children.firstWhere(
-                      (region) => region.name == newValue,
-                      orElse: () => RegionModel(id: null, name: ''),
-                    );
-                    setState(() {
-                      selectedChild = selectedRegion;
-                    });
-                  },
-                  hint: 'المنطقة',
+                return Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      isExpanded: true,
+                      value: isChildValid ? currentChildName : null,
+                      hint: Text('اختر المنطقة', style: TextStyles.reguler14),
+                      items: childNames.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        final selectedRegion = children.firstWhere(
+                          (region) => region.name == newValue,
+                          orElse: () => RegionModel(id: null, name: ''),
+                        );
+                        setState(() {
+                          selectedChild = selectedRegion;
+                        });
+                      },
+                    ),
+                  ),
                 );
               },
             ),
 
             SizedBox(height: 32.h),
 
-            // الأقل سعرًا
-            buildPriceOption("الأقل سعرًا", "low"),
+            // نطاق السعر
+            Text('نطاق السعر', style: TextStyles.reguler14.copyWith(fontWeight: FontWeight.bold)),
+            SizedBox(height: 8.h),
+            RangeSlider(
+              values: _priceRange,
+              min: 0,
+              max: 1000000,
+              divisions: 100,
+              labels: RangeLabels(
+                '${_priceRange.start.round()} ريال',
+                '${_priceRange.end.round()} ريال',
+              ),
+              onChanged: (RangeValues values) {
+                setState(() {
+                  _priceRange = values;
+                });
+              },
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('${_priceRange.start.round()} ريال'),
+                  Text('${_priceRange.end.round()} ريال'),
+                ],
+              ),
+            ),
 
             SizedBox(height: 32.h),
 
-            // الأعلى سعرًا
-            buildPriceOption("الأعلى سعرًا", "high"),
+            // ترتيب حسب السعر
+            Text('ترتيب حسب السعر', style: TextStyles.reguler14.copyWith(fontWeight: FontWeight.bold)),
+            SizedBox(height: 8.h),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  isExpanded: true,
+                  value: selectedSortOrder,
+                  hint: Text('اختر الترتيب', style: TextStyles.reguler14),
+                  items: [
+                    'السعر: من الأقل للأعلى',
+                    'السعر: من الأعلى للأقل',
+                  ].map((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedSortOrder = newValue;
+                    });
+                  },
+                ),
+              ),
+            ),
 
             SizedBox(height: 32.h),
 
             // زر تطبيق الفلترة
             FilterApplyButton(
               onTap: () {
-                // مثال: تعيين حدود السعر (يمكن تعديلها حسب الحاجة)
-                double? priceLimitValue;
-                if (selectedSortOrder == "low") {
-                  priceLimitValue = 500;
-                } else if (selectedSortOrder == "high") {
-                  priceLimitValue = 1000;
-                }
-
+                // تطبيق الفلترة
                 context.read<ListingCubit>().filterAds(
                       city: selectedParent?.name,
                       region: selectedChild?.name,
-                      priceLimit: priceLimitValue,
-                      isPriceAbove: selectedSortOrder == "high",
+                      priceLimit: _priceRange.end,
+                      isPriceAbove: selectedSortOrder == 'السعر: من الأعلى للأقل',
                     );
 
-                Navigator.pushReplacementNamed(context, '/home');
+                // العودة إلى صفحة الهوم وتحديث البيانات
+                Navigator.pop(context);
               },
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildPriceOption(String label, String value) {
-    return Container(
-      width: 360.w,
-      height: 72.h,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [
-            Color.fromARGB(255, 116, 172, 196),
-            Color.fromARGB(255, 112, 164, 158)
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      padding: const EdgeInsets.all(2),
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 14),
-        child: RadioListTile<String>(
-          title: Text(
-            label,
-            style: TextStyles.smallReguler.copyWith(color: darkGreenContainer),
-          ),
-          value: value,
-          groupValue: selectedSortOrder,
-          onChanged: (value) {
-            setState(() {
-              selectedSortOrder = value;
-            });
-          },
         ),
       ),
     );
