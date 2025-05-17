@@ -39,7 +39,10 @@ class ListingCubit extends Cubit<ListingState> {
         _listing = adsModel; // تخزين الإعلانات الأصلية
         _filteredListing = _listing; // تعيين الإعلانات المفلترة لجميع الإعلانات
 
-        emit(SuccessListingState(listing: adsModel));
+        emit(SuccessListingState(
+          listing: _listing,
+          filteredListing: _filteredListing,
+        ));
       } else {
         emit(ErrorListingState(message: "Error: ${response['message']}"));
       }
@@ -99,41 +102,126 @@ class ListingCubit extends Cubit<ListingState> {
   }
 
   // filter function
-  void filterAds(
-      {String? city,
-      String? region,
-      double? priceLimit,
-      bool isPriceAbove = false}) {
-    _filteredListing = _listing.where((ad) {
-      bool matchesCity = city != null ? ad.region?.name == city : true;
-      bool matchesRegion = region != null ? ad.region?.name == region : true;
-      bool matchesPrice = priceLimit != null
-          ? _matchesPriceLimit(ad.price, priceLimit, isPriceAbove)
-          : true;
+  void filterAds({
+    String? city,
+    String? region,
+    double? priceLimit,
+    bool isPriceAbove = false,
+  }) {
+    dev.log('Filtering ads with: city=$city, region=$region, priceLimit=$priceLimit, isPriceAbove=$isPriceAbove');
+    
+    List<ListingModel> filteredAds = List.from(_listing);
 
-      return matchesCity && matchesRegion && matchesPrice;
-    }).toList();
+    // فلترة حسب المدينة والمنطقة
+    if (_hasLocationFilter(city, region)) {
+      filteredAds = _filterByLocation(filteredAds, city, region);
+    }
 
+    // فلترة حسب السعر
+    if (priceLimit != null) {
+      filteredAds = _filterByPrice(filteredAds, priceLimit, isPriceAbove);
+    }
+
+    // ترتيب حسب السعر
+    filteredAds = _sortByPrice(filteredAds, isPriceAbove);
+
+    dev.log('Filtered ads count: ${filteredAds.length}');
+    _filteredListing = filteredAds;
+    
+    // إظهار رسالة إذا لم توجد إعلانات
+    if (filteredAds.isEmpty) {
+      String location = '';
+      if (city != null && city.isNotEmpty) {
+        location += city;
+      }
+      if (region != null && region.isNotEmpty) {
+        if (location.isNotEmpty) location += ' - ';
+        location += region;
+      }
+      
+      Fluttertoast.showToast(
+        msg: 'لا توجد إعلانات في $location',
+        backgroundColor: Colors.orange,
+        textColor: Colors.white,
+        gravity: ToastGravity.BOTTOM,
+        toastLength: Toast.LENGTH_LONG,
+      );
+    }
+    
     emit(SuccessListingState(
       listing: _listing,
       filteredListing: _filteredListing,
     ));
   }
 
-// دالة مساعدة لمقارنة السعر
-  bool _matchesPriceLimit(
-      String? adPrice, double priceLimit, bool isPriceAbove) {
-    if (adPrice == null) return false;
+  // التحقق من وجود فلتر للموقع
+  bool _hasLocationFilter(String? city, String? region) {
+    return (city != null && city.isNotEmpty) || (region != null && region.isNotEmpty);
+  }
 
-    double price = double.tryParse(adPrice) ?? 0;
+  // فلترة حسب الموقع
+  List<ListingModel> _filterByLocation(
+    List<ListingModel> ads,
+    String? city,
+    String? region,
+  ) {
+    return ads.where((ad) {
+      final adRegion = ad.region?.name?.toLowerCase() ?? '';
+      final searchCity = city?.toLowerCase() ?? '';
+      final searchRegion = region?.toLowerCase() ?? '';
+      
+      dev.log('Comparing region: $adRegion with city: $searchCity and region: $searchRegion');
+      
+      // إذا تم تحديد المنطقة فقط
+      if (region != null && region.isNotEmpty && (city == null || city.isEmpty)) {
+        final matchesRegion = adRegion.contains(searchRegion);
+        dev.log('Region match: $matchesRegion');
+        return matchesRegion;
+      }
+      
+      // إذا تم تحديد المدينة فقط
+      if (city != null && city.isNotEmpty && (region == null || region.isEmpty)) {
+        final matchesCity = adRegion.contains(searchCity);
+        dev.log('City match: $matchesCity');
+        return matchesCity;
+      }
+      
+      // إذا تم تحديد كلاهما
+      if (city != null && city.isNotEmpty && region != null && region.isNotEmpty) {
+        final matchesRegion = adRegion.contains(searchRegion);
+        dev.log('Region match: $matchesRegion');
+        return matchesRegion;
+      }
+      
+      return false;
+    }).toList();
+  }
 
-    if (isPriceAbove) {
-      // إذا كان الفلتر لعرض الإعلانات ذات السعر أعلى من القيمة المحددة
-      return price > priceLimit;
-    } else {
-      // إذا كان الفلتر لعرض الإعلانات ذات السعر أقل من القيمة المحددة
-      return price < priceLimit;
-    }
+  // فلترة حسب السعر
+  List<ListingModel> _filterByPrice(
+    List<ListingModel> ads,
+    double priceLimit,
+    bool isPriceAbove,
+  ) {
+    return ads.where((ad) {
+      final price = double.tryParse(ad.price ?? '0') ?? 0;
+      dev.log('Comparing price: $price with limit $priceLimit');
+      return isPriceAbove ? price >= priceLimit : price <= priceLimit;
+    }).toList();
+  }
+
+  // ترتيب حسب السعر
+  List<ListingModel> _sortByPrice(
+    List<ListingModel> ads,
+    bool isPriceAbove,
+  ) {
+    return List.from(ads)..sort((a, b) {
+      final priceA = double.tryParse(a.price ?? '0') ?? 0;
+      final priceB = double.tryParse(b.price ?? '0') ?? 0;
+      return isPriceAbove
+          ? priceB.compareTo(priceA) // ترتيب تنازلي
+          : priceA.compareTo(priceB); // ترتيب تصاعدي
+    });
   }
 
   Future<void> fetchMyAds() async {

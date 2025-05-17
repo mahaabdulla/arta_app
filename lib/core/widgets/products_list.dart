@@ -61,7 +61,6 @@ class _ProductsListState extends State<ProductsList> {
         SizedBox(width: 16.w),
         InkWell(
           onTap: () {
-            //TODO: add filter logic
             Navigator.push(
                 context, MaterialPageRoute(builder: (ctx) => FilterPage()));
           },
@@ -100,7 +99,7 @@ class _ProductsListState extends State<ProductsList> {
           return const Center(child: CircularProgressIndicator());
         } else if (state is SuccessListingState) {
           final hasSearchText = _searchController.text.isNotEmpty;
-          final isFiltered = state.filteredListing != null;
+          final isFiltered = state.filteredListing != null && state.filteredListing!.isNotEmpty;
 
           final adsToShow = hasSearchText || isFiltered
               ? state.filteredListing ?? []
