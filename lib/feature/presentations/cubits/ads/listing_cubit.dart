@@ -308,17 +308,26 @@ class ListingCubit extends Cubit<ListingState> {
 //اضافة اعلان
   Future<void> addListing(FormData data) async {
     emit(AddingListingLoadingState());
-    // FormData data =
-    // listing.toJson();
     try {
-      final response =
-          await _api.postForm(data: data, url: ApiUrls.postAdstUrl);
+      final token = await LocalStorage.getStringFromDisk(key: TOKEN);
+      if (token == null) {
+        emit(ErrorAddingListingState(message: "يرجى تسجيل الدخول أولاً"));
+        return;
+      }
+
+      _api.dio.options.headers.addAll({
+        "Authorization": "Bearer $token",
+      });
+
+      final response = await _api.postForm(
+        data: data,
+        url: ApiUrls.postAdstUrl,
+      );
 
       if (response.data['success'] == true) {
         emit(AddedListingSuccessState());
       } else {
-        emit(ErrorAddingListingState(
-            message: "خطأ: ${response.data['message']}"));
+        emit(ErrorAddingListingState(message: response.data['message'] ?? "حدث خطأ أثناء إضافة الإعلان"));
       }
     } on DioException catch (dioError) {
       final errorHandled = Diohandling.fromDioError(dioError);
@@ -327,11 +336,9 @@ class ListingCubit extends Cubit<ListingState> {
           bgColor: Colors.red,
           textColor: Colors.white,
           print: true);
-      dev.log("Dio Error: ${errorHandled.errorMessage}", name: "Dio Error");
       emit(ErrorAddingListingState(message: errorHandled.errorMessage));
     } catch (e) {
-      dev.log(e.toString());
-      emit(ErrorAddingListingState(message: "Unexpected error"));
+      emit(ErrorAddingListingState(message: "حدث خطأ غير متوقع"));
     }
   }
 }

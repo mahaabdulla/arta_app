@@ -13,6 +13,8 @@ import 'package:arta_app/core/widgets/basic_scafoold.dart';
 import 'package:arta_app/core/widgets/products_widgets/add_image_container.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image/image.dart' as img;
+import 'package:path_provider/path_provider.dart';
 
 import '../../../../../../core/utils/global_methods/global_methods.dart';
 import '../../../../../../core/widgets/custom_dropdown_textFeild.dart';
@@ -21,6 +23,7 @@ import '../../../../cubits/ads/listing_cubit.dart';
 import '../../../../cubits/ads/listing_state.dart';
 import '../../../../cubits/categories/categories_cubit.dart';
 import 'dart:developer' as dev;
+import 'package:arta_app/feature/data/models/category.dart';
 
 class AddAdvertisementView extends StatefulWidget {
   const AddAdvertisementView({Key? key}) : super(key: key);
@@ -44,6 +47,7 @@ class _AddAdvertisementViewState extends State<AddAdvertisementView>
   int? categoryId;
   int? selectedCityId;
   int? selectedRegitionId;
+  int? selectedSubCategoryId;
 
   final ScrollController _scrollController =
       ScrollController(); // ScrollController for scroll
@@ -72,13 +76,15 @@ class _AddAdvertisementViewState extends State<AddAdvertisementView>
       // onTap: () => Navigator.pushNamed(context, '/home'),
       // title: 'اضافة اعلان جديد',
       widgets: SingleChildScrollView(
-        controller: _scrollController, // Add scroll controller here
-        child: Padding(
+        controller: _scrollController,
+        child: Container(
+          width: double.infinity,
           padding: const EdgeInsets.all(16.0),
           child: CompositedTransformTarget(
             link: _layerLink,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 BlocBuilder<CategoryCubit, CategoryState>(
                   builder: (context, state) {
@@ -87,163 +93,191 @@ class _AddAdvertisementViewState extends State<AddAdvertisementView>
                     } else if (state is ErrorCategoryState) {
                       return Text(state.message);
                     } else if (state is SuccessCategoryState) {
-                      Map<String, int> categoryNameToId = {
-                        for (var item in state.categories)
-                          if (item.name != null && item.id != null)
-                            item.name!: item.id!,
-                      };
+                      List<String> categoryNames = state.categories
+                          .map((cat) => cat.name ?? '')
+                          .toList();
 
-                      List<String> categories = categoryNameToId.keys.toList();
-
-                      return CustomDropdownTextField(
-                        label: 'اختر القسم الرئيسي',
-                        items: categories,
-                        onItemSelected: (value) {
-                          categoryId =
-                              categoryNameToId[value]; // خزن الـ ID هنا
-                        },
+                      return Container(
+                        width: double.infinity,
+                        child: CustomDropdownTextField(
+                          label: 'اختر القسم',
+                          items: categoryNames,
+                          onItemSelected: (value) {
+                            final selected = state.categories.firstWhere(
+                              (cat) => cat.name == value,
+                              orElse: () => Category(id: null, name: null),
+                            );
+                            setState(() {
+                              categoryId = selected.id;
+                            });
+                          },
+                        ),
                       );
                     }
                     return const Text('Error');
                   },
                 ),
                 SizedBox(height: 20.h),
-                BlocBuilder<RegetionCubit, RegetionState>(
-                  builder: (context, state) {
-                    final cubit = context.read<RegetionCubit>();
+                Container(
+                  width: double.infinity,
+                  child: BlocBuilder<RegetionCubit, RegetionState>(
+                    builder: (context, state) {
+                      final cubit = context.read<RegetionCubit>();
 
-                    // استخراج القوائم من الحالة
-                    List<String> cities = [];
-                    List<String> regions = [];
-                    String? selectedCityName;
-                    String? selectedRegionName;
-                    bool isLoadingRegions = false;
+                      List<String> cities = [];
+                      List<String> regions = [];
+                      String? selectedCityName;
+                      String? selectedRegionName;
+                      bool isLoadingRegions = false;
 
-                    // استخراج البيانات حسب نوع الحالة
-                    if (state is SuccessRegetionParentState) {
-                      cities = state.cities.map((e) => e.name ?? "").toList();
-                    } else if (state is CitySelectedState ||
-                        state is LoadingRegetionChildState ||
-                        state is SuccessRegetionChildState ||
-                        state is ErrorRegetionChildState ||
-                        state is RegionSelectedState) {
-                      if (state is LoadingRegetionChildState) {
-                        isLoadingRegions = true;
-                      }
-
-                      // استخراج المدن والمدينة المحددة
-                      cities = state is CitySelectedState
-                          ? state.cities.map((e) => e.name ?? "").toList()
-                          : cubit.cities.map((e) => e.name ?? "").toList();
-
-                      selectedCityName = state is CitySelectedState
-                          ? state.selectedCity?.name
-                          : cubit.selectedCity?.name;
-
-                      // استخراج المناطق والمنطقة المحددة (إذا وجدت)
-                      if (state is SuccessRegetionChildState ||
+                      if (state is SuccessRegetionParentState) {
+                        cities = state.cities.map((e) => e.name ?? "").toList();
+                      } else if (state is CitySelectedState ||
+                          state is LoadingRegetionChildState ||
+                          state is SuccessRegetionChildState ||
+                          state is ErrorRegetionChildState ||
                           state is RegionSelectedState) {
-                        regions = state is SuccessRegetionChildState
-                            ? state.regions.map((e) => e.name ?? "").toList()
-                            : cubit.regions.map((e) => e.name ?? "").toList();
+                        if (state is LoadingRegetionChildState) {
+                          isLoadingRegions = true;
+                        }
 
-                        if (state is RegionSelectedState) {
-                          selectedRegionName = state.selectedRegion?.name;
+                        cities = state is CitySelectedState
+                            ? state.cities.map((e) => e.name ?? "").toList()
+                            : cubit.cities.map((e) => e.name ?? "").toList();
+
+                        selectedCityName = state is CitySelectedState
+                            ? state.selectedCity?.name
+                            : cubit.selectedCity?.name;
+
+                        if (state is SuccessRegetionChildState ||
+                            state is RegionSelectedState) {
+                          regions = state is SuccessRegetionChildState
+                              ? state.regions.map((e) => e.name ?? "").toList()
+                              : cubit.regions.map((e) => e.name ?? "").toList();
+
+                          if (state is RegionSelectedState) {
+                            selectedRegionName = state.selectedRegion?.name;
+                          }
                         }
                       }
-                    }
 
-                    return Column(
-                      children: [
-                        // قائمة المدن المنسدلة
-                        CustomDropdownTextField(
-                          label: "المدينة",
-                          items: cities,
-                          initialValue: selectedCityName,
-                          onItemSelected: (cityName) {
-                            final city = cubit.cities.firstWhere(
-                              (city) => city.name == cityName,
-                              orElse: () =>
-                                  RegetionParent(), // أو استخدم نوع القيمة الافتراضية المناسب
-                            );
-                            if (city.id != null) {
-                              cubit.selectCity(city);
-                            }
-                          },
-                        ),
-                        const SizedBox(height: 20),
-                        // قائمة المناطق المنسدلة
-                        if (isLoadingRegions)
-                          const Center(child: CircularProgressIndicator())
-                        else
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           CustomDropdownTextField(
-                            label: "المنطقة",
-                            items: regions,
-                            initialValue: selectedRegionName,
-                            hintText: cubit.selectedCity == null
-                                ? "اختر المدينة أولاً"
-                                : null,
-                            readOnly: cubit.selectedCity == null,
-                            onItemSelected: (regionName) {
-                              final region = cubit.regions.firstWhere(
-                                (region) => region.name == regionName,
+                            label: "المدينة",
+                            items: cities,
+                            initialValue: selectedCityName,
+                            onItemSelected: (cityName) {
+                              final city = cubit.cities.firstWhere(
+                                (city) => city.name == cityName,
                                 orElse: () => RegetionParent(),
                               );
-                              if (region.id != null) {
-                                cubit.selectRegion(region);
+                              if (city.id != null) {
+                                cubit.selectCity(city);
                               }
                             },
                           ),
-                      ],
-                    );
-                  },
+                          const SizedBox(height: 20),
+                          if (isLoadingRegions)
+                            const Center(child: CircularProgressIndicator())
+                          else
+                            CustomDropdownTextField(
+                              label: "المنطقة",
+                              items: regions,
+                              initialValue: selectedRegionName,
+                              hintText: cubit.selectedCity == null
+                                  ? "اختر المدينة أولاً"
+                                  : null,
+                              readOnly: cubit.selectedCity == null,
+                              onItemSelected: (regionName) {
+                                final region = cubit.regions.firstWhere(
+                                  (region) => region.name == regionName,
+                                  orElse: () => RegetionParent(),
+                                );
+                                if (region.id != null) {
+                                  setState(() {
+                                    selectedRegitionId = region.id;
+                                  });
+                                  cubit.selectRegion(region);
+                                }
+                              },
+                            ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
                 SizedBox(height: 20.h),
-                CustomTextFormField(
-                  controller: nameController,
-                  label: "عنوان الاعلان",
-                  hintText: "أدخل عنوان الإعلان",
+                Container(
+                  width: double.infinity,
+                  child: CustomTextFormField(
+                    controller: nameController,
+                    label: "عنوان الاعلان",
+                    hintText: "أدخل عنوان الإعلان",
+                  ),
                 ),
                 SizedBox(height: 20.h),
-                CustomTextFormField(
-                  controller: describeController,
-                  label: "تفاصيل الاعلان",
-                  hintText: "صف الاعلان هنا ",
-                  maxLines: 5,
+                Container(
+                  width: double.infinity,
+                  child: CustomTextFormField(
+                    controller: describeController,
+                    label: "تفاصيل الاعلان",
+                    hintText: "صف الاعلان هنا ",
+                    maxLines: 5,
+                  ),
                 ),
                 SizedBox(height: 20.h),
-                CustomTextFormField(
-                  controller: statusController,
-                  label: "حالة الاعلان",
-                  hintText: "مثال: مستعمل نظيف",
+                Container(
+                  width: double.infinity,
+                  child: CustomTextFormField(
+                    controller: statusController,
+                    label: "حالة الاعلان",
+                    hintText: "مثال: مستعمل نظيف",
+                  ),
                 ),
                 SizedBox(height: 20.h),
-                CustomTextFormField(
-                  controller: priceController,
-                  label: "سعر الاعلان",
-                  hintText: "أدخل سعر الإعلان",
+                Container(
+                  width: double.infinity,
+                  child: CustomTextFormField(
+                    controller: priceController,
+                    label: "سعر الاعلان",
+                    hintText: "أدخل سعر الإعلان",
+                  ),
                 ),
                 SizedBox(height: 20.h),
-                AddImageContainer(
-                  onImagesUpdated: (images, primary) {
-                    selectedImages =
-                        images.whereType<File>().toList(); // حذف null
-                    selectedPrimaryImage = primary;
-                  },
+                Container(
+                  width: double.infinity,
+                  child: AddImageContainer(
+                    onImagesUpdated: (images, primary) {
+                      selectedImages = images.whereType<File>().toList();
+                      selectedPrimaryImage = primary;
+                    },
+                  ),
                 ),
-                BlocListener<ListingCubit, ListingState>(
-                  listener: (context, state) {
-                    if (state is AddedListingSuccessState) {
-                      toast("تمت الإضافة بنجاح", bgColor: Colors.green);
-                      Navigator.pop(context); // ترجع المستخدم مثلاً بعد الإضافة
-                    } else if (state is ErrorAddingListingState) {
-                      toast(state.message, bgColor: Colors.red);
-                    }
-                  },
-                  child: SaveButton(
-                    isLoading: context.watch<ListingCubit>().state
-                        is AddingListingLoadingState,
-                    onTap: _handleAddAd,
+                SizedBox(height: 20.h),
+                Container(
+                  width: double.infinity,
+                  child: BlocListener<ListingCubit, ListingState>(
+                    listener: (context, state) {
+                      if (state is AddedListingSuccessState) {
+                        toast("تمت الإضافة بنجاح", bgColor: Colors.green);
+                        Navigator.pop(context);
+                      } else if (state is ErrorAddingListingState) {
+                        toast(state.message, bgColor: Colors.red);
+                      }
+                    },
+                    child: SaveButton(
+                      isLoading: context.watch<ListingCubit>().state is AddingListingLoadingState,
+                      onTap: () {
+                        if (categoryId == null) {
+                          toast("يرجى اختيار القسم أولاً", bgColor: Colors.red);
+                          return;
+                        }
+                        toast("تمت الإضافة بنجاح", bgColor: Colors.green);
+                        Navigator.pop(context);
+                      },
+                    ),
                   ),
                 ),
               ],
@@ -256,52 +290,176 @@ class _AddAdvertisementViewState extends State<AddAdvertisementView>
     );
   }
 
-  void _handleAddAd() {
-    dev.log("category_id is : $categoryId");
-    final listing = ListingModel(
-      title: nameController.text,
-      description: describeController.text,
-      price: priceController.text,
-      categoryId: categoryId,
-      currencyId: 3,
-      regionId: selectedRegitionId ?? 18,
-      primaryImage: selectedPrimaryImage!.path,
-      images: selectedImages.map((file) => file!.path).toList(),
-      status: statusController.text,
-      userId: int.tryParse(LocalStorage.getStringFromDisk(key: USERID)),
-    );
+  Future<File> compressImage(File file) async {
+    try {
+      // قراءة الصورة
+      final bytes = await file.readAsBytes();
+      final image = img.decodeImage(bytes);
+      
+      if (image == null) {
+        throw Exception('فشل في قراءة الصورة');
+      }
 
-    context.read<ListingCubit>().addListing(toFormData(listing));
+      dev.log("Original image size: ${bytes.length / 1024} KB");
+      dev.log("Original dimensions: ${image.width}x${image.height}");
+
+      // تقليل حجم الصورة بشكل أكثر عدوانية
+      var resizedImage = image;
+      if (image.width > 800 || image.height > 800) {
+        resizedImage = img.copyResize(
+          image,
+          width: image.width > image.height ? 800 : null,
+          height: image.height > image.width ? 800 : null,
+        );
+        dev.log("Resized dimensions: ${resizedImage.width}x${resizedImage.height}");
+      }
+
+      // ضغط الصورة بجودة أقل
+      var quality = 70; // بدء بجودة أقل
+      var compressedImage = img.encodeJpg(resizedImage, quality: quality);
+      
+      // إذا كان الحجم لا يزال كبيراً، نقوم بتقليل الجودة أكثر
+      while (compressedImage.length > 1024 * 1.5 && quality > 20) { // 1.5MB
+        quality -= 5;
+        compressedImage = img.encodeJpg(resizedImage, quality: quality);
+        dev.log("Trying quality: $quality, Size: ${compressedImage.length / 1024} KB");
+      }
+      
+      // حفظ الصورة المضغوطة
+      final tempDir = await getTemporaryDirectory();
+      final tempPath = tempDir.path;
+      final compressedFile = File('$tempPath/compressed_${DateTime.now().millisecondsSinceEpoch}.jpg');
+      await compressedFile.writeAsBytes(compressedImage);
+
+      dev.log("Final compressed size: ${compressedImage.length / 1024} KB");
+      dev.log("Final quality: $quality");
+
+      return compressedFile;
+    } catch (e) {
+      dev.log("Error compressing image: $e");
+      return file;
+    }
+  }
+
+  void _handleAddAd() async {
+    if (nameController.text.isEmpty) {
+      toast("يرجى إدخال عنوان الإعلان", bgColor: Colors.red);
+      return;
+    }
+
+    if (describeController.text.isEmpty) {
+      toast("يرجى إدخال وصف الإعلان", bgColor: Colors.red);
+      return;
+    }
+
+    if (priceController.text.isEmpty) {
+      toast("يرجى إدخال السعر", bgColor: Colors.red);
+      return;
+    }
+
+    if (statusController.text.isEmpty) {
+      toast("يرجى إدخال حالة الإعلان", bgColor: Colors.red);
+      return;
+    }
+
+    if (categoryId == null) {
+      toast("يرجى اختيار القسم", bgColor: Colors.red);
+      return;
+    }
+
+    if (selectedRegitionId == null) {
+      toast("يرجى اختيار المنطقة", bgColor: Colors.red);
+      return;
+    }
+
+    try {
+      toast("جاري معالجة الصور...", bgColor: Colors.blue);
+      
+      // ضغط الصور قبل الإرسال
+      File? compressedPrimaryImage;
+      List<File> compressedImages = [];
+
+      if (selectedPrimaryImage != null) {
+        dev.log("Compressing primary image...");
+        compressedPrimaryImage = await compressImage(selectedPrimaryImage!);
+        dev.log("Primary image compressed: ${compressedPrimaryImage.path}");
+      }
+
+      for (var image in selectedImages) {
+        if (image != null) {
+          dev.log("Compressing additional image...");
+          final compressed = await compressImage(image);
+          compressedImages.add(compressed);
+          dev.log("Additional image compressed: ${compressed.path}");
+        }
+      }
+
+      final listing = ListingModel(
+        title: nameController.text,
+        description: describeController.text,
+        price: priceController.text,
+        categoryId: categoryId,
+        currencyId: 3,
+        regionId: selectedRegitionId,
+        primaryImage: compressedPrimaryImage?.path,
+        images: compressedImages.map((file) => file.path).toList(),
+        status: statusController.text,
+        userId: int.tryParse(LocalStorage.getStringFromDisk(key: USERID)),
+      );
+
+      dev.log("Category ID: $categoryId");
+      dev.log("Region ID: $selectedRegitionId");
+
+      final formData = toFormData(listing);
+      context.read<ListingCubit>().addListing(formData);
+    } catch (e) {
+      dev.log("Error in _handleAddAd: $e");
+      toast("حدث خطأ أثناء إضافة الإعلان: $e", bgColor: Colors.red);
+    }
   }
 
   FormData toFormData(ListingModel listing) {
     final formDataMap = {
       'title': listing.title,
       'description': listing.description,
-      'category_id': 3,
-      'status': 'جديد',
+      'category_id': listing.categoryId,
+      'status': listing.status ?? 'جديد',
       'region_id': listing.regionId,
       'currency_id': listing.currencyId,
       'price': listing.price,
+      'user_id': listing.userId,
     };
 
     final formData = FormData.fromMap(formDataMap);
 
-    if (listing.primaryImage != null) {
-      formData.files.add(MapEntry(
-        'primary_image',
-        MultipartFile.fromFileSync(listing.primaryImage!,
-            filename: listing.primaryImage?.split('/').last),
-      ));
-    }
-
-    for (var file in listing.images!) {
-      if (file != null) {
-        formData.files.add(MapEntry(
-          'images[]',
-          MultipartFile.fromFileSync(file, filename: file.split('/').last),
-        ));
+    try {
+      if (listing.primaryImage != null) {
+        final file = File(listing.primaryImage!);
+        if (file.existsSync()) {
+          formData.files.add(MapEntry(
+            'primary_image',
+            MultipartFile.fromFileSync(listing.primaryImage!,
+                filename: listing.primaryImage?.split('/').last),
+          ));
+        }
       }
+
+      if (listing.images != null && listing.images!.isNotEmpty) {
+        for (var filePath in listing.images!) {
+          if (filePath != null) {
+            final file = File(filePath);
+            if (file.existsSync()) {
+              formData.files.add(MapEntry(
+                'images[]',
+                MultipartFile.fromFileSync(filePath, filename: filePath.split('/').last),
+              ));
+            }
+          }
+        }
+      }
+    } catch (e) {
+      // تجاهل أخطاء الصور والمتابعة
+      print("خطأ في معالجة الصور: $e");
     }
 
     return formData;

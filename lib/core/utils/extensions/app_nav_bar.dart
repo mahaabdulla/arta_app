@@ -24,7 +24,7 @@ class CustomBottomNavBar extends StatelessWidget {
         Navigator.pushNamed(context, MYADS);
         break;
       case 3:
-        Navigator.pushNamed(context, CHANGPASS);
+        Navigator.pushNamed(context, '/profile');
         break;
     }
   }

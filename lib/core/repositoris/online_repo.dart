@@ -183,15 +183,20 @@ class OnlineDataRepo extends DataRepo {
       required FormData data,
       Map<String, dynamic>? query,
       Map? jsonData}) async {
-    dio.options.headers.addAll({
-      //TODO: رجعي ذا مكانه لما ندمج الصفحات
-      "Authorization":
-          "Bearer 1|9N9BgtXaWx1CnuGBGcD9ZPfA2I1d26Gs1wfm7OvHf40d0655",
-      // ${LocalStorage.getStringFromDisk(key: TOKEN)}"
-    });
-
-    Response? response;
     try {
+      final token = await LocalStorage.getStringFromDisk(key: TOKEN);
+      if (token == null) {
+        throw DioException(
+          requestOptions: RequestOptions(path: url),
+          error: "No authentication token found",
+        );
+      }
+
+      dio.options.headers.addAll({
+        "Authorization": "Bearer $token",
+      });
+
+      Response? response;
       if (!await checkConnection()) {
         await CacheHelper.saveCacheData(
           key: url,
@@ -208,11 +213,13 @@ class OnlineDataRepo extends DataRepo {
           data: data,
         );
       }
-    } catch (e) {}
 
-    dev.log((response?.data['error'] != null).toString());
-
-    return response!;
+      dev.log((response?.data['error'] != null).toString());
+      return response!;
+    } catch (e) {
+      dev.log("Error in postForm: $e");
+      rethrow;
+    }
   }
 
   @override

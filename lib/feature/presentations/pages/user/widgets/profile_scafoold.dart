@@ -80,16 +80,16 @@ class _ProfileScaffoldState extends State<ProfileScaffold> {
               child: Stack(
                 children: [
                   /// صورة الخلفية
-                  Positioned.fill(
-                    child: Image.asset(
-                      "assets/png_images/Group 9276.png",
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(color: Colors.grey);
-                      },
-                    ),
-                  ),
+                  // Positioned.fill(
+                  //   child: Image.asset(
+                  //     "assets/png_images/Group 9276.png",
+                  //     width: double.infinity,
+                  //     fit: BoxFit.cover,
+                  //     errorBuilder: (context, error, stackTrace) {
+                  //       return Container(color: Colors.grey);
+                  //     },
+                  //   ),
+                  // ),
 
                   Positioned(
                     top: 30.h,
@@ -150,9 +150,7 @@ class _ProfileScaffoldState extends State<ProfileScaffold> {
                   borderRadius:
                       BorderRadius.vertical(top: Radius.circular(20.r)),
                 ),
-                child: SingleChildScrollView(
-                  child: widget.child,
-                ),
+                child: widget.child,
               ),
             ),
           ],

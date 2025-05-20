@@ -1,4 +1,5 @@
 import 'package:arta_app/core/constants/global_constants.dart';
+import 'package:arta_app/core/constants/text.dart';
 import 'package:arta_app/core/routes/routes_name.dart';
 import 'package:arta_app/core/utils/global_methods/global_methods.dart';
 import 'package:arta_app/core/utils/local_repo/local_storage.dart';
@@ -68,7 +69,20 @@ class LoginBody extends StatelessWidget {
               return null;
             },
           ),
-          vSpace(39.h),
+          vSpace(16.h),
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, FORGETPASS);
+              },
+              child: Text(
+                'نسيت كلمة المرور؟',
+                style: TextStyles.reguler14
+              ),
+            ),
+          ),
+      
           BlocConsumer<LoginCubit, LoginState>(listener: (context, state) {
             if (state is SuccessLoginState) {
               Fluttertoast.showToast(
@@ -112,6 +126,7 @@ class LoginBody extends StatelessWidget {
             secondaryText: 'انشاء حساب',
             navigatorPage: SIGNUP,
           ),
+            vSpace(40.h),
         ],
       ),
     );

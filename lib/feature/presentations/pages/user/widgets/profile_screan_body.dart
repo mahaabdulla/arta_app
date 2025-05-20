@@ -1,5 +1,4 @@
 import 'package:arta_app/core/constants/png_images.dart';
-
 import 'package:arta_app/core/constants/svg_images.dart';
 import 'package:arta_app/feature/presentations/pages/user/widgets/profile_list_tile_widget.dart';
 import 'package:arta_app/feature/presentations/pages/user/widgets/profile_scafoold.dart';
@@ -13,31 +12,26 @@ class ProfileScreenBody extends StatelessWidget {
     final List<Map<String, dynamic>> profileOptions = [
       {
         "title": "تعديل المعلومات الشخصية",
-        // "icon": profile_image,
         "icon": profileImage,
         "route": "/home",
       },
       {
         "title": "اللغة",
-        // "icon": language,
         "icon": languageImage,
         "route": "/home",
       },
       {
         "title": "المساعدة والدعم",
-        // "icon": helps_spport,
         "icon": helpsSpport,
         "route": "/home",
       },
       {
         "title": "الأحكام والشروط",
-        // "icon": condditions,
         "icon": condditions,
         "route": "/home",
       },
       {
         "title": "تسجيل الخروج",
-        //  "icon": lougot,
         "icon": lougot,
         "route": "/home",
         "showArrow": false,
@@ -52,6 +46,8 @@ class ProfileScreenBody extends StatelessWidget {
           border: Border.all(color: const Color(0xffD6D6D6), width: 1),
         ),
         child: ListView.separated(
+          shrinkWrap: true,
+          physics: const AlwaysScrollableScrollPhysics(),
           itemCount: profileOptions.length,
           itemBuilder: (context, index) {
             return ProfileListTileWidget(

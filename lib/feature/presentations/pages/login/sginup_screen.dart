@@ -11,7 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'test_screen.dart';
 import 'widgets/custom_login_textField.dart';
 import 'widgets/login_by_widget.dart';
 
@@ -19,11 +18,7 @@ class SginupScreen extends StatelessWidget {
   SginupScreen({super.key}) {
     fields = [
       {"hint_text": "الاسم", "isPassword": false, "validator": nameValidator},
-      {
-        "hint_text": "الايميل",
-        "isPassword": false,
-        "validator": emailValidator
-      },
+      {"hint_text": "الايميل", "isPassword": false, "validator": emailValidator},
       {
         "hint_text": "كلمة المرور",
         "isPassword": true,
@@ -32,22 +27,12 @@ class SginupScreen extends StatelessWidget {
       {
         "hint_text": "تأكيد كلمة المرور",
         "isPassword": true,
-        "validator": (value) =>
-            confirmPasswordValidator(value, controllers[2].text)
+        "validator": (value) => confirmPasswordValidator(value, controllers[2].text)
       },
-      {
-        "hint_text": "رقم الجوال",
-        "isPassword": false,
-        "validator": phoneValidator
-      },
-      {
-        "hint_text": "رقم الواتساب",
-        "isPassword": false,
-        "validator": phoneValidator
-      },
+      {"hint_text": "رقم الجوال", "isPassword": false, "validator": phoneValidator},
+      {"hint_text": "رقم الواتساب", "isPassword": false, "validator": phoneValidator},
     ];
 
-    // تهيئة controllers بعد controllersText
     controllers = List.generate(
       6,
       (index) => TextEditingController(
@@ -58,8 +43,8 @@ class SginupScreen extends StatelessWidget {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   final List<String> controllersText = [
-    'Heba',
-    'hebazubidi@gmail.com',
+    'UserName',
+    'userEmail@gmail.com',
     '1234567890',
     '1234567890',
     '777777777',
@@ -67,7 +52,6 @@ class SginupScreen extends StatelessWidget {
   ];
 
   late final List<TextEditingController> controllers;
-
   late final List<Map<String, dynamic>> fields;
 
   @override
@@ -82,62 +66,88 @@ class SginupScreen extends StatelessWidget {
               supTitle: "نرحب بوجودك معنا استمتع بخدماتنا المميزة"),
           Expanded(
             child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: controllers.length,
-                itemBuilder: (ctx, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16.0),
-                    child: CustomLoginTextField(
-                      controller: controllers[index],
-                      hintText: fields[index]['hint_text'],
-                      isPassword: fields[index]['isPassword'],
-                      validator: fields[index]['validator'],
-                    ),
-                  );
-                }),
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: controllers.length,
+              itemBuilder: (ctx, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0),
+                  child: CustomLoginTextField(
+                    controller: controllers[index],
+                    hintText: fields[index]['hint_text'],
+                    isPassword: fields[index]['isPassword'],
+                    validator: fields[index]['validator'],
+                  ),
+                );
+              },
+            ),
           ),
-          BlocConsumer<LoginCubit, LoginState>(
-            listener: (context, state) {
-              if (state is SuccessRegisterState) {
-                Fluttertoast.showToast(
-                  msg: state.message,
-                  backgroundColor: Colors.green,
-                );
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => TestScreen()),
-                );
-              } else if (state is ErrorRegisterState) {
-                toast(
-                  state.message,
-                  bgColor: Colors.red,
-                  print: true,
-                  gravity: ToastGravity.BOTTOM,
-                  textColor: Colors.white,
+BlocConsumer<LoginCubit, LoginState>(
+  listener: (context, state) {
+    if (state is SuccessRegisterState) {
+      Fluttertoast.showToast(
+        msg: state.message,
+        backgroundColor: Colors.green,
+      );
+
+      if (context.mounted) {
+        Future.microtask(() {
+          Navigator.pushReplacementNamed(
+            context,
+            EMAILOTP,
+            arguments: controllers[1].text,
+          );
+        });
+      }
+    } else if (state is ErrorRegisterState) {
+      toast(
+        state.message,
+        bgColor: Colors.red,
+        print: true,
+        gravity: ToastGravity.BOTTOM,
+        textColor: Colors.white,
+      );
+    } else if (state is SuccessLoginState) {
+      Fluttertoast.showToast(
+        msg: state.message,
+        backgroundColor: Colors.green,
+      );
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        HOME,
+        (route) => false,
+      );
+    } else if (state is ErrorLoginState) {
+      toast(
+        state.message,
+        bgColor: Colors.red,
+        print: true,
+        gravity: ToastGravity.BOTTOM,
+        textColor: Colors.white,
+      );
+    }
+  },
+  builder: (context, state) {
+    return LoginButton(
+      state: state,
+      onTap: state is LoadingRegisterState
+          ? null
+          : () async {
+              if (formKey.currentState!.validate()) {
+                await LoginCubit.get(context).register(
+                  name: controllers[0].text,
+                  email: controllers[1].text,
+                  password: controllers[2].text,
+                  confirmPassword: controllers[3].text,
+                  phoneNumber: controllers[4].text,
+                  whatsappNumber: controllers[5].text,
                 );
               }
             },
-            builder: (context, state) {
-              return LoginButton(
-                state: state,
-                onTap: state is LoadingRegisterState
-                    ? null
-                    : () async {
-                        if (formKey.currentState!.validate()) {
-                          await LoginCubit.get(context).register(
-                            name: controllers[0].text,
-                            email: controllers[1].text,
-                            password: controllers[2].text,
-                            confirmPassword: controllers[3].text,
-                            phoneNumber: controllers[4].text,
-                            whatsappNumber: controllers[5].text,
-                          );
-                        }
-                      },
-                text: 'إنشاء حساب',
-              );
-            },
-          ),
+      text: 'إنشاء حساب',
+    );
+  },
+),
+
           LoginByWidget(
             mainText: 'لديك حساب بالفعل؟',
             secondaryText: 'سجل الدخول',
@@ -155,8 +165,7 @@ String? emailValidator(String? value) {
   if (value == null || value.isEmpty) {
     return 'البريد الإلكتروني مطلوب';
   }
-  final emailRegex =
-      RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+  final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
   if (!emailRegex.hasMatch(value)) {
     return 'البريد الإلكتروني غير صالح';
   }

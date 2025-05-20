@@ -47,4 +47,9 @@ class ApiUrls {
   }
 
   static const String REGETION_PARENT = '$root/regions/parents';
+
+  static const String SEND_VERIFICATION_EMAIL = '$root/resendOTP';
+  static const String VERIFY_OTP = '$root/verifyOtpAndLogin';
+  static const String FORGET_PASSWORD = '$root/forgetPassword';
+  static const String RESET_PASSWORD = '$root/resetPassword';
 }

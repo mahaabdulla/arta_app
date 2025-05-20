@@ -13,12 +13,16 @@ import 'package:arta_app/feature/presentations/pages/categorys/presintion/views/
 import 'package:arta_app/feature/presentations/pages/categorys/presintion/views/sport.dart';
 import 'package:arta_app/feature/presentations/pages/categorys/presintion/views/women.dart';
 import 'package:arta_app/feature/presentations/pages/home/presention/view/home_view.dart';
+import 'package:arta_app/feature/presentations/pages/login/forget_pass.dart';
 import 'package:arta_app/feature/presentations/pages/login/login_screen.dart';
 import 'package:arta_app/feature/presentations/pages/login/sginup_screen.dart';
 import 'package:arta_app/feature/presentations/pages/on_boreding/presintion/views/onbording.dart';
 import 'package:arta_app/feature/presentations/pages/ads/presition/widgets/product_details_view.dart';
 import 'package:arta_app/feature/presentations/pages/splash/presention/splash_view.dart';
 import 'package:arta_app/feature/presentations/pages/user/widgets/change_pass_screan.dart';
+import 'package:arta_app/feature/presentations/pages/login/otp_verification.dart';
+import 'package:arta_app/feature/presentations/pages/login/reset_password.dart';
+import 'package:arta_app/feature/presentations/pages/user/profile_page.dart';
 import 'package:flutter/material.dart';
 
 class AppRoute {
@@ -62,6 +66,35 @@ class AppRoute {
         return MaterialPageRoute(builder: (ctx) => RegionView());
       case '/change_pass':
         return MaterialPageRoute(builder: (ctx) => ChangePasswordScreen());
+      case '/profile':
+        return MaterialPageRoute(builder: (ctx) => ProfilePage());
+      case EMAILOTP:
+        final email = route.arguments as String?;
+        if (email == null) {
+          return MaterialPageRoute(
+            builder: (ctx) => Scaffold(
+              body: Center(child: Text('خطأ: البريد الإلكتروني غير متوفر')),
+            ),
+          );
+        }
+        return MaterialPageRoute(builder: (ctx) => OtpVerificationScreen(email: email));
+      case '/resetPassword':
+        final args = route.arguments as Map<String, dynamic>?;
+        if (args == null) {
+          return MaterialPageRoute(
+            builder: (ctx) => Scaffold(
+              body: Center(child: Text('خطأ: البيانات المطلوبة غير متوفرة')),
+            ),
+          );
+        }
+        return MaterialPageRoute(
+          builder: (ctx) => ResetPasswordPage(
+            email: args['email'] as String,
+            otp: args['otp'] as String,
+          ),
+        );
+      case '/forgetPass':
+        return MaterialPageRoute(builder: (ctx) => ForgetPassScreen());
 
       case '/ctgChildern':
         final routeArgs = route.arguments as Map<String, dynamic>;

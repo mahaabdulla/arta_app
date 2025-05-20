@@ -5,7 +5,7 @@ class UserModel {
   String? name;
   String? username;
   String? email;
-  File? image;
+  String? image;
   String? contactNumber;
   String? whatsappNumber;
   Null googleId;

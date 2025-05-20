@@ -5,8 +5,8 @@ class ProfileListTileWidget extends StatelessWidget {
   final String title;
   final String imagePath;
   final Color color;
-  final VoidCallback onTap;
   final bool showArrow;
+  final VoidCallback onTap;
 
   const ProfileListTileWidget({
     Key? key,
