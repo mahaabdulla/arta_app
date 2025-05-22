@@ -4,8 +4,7 @@ import 'package:arta_app/core/routes/routes_name.dart';
 import 'package:arta_app/feature/presentations/cubits/change_password/change_password_cubit.dart';
 import 'package:arta_app/feature/presentations/cubits/commint/commints_cubit.dart';
 import 'package:arta_app/feature/presentations/cubits/region/region_cubit.dart';
-import 'package:arta_app/feature/presentations/pages/login/forget_pass.dart';
-import 'package:arta_app/feature/presentations/pages/user/profile_page.dart';
+import 'package:arta_app/feature/presentations/pages/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -17,6 +16,15 @@ import 'feature/presentations/cubits/regetion/regetion_cubit.dart';
 import 'generated/l10n.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+void main() {
+  debugPrint = (String? message, {int? wrapWidth}) {
+    if (message != null && !message.contains('║')) {
+      print(message);
+    }
+  };
+  runApp(const MyApp());
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -62,7 +70,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         navigatorKey: navigatorKey,
         onGenerateRoute: AppRoute.generatedRoute,
-        initialRoute: '/splash',
+      //  initialRoute: '/splash',
         locale: Locale('ar'),
         localizationsDelegates: [
           S.delegate,
@@ -72,6 +80,7 @@ class _MyAppState extends State<MyApp> {
         ],
         supportedLocales: S.delegate.supportedLocales,
         debugShowCheckedModeBanner: false,
+        home: LoginScreen(),
       ),
     );
   }

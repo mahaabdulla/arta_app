@@ -10,18 +10,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'widgets/custom_login_textField.dart';
+import 'custom_login_textField.dart';
 
-class ForgetPassScreen extends StatefulWidget {
-  const ForgetPassScreen({Key? key}) : super(key: key);
+class UnifiedResetPasswordScreen extends StatefulWidget {
+  final String email;
+  final String otp;
+
+  const UnifiedResetPasswordScreen({
+    Key? key,
+    required this.email,
+    required this.otp,
+  }) : super(key: key);
 
   @override
-  State<ForgetPassScreen> createState() => _ForgetPassScreenState();
+  State<UnifiedResetPasswordScreen> createState() => _UnifiedResetPasswordScreenState();
 }
 
-class _ForgetPassScreenState extends State<ForgetPassScreen> {
+class _UnifiedResetPasswordScreenState extends State<UnifiedResetPasswordScreen> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +39,22 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
         height: 902.h,
         cheldren: [
           TitlePage(
-            title: "نسيت كلمة المرور",
-            supTitle: "أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور",
+            title: "إعادة تعيين كلمة المرور",
+            supTitle: "أدخل كلمة المرور الجديدة",
           ),
           vSpace(32.h),
           CustomLoginTextField(
-            controller: emailController,
-            hintText: "البريد الإلكتروني",
-            isPassword: false,
-            validator: emailValidator,
+            controller: passwordController,
+            hintText: "كلمة المرور الجديدة",
+            isPassword: true,
+            validator: passwordValidator,
+          ),
+          vSpace(16.h),
+          CustomLoginTextField(
+            controller: confirmPasswordController,
+            hintText: "تأكيد كلمة المرور",
+            isPassword: true,
+            validator: (value) => confirmPasswordValidator(value, passwordController.text),
           ),
           vSpace(32.h),
           BlocConsumer<LoginCubit, LoginState>(
@@ -49,11 +64,10 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
                   msg: state.message,
                   backgroundColor: Colors.green,
                 );
-                Navigator.pushNamed(
+                Navigator.pushNamedAndRemoveUntil(
                   context,
-                  EMAILOTP,
-            
-                  arguments: emailController.text,
+                  LOGIN,
+                  (route) => false,
                 );
               } else if (state is ErrorLoginState) {
                 toast(
@@ -72,12 +86,14 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
                     ? null
                     : () {
                         if (formKey.currentState!.validate()) {
-                          context.read<LoginCubit>().forgetPassword(
-                                email: emailController.text,
+                          context.read<LoginCubit>().resetPassword(
+                                email: widget.email,
+                                otp: widget.otp,
+                                password: passwordController.text,
                               );
                         }
                       },
-                text: 'إرسال رمز التحقق',
+                text: 'تحديث كلمة المرور',
               );
             },
           ),
@@ -88,13 +104,22 @@ class _ForgetPassScreenState extends State<ForgetPassScreen> {
   }
 }
 
-String? emailValidator(String? value) {
+String? passwordValidator(String? value) {
   if (value == null || value.isEmpty) {
-    return 'البريد الإلكتروني مطلوب';
+    return 'كلمة المرور مطلوبة';
   }
-  final emailRegex = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-  if (!emailRegex.hasMatch(value)) {
-    return 'البريد الإلكتروني غير صالح';
+  if (value.length < 6) {
+    return 'يجب أن تكون كلمة المرور 6 أحرف على الأقل';
+  }
+  return null;
+}
+
+String? confirmPasswordValidator(String? value, String password) {
+  if (value == null || value.isEmpty) {
+    return 'يرجى تأكيد كلمة المرور';
+  }
+  if (value != password) {
+    return 'كلمة المرور غير متطابقة';
   }
   return null;
 }

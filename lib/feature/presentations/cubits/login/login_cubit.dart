@@ -249,9 +249,11 @@ class LoginCubit extends Cubit<LoginState> {
           // Save user data if available
           if (response['data'] != null && response['data']['user'] != null) {
             final userData = response['data']['user'];
+            if (userData is Map<String, dynamic>) {
             UserModel user = UserModel.fromJson(userData);
             await saveUserData(user);
             dev.log("User data saved successfully");
+            }
           }
 
           emit(SuccessLoginState(message: response['message'] ?? "تم التحقق بنجاح"));
@@ -321,57 +323,76 @@ class LoginCubit extends Cubit<LoginState> {
       dev.log("Email: $email");
       dev.log("OTP: $otp");
       dev.log("Request URL: ${ApiUrls.RESET_PASSWORD}");
-      dev.log("Request Data: {email: $email, otp: $otp, password: $password}");
       
+      // Validate OTP format
+      if (otp.length != 6 || !RegExp(r'^\d{6}$').hasMatch(otp)) {
+        emit(ErrorLoginState(message: "رمز التحقق غير صالح"));
+        return;
+      }
+
       final response = await _api.postData(
         {
           'email': email,
-          'otp': otp,
-          'new_password': password,
+          'otp': otp.trim(),
+          'password': password,
+          'password_confirmation': password,
         },
         ApiUrls.RESET_PASSWORD,
       );
 
       dev.log("=== Response Details ===");
-      dev.log("Response Status Code: ${response['status_code']}");
-      dev.log("Response Data: $response");
-      dev.log("Response Success: ${response['success']}");
-      dev.log("Response Message: ${response['message']}");
-      if (response['errors'] != null) {
-        dev.log("Response Errors: ${response['errors']}");
-      }
+      dev.log("Response: $response");
+      dev.log("Success: ${response['success']}");
+      dev.log("Message: ${response['message']}");
 
       if (response['success'] == true) {
         dev.log("Password reset successful");
-        emit(SuccessLoginState(message: response['message'] ?? "تم تغيير كلمة المرور بنجاح"));
+        emit(SuccessLoginState(message: response['message'] ?? "تم إعادة تعيين كلمة المرور بنجاح"));
       } else {
         dev.log("Password reset failed");
-        String errorMessage = response['message'] ?? "فشل في تغيير كلمة المرور";
+        String errorMessage = response['message'] ?? "فشل في إعادة تعيين كلمة المرور";
+        
+        // Handle specific error cases
         if (response['errors'] != null) {
-          if (response['errors']['new_password'] != null) {
-            errorMessage = response['errors']['new_password'][0];
-          } else if (response['errors']['otp'] != null) {
+          if (response['errors']['otp'] != null) {
             errorMessage = response['errors']['otp'][0];
+          } else if (response['errors']['email'] != null) {
+            errorMessage = response['errors']['email'][0];
+          } else if (response['errors']['password'] != null) {
+            errorMessage = response['errors']['password'][0];
           }
+        } else if (errorMessage.contains("expired")) {
+          errorMessage = "رمز التحقق منتهي الصلاحية";
+        } else if (errorMessage.contains("invalid")) {
+          errorMessage = "رمز التحقق غير صحيح";
         }
+        
         emit(ErrorLoginState(message: errorMessage));
       }
+    } on DioException catch (dioError) {
+      dev.log("Dio Error: ${dioError.message}");
+      dev.log("Dio Error Response: ${dioError.response?.data}");
+      dev.log("Dio Error Status: ${dioError.response?.statusCode}");
+      
+      String errorMessage = "حدث خطأ في الاتصال بالخادم";
+      if (dioError.response?.statusCode == 404) {
+        errorMessage = "عنوان الخادم غير صحيح";
+      } else if (dioError.response?.statusCode == 401) {
+        errorMessage = "غير مصرح لك بإجراء هذه العملية";
+      }
+      
+      emit(ErrorLoginState(message: errorMessage));
     } catch (e) {
       dev.log("Error in resetPassword: $e");
-      dev.log("Error Type: ${e.runtimeType}");
-      if (e is DioException) {
-        dev.log("Dio Error Response: ${e.response?.data}");
-        dev.log("Dio Error Status: ${e.response?.statusCode}");
-      }
       emit(ErrorLoginState(message: "حدث خطأ غير متوقع"));
     }
   }
-}
 
-void storeCredentials(String password) {
-  final storage = SecureStorage();
-  String key = storage.getKeyEncryption();
-  String encryptedPassword = storage.encryptPassword(password, key);
-  storage.saveEncryptedPassword(encryptedPassword);
-  dev.log('Secure Credentials stored successfully');
+  void storeCredentials(String password) {
+    final storage = SecureStorage();
+    String key = storage.getKeyEncryption();
+    String encryptedPassword = storage.encryptPassword(password, key);
+    storage.saveEncryptedPassword(encryptedPassword);
+    dev.log('Secure Credentials stored successfully');
+  }
 }

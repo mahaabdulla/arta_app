@@ -6,12 +6,14 @@ class CustomLoginTextField extends StatefulWidget {
   final bool isPassword;
   final TextEditingController controller;
   final String? Function(String?)? validator;
+  final bool enabled;
 
   CustomLoginTextField({
     required this.controller,
     required this.hintText,
     this.isPassword = false,
     this.validator,
+    this.enabled = true,
   });
 
   @override
@@ -73,6 +75,7 @@ class _CustomLoginTextFieldState extends State<CustomLoginTextField> {
         ),
       ),
       child: TextFormField(
+        enabled: widget.enabled,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         controller: widget.controller,
         obscureText: _obscureText,

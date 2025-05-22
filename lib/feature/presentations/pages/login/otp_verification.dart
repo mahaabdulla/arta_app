@@ -73,8 +73,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               );
               Navigator.pushNamed(
                 context,
-                HOME,
-                //RESET_PASSWORD,
+               // HOME,
+                RESET_PASSWORD,
                 arguments: {
                   'email': widget.email,
                   'otp': otpController.text,
