@@ -12,8 +12,7 @@
 - 🌐 **Dio** for efficient and structured API handling
 - 📱 **Responsive UI** supporting all screen sizes with `flutter_screenutil`
 - 💬 **In-App Chat** between buyers and sellers
-- 📴 **Offline Mode** to access data without internet
-- 🌍 RTL layout support (Arabic-friendly)
+
 
 ---
 
