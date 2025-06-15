@@ -14,3 +14,14 @@
 - 💬 **In-App Chat** between buyers and sellers
 - 📴 **Offline Mode** to access data without internet
 - 🌍 RTL layout support (Arabic-friendly)
+
+---
+
+## 🛠 Requirements
+
+- Flutter SDK (>= 3.10)
+- Dart SDK
+- Android Studio or Visual Studio Code
+- Android emulator or physical device
+
+---
