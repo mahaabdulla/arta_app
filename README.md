@@ -25,3 +25,10 @@
 - Android emulator or physical device
 
 ---
+
+## 🚀 Getting Started
+
+Install dependencies:
+
+```bash
+flutter pub get
