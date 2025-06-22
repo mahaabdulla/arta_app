@@ -20,7 +20,6 @@ user experience and is fully localized in Arabic.
 
 ## 🛠 Requirements
 
-- Flutter SDK (>= 3.10)
 - Dart SDK
 - Android Studio or Visual Studio Code
 - Android emulator or physical device
