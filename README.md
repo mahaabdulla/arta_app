@@ -21,7 +21,7 @@ user experience and is fully localized in Arabic.
 ## 🛠 Requirements
 
 
-- Android Studio or Visual Studio Code
+
 - Android emulator or physical device
 
 ---
