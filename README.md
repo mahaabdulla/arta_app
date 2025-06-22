@@ -18,8 +18,6 @@ user experience and is fully localized in Arabic.
 
 ---
 
-## 🛠 Requirements
-
 ## 🚀 Getting Started
 
 Install dependencies:
