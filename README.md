@@ -22,7 +22,7 @@ user experience and is fully localized in Arabic.
 
 
 
-- Android emulator or physical device
+
 
 ---
 
