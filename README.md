@@ -16,6 +16,7 @@ user experience and is fully localized in Arabic.
 - 📴 **Offline Mode** to access data without internet
 - 🌍 RTL layout support (Arabic-friendly)
 
+
 ---
 
 ## 🚀 Getting Started
