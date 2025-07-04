@@ -2,6 +2,7 @@
 
 **arta_app** is a modern Flutter application built for listing and selling various types of products such as cars, clothes, furniture, and more. The app provides an intuitive
 user experience and is fully localized in Arabic.
+thapd
 
 ---
 ## ✨ Features
@@ -15,7 +16,6 @@ user experience and is fully localized in Arabic.
 - 💬 **In-App Chat** between buyers and sellers
 - 📴 **Offline Mode** to access data without internet
 - 🌍 RTL layout support (Arabic-friendly)
-
 
 ---
 
