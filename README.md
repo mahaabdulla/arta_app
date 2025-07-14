@@ -9,7 +9,7 @@ thapd
 ## ✨ Features
 
 - 🔐 User Authentication (Sign up & Login)
-- 📦 Product Listing (Cars, Clothes, Furniture, etc.)
+- 📦 Product Listing (Cars, Clothes, Furniture)
 - 🧠 **Clean Architecture** for scalable and maintainable code
 - 🔄 **BLoC (Business Logic Component)** for robust state management
 - 🌐 **Dio** for efficient and structured API handling
